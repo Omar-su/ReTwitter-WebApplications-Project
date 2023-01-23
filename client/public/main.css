@@ -12,3 +12,14 @@
 
   .top-buffer { margin-top:65px; }
 
+  .nav-button {
+    border-radius: 0px;
+    background-color: blanchedalmond;
+    transition: 2000ms;
+  }
+
+  .nav-button:hover {
+    border-radius: 100px;
+    background-color: burlywood;
+  }
+
