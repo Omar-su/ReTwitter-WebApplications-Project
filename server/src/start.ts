@@ -1,7 +1,7 @@
 import express from "express";
-import { taskRouter } from "./router/task";
+import { tweetRouter } from "./router/tweet";
 
 export const app = express();
 
 app.use(express.json());
-app.use("/task", taskRouter);
+app.use("/", tweetRouter);

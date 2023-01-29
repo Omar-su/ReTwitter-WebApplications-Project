@@ -13,8 +13,8 @@ export class Tweet {
     // number of views, number of shares, 
     
     //Default values for some parameters as they should not be set 
-    constructor(id : number, author : string, description : string) {
-        this.id = id;
+    constructor(author : string, description : string) {
+        this.id = Date.now();
         this.author = author;
         this.description = description;
         this.numberOfComments = 0;
@@ -30,11 +30,12 @@ export class Tweet {
     }
 
 
-    increaseNrComments(){
+    private increaseNrComments(){
       this.numberOfComments += 1;
     }
 
     addComment(newComment : Comment ){
       this.comments.push(newComment);
+      this.increaseNrComments();
     }
 }
