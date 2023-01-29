@@ -1,5 +1,5 @@
 import { Tweet } from "../model/tweet";
-import { Comment } from "../model/comment";
+import { Reply } from "../model/reply";
 
 const tweets : Tweet[] = [];
 
@@ -26,14 +26,14 @@ export function likeTweet(id : number) : boolean{
     return true;
 }
 
-export function commentOnTweet(id : number, comment : Comment) : boolean{
+export function commentOnTweet(id : number, reply : Reply) : boolean{
   const tweet : Tweet | undefined = tweets.find((tweet : Tweet) => {
     return tweet.id === id;
   }); 
   if (tweet == null) {
     return false;
   }
-  tweet.addComment(comment);
+  tweet.addReply(reply);
   return true;
 }
 

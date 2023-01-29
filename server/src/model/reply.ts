@@ -5,7 +5,7 @@
 import { Tweet } from "./tweet";
 
 // Comment has an reference to the original tweet
-export class Comment extends Tweet{
+export class Reply extends Tweet{
     userNameOfOriginalTweet : string;
     
     constructor( author : string, description : string, userNameOfOriginalTweet : string){

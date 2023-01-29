@@ -1,4 +1,4 @@
-import { Comment } from "./comment";
+import { Reply } from "./reply";
 
 export class Tweet {
   
@@ -6,8 +6,8 @@ export class Tweet {
     author : string;
     description : string;
     numberOfLikes : number;
-    numberOfComments : number;
-    comments : Comment[];
+    numberOfReplies : number;
+    comments : Reply[];
 
     // Optional
     // number of views, number of shares, 
@@ -17,7 +17,7 @@ export class Tweet {
         this.id = Date.now();
         this.author = author;
         this.description = description;
-        this.numberOfComments = 0;
+        this.numberOfReplies = 0;
         this.numberOfLikes = 0;
         this.comments = [];
     }
@@ -31,11 +31,11 @@ export class Tweet {
 
 
     private increaseNrComments(){
-      this.numberOfComments += 1;
+      this.numberOfReplies += 1;
     }
 
-    addComment(newComment : Comment ){
-      this.comments.push(newComment);
+    addReply(newReply : Reply ){
+      this.comments.push(newReply);
       this.increaseNrComments();
     }
 }
