@@ -1,10 +1,12 @@
 import express from "express";
-import { tweet, likeTweet, commentOnTweet, getTweets } from "../service/tweet";
+import { makeTweetService } from "../service/tweet";
 
 export const tweetRouter = express.Router();
 
+const tweetService = makeTweetService();
+
 tweetRouter.get("/tweet", (req, res) => {
-    res.status(200).send(getTweets());
+    res.status(200).send(tweetService.getTweets());
 });
 
 
@@ -17,7 +19,7 @@ tweetRouter.post("/tweet", (req, res) => {
         ${typeof(description)}`);
         return;
     }
-    const newTweet = tweet(author, description);
+    const newTweet = tweetService.tweet(author, description);
     res.status(201).send(newTweet);
 });
 
@@ -31,7 +33,7 @@ tweetRouter.post("/tweet/:id", (req, res) => {
   }
 
 
-  const succeeded = likeTweet(id);
+  const succeeded = tweetService.likeTweet(id);
   
   if (! succeeded) {
       res.status(404).send(`No tweet with id number ${id}`);
