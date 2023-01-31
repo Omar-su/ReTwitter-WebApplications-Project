@@ -16,9 +16,9 @@ test("If a tweet with 5 likes is liked, the number of likes is 6",async () => {
   await tweetService.tweet(author, desc);
   const tweets = await tweetService.getTweets();
   const testTweet = tweets.pop();
-  if(testTweet){
+  if(testTweet){ //Ensures that testTweet is not undefined
     testTweet.numberOfLikes = 5;
   tweetService.likeTweet(testTweet.id);
-  expect(testTweet.numberOfLikes = 6)
+  expect(testTweet.numberOfLikes === 6)
   }
 })
