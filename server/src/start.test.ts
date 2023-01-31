@@ -7,7 +7,7 @@ const request = SuperTest.default(app);
 test("End-to-end test", async () => {
     const description = "Test description";
     const author = "author test";
-    const res1 = await request.put("/tweet").send({author: author, description : description});
+    const res1 = await request.post("/tweet").send({author: author, description : description});
     expect(res1.statusCode).toEqual(201);
     expect(res1.body.description).toEqual(description);
     const res2 = await request.get("/tweet");

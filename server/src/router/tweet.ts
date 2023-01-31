@@ -13,6 +13,7 @@ tweetRouter.get("/tweet", (req, res) => {
 tweetRouter.post("/tweet", (req, res) => {
     const author = req.body.author;
     const description = req.body.description;
+    console.log(author + description)
 
     if (typeof(description) !== "string" || typeof(author) !== "string") {
         res.status(400).send(`Bad POST cass to ${req.originalUrl} --- description has type
