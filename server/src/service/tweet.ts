@@ -1,19 +1,16 @@
 import { Tweet } from "../model/tweet";
 import { Reply } from "../model/reply";
 
-export class TweetService{
+class TweetService{
   
-  tweets : Tweet[];
+  tweets : Array<Tweet> = [];
 
-  constructor(){
-    this.tweets = [];
-  }
 
-  getTweets() : Tweet[] {
+  async getTweets() : Promise<Array<Tweet>> {
     return this.tweets;
   }
   
-  tweet(author : string, description : string) : Tweet {
+  async tweet(author : string, description : string) : Promise<Tweet> {
     const newTweet = new Tweet(author, description);
     this.tweets.push(newTweet);
     return newTweet;
@@ -21,7 +18,7 @@ export class TweetService{
   
   
   
-  likeTweet(id : number) : boolean{
+  async likeTweet(id : number) : Promise<boolean>{
       const tweet : Tweet | undefined = this.tweets.find((tweet : Tweet) => {
         return tweet.id === id;
       }); 
@@ -32,7 +29,7 @@ export class TweetService{
       return true;
   }
   
-  replyOnTweet(id : number, reply : Reply) : boolean{
+  async replyOnTweet(id : number, reply : Reply) : Promise<boolean>{
     const tweet : Tweet | undefined = this.tweets.find((tweet : Tweet) => {
       return tweet.id === id;
     }); 
