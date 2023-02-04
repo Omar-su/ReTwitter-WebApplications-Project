@@ -1,13 +1,13 @@
 import { Tweet } from "./tweet";
 
-export class profile {
+export class User {
 
     userNameID : string;
     ownerName : string;
     bio : string;
     followers : number;
     following : number;
-    Tweets : Tweet[];
+    Tweets : Array<Tweet>;
     
     constructor(userNameID : string, ownerName: string, bio: string){
       this.userNameID = userNameID;
@@ -29,6 +29,10 @@ export class profile {
 
     newTweet(newTweet : Tweet){
       this.Tweets.push(newTweet);
+    }
+    
+    getTweets() : Array<Tweet>{
+      return this.Tweets;
     }
 
 }
