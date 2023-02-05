@@ -57,6 +57,7 @@ class ProfileService{
     }
   }
 
+  // TODO TAKE THIS OUT OF HERE
   async createUser(userID : string, ownerName : string, bio : string) : Promise<User>{
     const newUser = new User(userID, ownerName, bio);
     this.users.push(newUser);
