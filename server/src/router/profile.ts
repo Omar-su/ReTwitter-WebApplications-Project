@@ -14,7 +14,7 @@ profileRouter.get("/profile/:userid", async(
 ) => {
   try {
     if(req.body.userID == null){
-      res.status(400).send(`Bad PUT call to ${req.originalUrl} --- missing user id param`);
+      res.status(400).send(`Bad GET call to ${req.originalUrl} --- missing user id param`);
       return;
     }
 
@@ -41,11 +41,11 @@ profileRouter.post("/newuser", async(
       const bio = req.body.bio;
       
       if (typeof(ownerName) !== "string") {
-          res.status(400).send(`Bad POST cass to ${req.originalUrl} --- ownerName has type
+          res.status(400).send(`Bad POST call to ${req.originalUrl} --- ownerName has type
           ${typeof(ownerName)}`);
           return;
       }else if( typeof(bio) !== "string"){
-          res.status(400).send(`Bad POST cass to ${req.originalUrl} --- bio has type
+          res.status(400).send(`Bad POST call to ${req.originalUrl} --- bio has type
           ${typeof(bio)}`);
           return;
       }
@@ -67,11 +67,11 @@ profileRouter.post("/profile/tweet/:userid", async(
       const description = req.body.description;
   
       if (typeof(description) !== "string") {
-          res.status(400).send(`Bad POST cass to ${req.originalUrl} --- description has type
+          res.status(400).send(`Bad POST call to ${req.originalUrl} --- description has type
           ${typeof(description)}`);
           return;
       }else if( typeof(author) !== "string"){
-          res.status(400).send(`Bad POST cass to ${req.originalUrl} --- author has type
+          res.status(400).send(`Bad POST call to ${req.originalUrl} --- author has type
           ${typeof(author)}`);
           return;
       }
