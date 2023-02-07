@@ -57,6 +57,17 @@ class ProfileService{
     }
   }
 
+  async followProfile(userName : string) : Promise<boolean>{
+    const user : User | undefined = this.users.find((user : User) => {
+      return user.userNameID === userName;
+    }); 
+    if (user == null) {
+      return false;
+    }
+    user.increaseFollowers();
+    return true;
+}
+
   // TODO TAKE THIS OUT OF HERE
   async createUser(userID : string, ownerName : string, bio : string) : Promise<User>{
     const newUser = new User(userID, ownerName, bio);

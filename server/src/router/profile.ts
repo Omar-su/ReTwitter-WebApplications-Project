@@ -87,6 +87,36 @@ profileRouter.post("/profile/tweet/:userid", async(
 
 });
 
+profileRouter.post("/profile/:userName/follow", async(
+  req : Request<{}, {}, {userName : string} >,
+  res : Response<string>
+) => {
+  try {
+      if (req.body.userName == null) {
+          res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing id param`);
+          return;
+      }
+      const userName = req.body.userName;
+      if (typeof(userName) !== "string") {
+          res.status(400).send(`Bad POST call to ${req.originalUrl} --- userID has type 
+          ${typeof(userName)}`);
+          return;
+      }
+
+      const succeeded = await profileService.followProfile(userName);
+      
+      if (! succeeded) {
+          res.status(404).send(`No user with id ${userName}`);
+          return;
+      }
+
+      res.status(200).send("number of followers increased");
+  } catch (e:any) {
+      res.status(500).send(e.message);
+  }
+
+});
+
 
 
 
