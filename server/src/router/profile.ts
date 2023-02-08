@@ -88,29 +88,37 @@ profileRouter.post("/profile/tweet/:userid", async(
 });
 
 profileRouter.post("/profile/:userName/follow", async(
-  req : Request<{}, {}, {userName : string} >,
+  req : Request<{}, {}, {followee : string, follower : string} >,
   res : Response<string>
 ) => {
   try {
-      if (req.body.userName == null) {
-          res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing id param`);
+      if (req.body.followee == null) {
+          res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing account to follow`);
           return;
       }
-      const userName = req.body.userName;
-      if (typeof(userName) !== "string") {
-          res.status(400).send(`Bad POST call to ${req.originalUrl} --- userID has type 
-          ${typeof(userName)}`);
-          return;
-      }
+      const followee = req.body.followee;
+      if (typeof(followee) !== "string") {
+        res.status(400).send(`Bad POST call to ${req.originalUrl} --- account to follow has type 
+        ${typeof(followee)}`);
+        return;
+    }
 
-      const succeeded = await profileService.followProfile(userName);
+    const follower = req.body.followee;
+    if (typeof(follower) !== "string") {
+      res.status(400).send(`Bad POST call to ${req.originalUrl} --- account trying to follow has type 
+      ${typeof(follower)}`);
+      return;
+  }
+
+      const succeeded = await profileService.followProfile(followee, follower);
       
       if (! succeeded) {
-          res.status(404).send(`No user with id ${userName}`);
+          res.status(404).send(`No user with id ${followee} 
+          or no user with id ${follower}`);
           return;
       }
 
-      res.status(200).send("number of followers increased");
+      res.status(200).send("number of followers and following increased");
   } catch (e:any) {
       res.status(500).send(e.message);
   }

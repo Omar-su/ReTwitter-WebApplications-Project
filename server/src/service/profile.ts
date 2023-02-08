@@ -57,14 +57,18 @@ class ProfileService{
     }
   }
 
-  async followProfile(userName : string) : Promise<boolean>{
-    const user : User | undefined = this.users.find((user : User) => {
-      return user.userNameID === userName;
+  async followProfile(followee : string, follower : string) : Promise<boolean>{
+    const toBeFollowed : User | undefined = this.users.find((user : User) => {
+      return user.userNameID === followee;
     }); 
-    if (user == null) {
+    const toFollow : User | undefined = this.users.find((user : User) => {
+      return user.userNameID === follower;
+    }); 
+    if (toBeFollowed == null || toFollow == null) {
       return false;
     }
-    user.increaseFollowers();
+    toBeFollowed.increaseFollowers();
+    toFollow.increaseFollowing;
     return true;
 }
 
