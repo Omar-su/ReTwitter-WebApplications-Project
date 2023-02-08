@@ -113,8 +113,8 @@ profileRouter.post("/profile/:userName/follow", async(
       const succeeded = await profileService.followProfile(followee, follower);
       
       if (! succeeded) {
-          res.status(404).send(`User with username 
-          "${succeeded === false ? followee : follower}" not found`);
+          res.status(404).send(`No user with id ${followee} 
+          or no user with id ${follower}`);
           return;
       }
 
