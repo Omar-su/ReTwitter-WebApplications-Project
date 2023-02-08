@@ -68,9 +68,14 @@ class ProfileService{
       return false;
     }
     toBeFollowed.increaseFollowers();
-    toFollow.increaseFollowing;
+    toFollow.increaseFollowing();
     return true;
 }
+
+
+
+
+
 
   // TODO TAKE THIS OUT OF HERE
   async createUser(userID : string, ownerName : string, bio : string) : Promise<User>{
