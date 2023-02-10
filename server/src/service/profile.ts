@@ -30,21 +30,8 @@ class ProfileService{
     }    
   }
   
-  
-  async follow(userID : string) : Promise<boolean>{
-    const user : User | undefined = this.users.find((user : User) => {
-      return user.userNameID === userID;
-    }); 
-    if(user != null){ 
-      user.increaseFollowing();
-      return true;
-    }else{
-      return false;
-    }  
-  }
-  
-  
-  async tweet(userID : string, description : string) : Promise<boolean>{
+ 
+    async tweet(userID : string, description : string) : Promise<boolean>{
     const user : User | undefined = this.users.find((user : User) => {
       return user.userNameID === userID;
     }); 
