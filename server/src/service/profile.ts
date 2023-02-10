@@ -30,21 +30,8 @@ class ProfileService{
     }    
   }
   
-  
-  async follow(userID : string) : Promise<boolean>{
-    const user : User | undefined = this.users.find((user : User) => {
-      return user.userNameID === userID;
-    }); 
-    if(user != null){ 
-      user.increaseFollowing();
-      return true;
-    }else{
-      return false;
-    }  
-  }
-  
-  
-  async tweet(userID : string, description : string) : Promise<boolean>{
+ 
+    async tweet(userID : string, description : string) : Promise<boolean>{
     const user : User | undefined = this.users.find((user : User) => {
       return user.userNameID === userID;
     }); 
@@ -56,6 +43,26 @@ class ProfileService{
       return false;
     }
   }
+
+  async followProfile(followee : string, follower : string) : Promise<boolean>{
+    const toBeFollowed : User | undefined = this.users.find((user : User) => {
+      return user.userNameID === followee;
+    }); 
+    const toFollow : User | undefined = this.users.find((user : User) => {
+      return user.userNameID === follower;
+    }); 
+    if (toBeFollowed == null || toFollow == null) {
+      return false;
+    }
+    toBeFollowed.increaseFollowers();
+    toFollow.increaseFollowing();
+    return true;
+}
+
+
+
+
+
 
   // TODO TAKE THIS OUT OF HERE
   async createUser(userID : string, ownerName : string, bio : string) : Promise<User>{

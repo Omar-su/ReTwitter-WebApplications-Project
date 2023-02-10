@@ -29,7 +29,7 @@ tweetRouter.post("/tweet", async(
         console.log(author + description)
     
         if (typeof(description) !== "string" || typeof(author) !== "string") {
-            res.status(400).send(`Bad POST cass to ${req.originalUrl} --- description has type
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- description has type
             ${typeof(description)}`);
             return;
         }
@@ -49,7 +49,7 @@ tweetRouter.post("/tweet/:id", async(
 ) => {
     try {
         if (req.params.id == null) {
-            res.status(400).send(`Bad PUT call to ${req.originalUrl} --- missing id param`);
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing id param`);
             return;
         }
         const id : number = parseInt(req.params.id, 10);
