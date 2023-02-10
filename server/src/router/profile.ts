@@ -103,7 +103,7 @@ profileRouter.post("/profile/:userName/follow", async(
         return;
     }
 
-    const follower = req.body.followee;
+    const follower = req.body.follower;
     if (typeof(follower) !== "string") {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- account trying to follow has type 
       ${typeof(follower)}`);
