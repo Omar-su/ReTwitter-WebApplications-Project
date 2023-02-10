@@ -35,4 +35,8 @@ export class User {
       return this.Tweets;
     }
 
+    getFollowers() : number {
+      return this.followers;
+    } 
+
 }

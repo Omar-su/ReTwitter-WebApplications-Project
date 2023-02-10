@@ -7,6 +7,17 @@ export const profileRouter = express.Router();
 
 const profileService = makeProfileService();
 
+profileRouter.get("/profiles", async (
+  req: Request<{}, {}, {}>,
+  res: Response<Array<User> | String>
+) => {
+  try {
+      const users = await profileService.getProfiles();
+      res.status(200).send(users);
+  } catch (e:any) {
+      res.status(500).send(e.message);
+  }
+});
 
 profileRouter.get("/profile/:userid", async(
     req : Request<{},{},{userID : string}>,

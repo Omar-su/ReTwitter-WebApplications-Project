@@ -46,6 +46,10 @@ class ProfileService{
     return true;
 }
 
+async getProfiles() : Promise<Array<User>> {
+  return this.users;
+}
+
   // TODO TAKE THIS OUT OF HERE
   async createUser(userID : string, ownerName : string, bio : string) : Promise<User>{
     const newUser = new User(userID, ownerName, bio);
