@@ -17,21 +17,8 @@ class ProfileService{
       return null;
     }   
   }
-
-  async newFollower(userID : string) : Promise<boolean>{
-    const user : User | undefined = this.users.find((user : User) => {
-      return user.userNameID === userID;
-    }); 
-    if(user != null){ 
-      user.increaseFollowing();
-      return true;
-    }else{
-      return false;
-    }    
-  }
-  
  
-    async tweet(userID : string, description : string) : Promise<boolean>{
+  async tweet(userID : string, description : string) : Promise<boolean>{
     const user : User | undefined = this.users.find((user : User) => {
       return user.userNameID === userID;
     }); 
@@ -58,11 +45,6 @@ class ProfileService{
     toFollow.increaseFollowing();
     return true;
 }
-
-
-
-
-
 
   // TODO TAKE THIS OUT OF HERE
   async createUser(userID : string, ownerName : string, bio : string) : Promise<User>{
