@@ -98,6 +98,7 @@ profileRouter.post("/profile/tweet/:userid", async(
 
 });
 
+// TODO CHECK FOLLOWER FIRST
 profileRouter.post("/profile/:userName/follow", async(
   req : Request<{}, {}, {followee : string, follower : string} >,
   res : Response<string>
