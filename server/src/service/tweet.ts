@@ -1,5 +1,5 @@
 import { Tweet } from "../model/tweet";
-import { Reply } from "../model/reply";
+import { Reply} from "../model/reply";
 
 class TweetService{
   
@@ -29,17 +29,19 @@ class TweetService{
       return true;
   }
   
-  async replyOnTweet(id : number, reply : Reply) : Promise<boolean>{
+  async replyOnTweet(id : number, author : string, description : string, origowner : string) : Promise<boolean>{
     const tweet : Tweet | undefined = this.tweets.find((tweet : Tweet) => {
       return tweet.id === id;
     }); 
     if (tweet == null) {
       return false;
     }
+    const reply = new Reply(author, description, origowner);
     tweet.addReply(reply);
     return true;
   }
-  
+
+
 }
 
 
