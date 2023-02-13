@@ -23,7 +23,6 @@ function App() {
   }, [tweets]);
 
 
-
   return (
     <div>
       <h1>Tweet Feed</h1>
@@ -38,6 +37,7 @@ function App() {
   );
 }
 
+//Interface for tweet item
 interface TweetItemProps{
   key : number;
   author : string;
