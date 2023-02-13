@@ -50,6 +50,18 @@ async getProfiles() : Promise<Array<User>> {
   return this.users;
 }
 
+async getProfile(userID : string) : Promise<User | null> {
+  console.log(this.users);
+  console.log(userID);
+  const user : User | undefined = this.users.find((user : User) => {
+    return user.userNameID === userID;
+  }); 
+  if(user){
+    return user;
+  }
+  return null;
+}
+
   // TODO TAKE THIS OUT OF HERE
   async createUser(userID : string, ownerName : string, bio : string) : Promise<User>{
     const newUser = new User(userID, ownerName, bio);

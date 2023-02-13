@@ -2,32 +2,57 @@ import React, {Children, useEffect, useState} from 'react';
 import './App.css';
 import axios from 'axios';
 
-interface Profile {
-    userID : string;
-    ownerName : string;
-    bio : string;
+interface User {
+  userNameID : string;
+  ownerName : string;
+  bio : string;
+  followers : number;
+  following : number;
+  Tweets : Array<Tweet>;
+}
+
+interface Tweet{
+    id : number;  
+    author : string;
+    description : string;
+    numberOfLikes : number;
+    numberOfReplies : number;
+    comments : Reply[];
+}
+
+interface Reply extends Tweet{
+  userNameOfOriginalTweet : string;
 }
 
 function Profile() {
-const[accountInfo, setAccountInfo] = useState<Profile[]>([]);
+const[accountInfo, setAccountInfo] = useState<User[]>([]);
 
 let accountID = "account1";
 
-async function getAccountInfo(){
-    const response = await axios.get<Profile[]>("http://localhost:9090/account1");
+async function updateAccountInfo(){
+    const response = await axios({
+      method: 'get',
+      url: "http://localhost:9090/profile/1",
+      params: {
+        userID : "account1"
+      }
+    });
     setAccountInfo(response.data);
+    console.log(response.data);
 }
 
 useEffect(() =>{
-    getAccountInfo();
+  console.log("UseEFF called")
+    updateAccountInfo();
 }, [accountInfo]);
 
     return <div>
-        <h1> {"Account info"}</h1>
+        <h1> {"Account info1"}</h1>
         <div>
-        {accountInfo.map((data) => <AccountInfo key={data.userID} 
-        ownerName = {data.ownerName} bio = {data.bio} followers ={1}
-        following = {2}></AccountInfo>)}
+          "hello"
+        {accountInfo.map((data) => <AccountInfo key={data.userNameID} 
+        ownerName = {data.ownerName} bio = "{data.bio}" followers ={1}
+        following = {2} ></AccountInfo>)}
       </div>
     </div>
 }

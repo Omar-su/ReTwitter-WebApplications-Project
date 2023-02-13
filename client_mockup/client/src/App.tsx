@@ -19,6 +19,7 @@ function App() {
   }
 
   useEffect(()=>{
+    console.log("called");
     updateTweets();
   }, [tweets]);
 
@@ -30,6 +31,7 @@ function App() {
         {tweets.map((tweet) => <TweetItem key={tweet.id} author = {tweet.author} description = {tweet.description} 
         numberOfLikes={ async () => {
           await axios.post(`http://localhost:9090/tweet/${tweet.id}`);
+          console.log("called in html")
           updateTweets();
         }} numberOfReplies={tweet.numberOfReplies}>{tweet.numberOfLikes}</TweetItem>)}
       </div>

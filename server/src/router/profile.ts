@@ -20,31 +20,31 @@ profileRouter.get("/profiles", async (
   }
 });
 
-interface profileResponse {
-  tweets : Array<Tweet>
-  user : User; 
-}
-
 profileRouter.get("/profile/:userid", async(
     req : Request<{},{},{userID : string}>,
-    res : Response<profileResponse | string>
+    res : Response<User | string>
 ) => {
   try {
+    
     if(req.body.userID == null){
       res.status(400).send(`Bad GET call to ${req.originalUrl} --- missing user id param`);
       return;
     }
-
-    const tweets = await profileService.getTweets(req.body.userID);
-    console.log(tweets);
-    if(tweets == null){
-      res.status(404).send(`no user with id number ${req.body.userID}`);
+    
+    const user = await profileService.getProfile(req.body.userID);
+    if(user == null) {
+      res.status(404).send(`No user exists with id number ${req.body.userID}`);
       return;
     }
-    const user = await profileService.getProfile(req.body.userID);
-    const profileResponse = {tweets, user}
+    
+    if(user?.getTweets == null){
+      res.status(404).send(`no tweets from user with id number ${req.body.userID}`);
+      return;
+    }
 
-    res.status(200).send(profileResponse);
+    
+
+    res.status(200).send(user);
 
   } catch (e:any) {
     res.status(500).send(e.message);
