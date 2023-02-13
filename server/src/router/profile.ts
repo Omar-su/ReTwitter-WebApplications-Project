@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { User } from "../model/profile";
 import { makeProfileService } from "../service/profile";
 import { Tweet } from "../model/tweet";
+import { Console } from "console";
 
 export const profileRouter = express.Router();
 
@@ -19,9 +20,14 @@ profileRouter.get("/profiles", async (
   }
 });
 
+interface profileResponse {
+  tweets : Array<Tweet>
+  user : User; 
+}
+
 profileRouter.get("/profile/:userid", async(
     req : Request<{},{},{userID : string}>,
-    res : Response<Array<Tweet> | string>
+    res : Response<profileResponse | string>
 ) => {
   try {
     if(req.body.userID == null){
@@ -30,12 +36,15 @@ profileRouter.get("/profile/:userid", async(
     }
 
     const tweets = await profileService.getTweets(req.body.userID);
+    console.log(tweets);
     if(tweets == null){
       res.status(404).send(`no user with id number ${req.body.userID}`);
       return;
     }
+    const user = await profileService.getProfile(req.body.userID);
+    const profileResponse = {tweets, user}
 
-    res.status(200).send(tweets);
+    res.status(200).send(profileResponse);
 
   } catch (e:any) {
     res.status(500).send(e.message);
