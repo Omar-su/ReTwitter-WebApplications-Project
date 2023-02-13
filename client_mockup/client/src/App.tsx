@@ -1,6 +1,8 @@
-import React, {Children, useEffect, useState} from 'react';
-import './App.css';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import TweetButton from './components/home/tweetbutton';
+import './App.css';
+
 
 interface Tweet {
   id : number;
@@ -27,6 +29,9 @@ function App() {
   return (
     <div>
       <h1>Tweet Feed</h1>
+      <div>
+        <TweetButton></TweetButton>
+      </div>
       <div>
         {tweets.map((tweet) => <TweetItem key={tweet.id} author = {tweet.author} description = {tweet.description} 
         numberOfLikes={ async () => {
@@ -63,5 +68,8 @@ function TweetItem({key, author, description, numberOfLikes, numberOfReplies, ch
     </div>
   </div>
 }
+
+
+
 
 export default App;
