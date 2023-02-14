@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 
 interface ReplyButtonProps{
-  tweetId : number;
+  id : number;
 }
 
-function ReplyButton({tweetId}: ReplyButtonProps){
+function ReplyButton({id}: ReplyButtonProps){
 
   const [author, setAuthor] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -26,7 +26,7 @@ function ReplyButton({tweetId}: ReplyButtonProps){
       }} />
     </form>
     <button className='reply-button' onClick={async () => {
-      await axios.post(`http://localhost:9090/tweet/reply/${tweetId}`, {author, description, origowner});
+      await axios.post(`http://localhost:9090/tweet/reply/${id}`, {author, description, origowner});
     }}>Reply</button>
   </div>
 }

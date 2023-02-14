@@ -14,13 +14,14 @@ interface Tweet {
   replies : Reply[];
 }
 
-interface Reply {
+export interface Reply {
   id : number;
   author : string;
   description : string
   numberOfLikes : number;
   numberOfReplies : number;
   userNameOfOriginalTweet : string;
+  replies : Reply[];
 }
 
 
@@ -34,7 +35,7 @@ function App() {
 
   useEffect(()=>{
     updateTweets();
-  }, []);
+  }, [tweets]);
 
 
 
@@ -80,20 +81,32 @@ function TweetItem({key, id, author, description, numberOfLikes, numberOfReplies
           {children}
         </button>
         <span>{numberOfReplies}</span>
-      </div>
-      <div className='reply'>
         <div>
-          <ReplyButton tweetId={id}></ReplyButton>
+          <ReplyButton id={id}></ReplyButton>
         </div>
-        <div>
-            {replies && replies.length > 0 && replies.map((reply) => (<ReplyItem key={reply.id} id={reply.id} author={reply.author} description={reply.description} numberOfLikes={reply.numberOfLikes} numberOfReplies={reply.numberOfReplies} origowner={reply.userNameOfOriginalTweet}></ReplyItem>))}
-        </div>
-          
       </div>
+      <RepliesToTweet id={id} replies={replies}></RepliesToTweet>
     </div>
   </div>
 }
 
+interface RepliesToTweetProps{
+  id : number;
+  replies : Reply[];
+}
+
+export function RepliesToTweet({id, replies}:RepliesToTweetProps){
+  return <div className='reply'>
+    <div>
+        {replies && replies.length > 0 && replies.map((reply) => (<ReplyItem key={reply.id} id={reply.id} author={reply.author} origTweetId={id} description={reply.description} replies={reply.replies} numberOfReplies={reply.numberOfReplies} origowner={reply.userNameOfOriginalTweet} numberOfLikes={ async () => {
+        await axios.post(`http://localhost:9090/tweet/${reply.id}`);
+        }}>{reply.numberOfLikes}
+      </ReplyItem>))}
+    </div>
+      
+  </div>
+
+}
 
 
 

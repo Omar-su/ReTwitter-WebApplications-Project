@@ -22,23 +22,56 @@ class TweetService{
       const tweet : Tweet | undefined = this.tweets.find((tweet : Tweet) => {
         return tweet.id === id;
       }); 
-      if (tweet == null) {
+      if (tweet != null) {
+        tweet.increaseNrLikes();
+        return true;
+      }
+
+      const nestedReply : Reply | undefined = await this.recrusiveIdSearch(id, this.tweets.flatMap((tweet) => tweet.replies));
+
+      if (nestedReply == null) {
         return false;
       }
-      tweet.increaseNrLikes();
+      nestedReply.increaseNrLikes();
       return true;
   }
   
-  async replyOnTweet(id : number, author : string, description : string, origowner : string) : Promise<boolean>{
+
+  async replyOnTweet(id : number, author : string, description : string, origowner : string) :   Promise<boolean>{
+    const reply = new Reply(author, description, origowner);
+
     const tweet : Tweet | undefined = this.tweets.find((tweet : Tweet) => {
       return tweet.id === id;
     }); 
-    if (tweet == null) {
+
+    if (tweet != null) {
+      tweet.addReply(reply);
+      return true;
+    }
+    
+    const nestedReply : Reply | undefined = await this.recrusiveIdSearch(id, this.tweets.flatMap((tweet) => tweet.replies));
+
+    if (nestedReply == null) {
       return false;
     }
-    const reply = new Reply(author, description, origowner);
-    tweet.addReply(reply);
+    nestedReply.addReply(reply);
     return true;
+  }
+
+  // Search for a reply with an id recrusivaly 
+  async recrusiveIdSearch(id: number, replyToBeSearched : Reply[]) : Promise<Reply | undefined>{
+    for (const reply of replyToBeSearched) {
+      if (reply.id === id) {
+        return reply;
+      }
+      if (reply.replies) {
+        const nestedReply = this.recrusiveIdSearch(id, reply.replies);
+        if (nestedReply) {
+          return nestedReply;
+        }
+      }
+    }
+    return undefined;
   }
 
 
