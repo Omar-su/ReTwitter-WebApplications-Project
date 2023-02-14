@@ -25,36 +25,37 @@ interface Reply extends Tweet{
 }
 
 function Profile() {
-const[accountInfo, setAccountInfo] = useState<User[]>([]);
+const[accountInfo, setAccountInfo] = useState<User>();
 
 let accountID = "account1";
 
 async function updateAccountInfo(){
     const response = await axios({
       method: 'get',
-      url: "http://localhost:9090/profile/1",
-      params: {
-        userID : "account1"
-      }
+      url: "http://localhost:9090/profile/account1",
     });
     setAccountInfo(response.data);
+    if(accountInfo == null){
+      console.log("accountinfo is null")
+    }
     console.log(response.data);
 }
 
 useEffect(() =>{
   console.log("UseEFF called")
     updateAccountInfo();
-}, [accountInfo]);
+}, []);
 
     return <div>
+    
         <h1> {"Account info1"}</h1>
         <div>
-          "hello"
-        {accountInfo.map((data) => <AccountInfo key={data.userNameID} 
-        ownerName = {data.ownerName} bio = "{data.bio}" followers ={1}
-        following = {2} ></AccountInfo>)}
+      {!accountInfo ? "AccountInfo is null" : <AccountInfo key={accountInfo.userNameID} 
+        ownerName = {accountInfo.ownerName} bio = {accountInfo.bio} followers ={1}
+        following = {2} ></AccountInfo>}
       </div>
     </div>
+
 }
 
 interface accountInfoProps{

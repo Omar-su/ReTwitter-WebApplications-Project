@@ -21,24 +21,26 @@ profileRouter.get("/profiles", async (
 });
 
 profileRouter.get("/profile/:userid", async(
-    req : Request<{},{},{userID : string}>,
+    req : Request<{userid : string},{},{}>,
     res : Response<User | string>
 ) => {
   try {
+    console.log(req.params.userid);
+    const userID : string = req.params.userid;
     
-    if(req.body.userID == null){
+    if(userID == null){
       res.status(400).send(`Bad GET call to ${req.originalUrl} --- missing user id param`);
       return;
     }
     
-    const user = await profileService.getProfile(req.body.userID);
+    const user = await profileService.getProfile(userID);
     if(user == null) {
-      res.status(404).send(`No user exists with id number ${req.body.userID}`);
+      res.status(404).send(`No user exists with id number ${userID}`);
       return;
     }
     
     if(user?.getTweets == null){
-      res.status(404).send(`no tweets from user with id number ${req.body.userID}`);
+      res.status(404).send(`no tweets from user with id number ${userID}`);
       return;
     }
 
