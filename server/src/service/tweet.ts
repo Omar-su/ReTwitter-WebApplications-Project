@@ -27,7 +27,7 @@ class TweetService{
         return true;
       }
 
-      const nestedReply : Reply | undefined = await this.recrusiveIdSearch(id, this.tweets.flatMap((tweet) => tweet.replies));
+      const nestedReply : Reply | undefined = this.recrusiveIdSearch(id, this.tweets.flatMap((tweet) => tweet.replies));
 
       if (nestedReply == null) {
         return false;
@@ -49,7 +49,7 @@ class TweetService{
       return true;
     }
     
-    const nestedReply : Reply | undefined = await this.recrusiveIdSearch(id, this.tweets.flatMap((tweet) => tweet.replies));
+    const nestedReply : Reply | undefined = this.recrusiveIdSearch(id, this.tweets.flatMap((tweet) => tweet.replies));
 
     if (nestedReply == null) {
       return false;
@@ -59,7 +59,7 @@ class TweetService{
   }
 
   // Search for a reply with an id recrusivaly 
-  async recrusiveIdSearch(id: number, replyToBeSearched : Reply[]) : Promise<Reply | undefined>{
+  recrusiveIdSearch(id: number, replyToBeSearched : Reply[]) : Reply | undefined{
     for (const reply of replyToBeSearched) {
       if (reply.id === id) {
         return reply;

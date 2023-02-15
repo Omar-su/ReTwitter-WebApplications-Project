@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import { Reply } from '../../App';
+import { ReplyDisplayerButton } from './displyreplies';
 
 interface ReplyButtonProps{
   id : number;
+  replies : Reply[];
 }
 
-function ReplyButton({id}: ReplyButtonProps){
+function ReplyForm({id, replies}: ReplyButtonProps){
 
   const [author, setAuthor] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -28,7 +31,9 @@ function ReplyButton({id}: ReplyButtonProps){
     <button className='reply-button' onClick={async () => {
       await axios.post(`http://localhost:9090/tweet/reply/${id}`, {author, description, origowner});
     }}>Reply</button>
+    <ReplyDisplayerButton id={id} replies={replies}></ReplyDisplayerButton>
   </div>
 }
 
-export default ReplyButton;
+
+export default ReplyForm;

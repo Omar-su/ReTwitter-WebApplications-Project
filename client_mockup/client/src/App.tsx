@@ -4,6 +4,7 @@ import TweetButton from './components/home/tweetbutton';
 import './App.css';
 import ReplyButton from './components/home/replybutton';
 import ReplyItem from './components/home/reply';
+import { ReplyDisplayerButton } from './components/home/displyreplies';
 
 interface Tweet {
   id : number;
@@ -82,15 +83,14 @@ function TweetItem({key, id, author, description, numberOfLikes, numberOfReplies
         </button>
         <span>{numberOfReplies}</span>
         <div>
-          <ReplyButton id={id}></ReplyButton>
+          <ReplyButton id={id} replies={replies}></ReplyButton>
         </div>
       </div>
-      <RepliesToTweet id={id} replies={replies}></RepliesToTweet>
     </div>
   </div>
 }
 
-interface RepliesToTweetProps{
+export interface RepliesToTweetProps{
   id : number;
   replies : Reply[];
 }

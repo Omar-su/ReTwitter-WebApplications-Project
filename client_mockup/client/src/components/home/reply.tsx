@@ -1,6 +1,6 @@
-import ReplyButton from "./replybutton";
-import { RepliesToTweet } from "../../App";
+import ReplyForm from "./replybutton";
 import { Reply } from "../../App";
+import { ReplyDisplayerButton } from "./displyreplies";
 
 interface ReplyProps{
   key : number;
@@ -31,11 +31,8 @@ function ReplyItem({key, id, origTweetId, author, description, numberOfLikes, nu
         <span>{numberOfReplies}</span>
       </div>
       <div>
-          <ReplyButton id={id}></ReplyButton>
+          <ReplyForm id={id} replies={replies}></ReplyForm>
       </div>
-    </div>
-    <div>
-        <RepliesToTweet id={id} replies={replies} ></RepliesToTweet>
     </div>
 
   </div>
