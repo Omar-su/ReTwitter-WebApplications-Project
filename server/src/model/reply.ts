@@ -4,7 +4,7 @@
 
 import { Tweet } from "./tweet";
 
-// Comment has an reference to the original tweet
+// Comment has a reference to the original tweet
 export class Reply extends Tweet{
     userNameOfOriginalTweet : string;
     

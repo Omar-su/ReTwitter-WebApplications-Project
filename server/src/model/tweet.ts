@@ -7,7 +7,7 @@ export class Tweet {
     description : string;
     numberOfLikes : number;
     numberOfReplies : number;
-    comments : Reply[];
+    replies : Reply[];
 
     // Optional
     // number of views, number of shares, 
@@ -19,7 +19,7 @@ export class Tweet {
         this.description = description;
         this.numberOfReplies = 0;
         this.numberOfLikes = 0;
-        this.comments = [];
+        this.replies = [];
     }
 
     // currently tweet can not be edited
@@ -35,7 +35,7 @@ export class Tweet {
     }
 
     addReply(newReply : Reply ){
-      this.comments.push(newReply);
+      this.replies.push(newReply);
       this.increaseNrComments();
     }
 }
