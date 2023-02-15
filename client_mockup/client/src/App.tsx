@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import TweetButton from './components/home/tweetbutton';
+import TweetButton from './Components/Home/tweetbutton';
 import './App.css';
-import ReplyButton from './components/home/replybutton';
-import ReplyItem from './components/home/reply';
+import ReplyButton from './Components/Home/replybutton';
+import ReplyItem from './Components/Home/reply';
 
 interface Tweet {
   id : number;
