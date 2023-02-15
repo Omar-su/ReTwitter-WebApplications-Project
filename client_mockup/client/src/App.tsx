@@ -26,20 +26,8 @@ export interface Reply {
 }
 
 
+
 function App() {
-  const[tweets, setTweets] = useState<Tweet[]>([]);
-
-  async function updateTweets(){
-    const response = await axios.get<Tweet[]>("http://localhost:9090/tweet");
-    setTweets(response.data);
-  }
-
-  useEffect(()=>{
-    updateTweets();
-  }, [tweets]);
-
-
-
   return (
     <div>
       <h1>Tweet Feed</h1>
@@ -110,4 +98,3 @@ export function RepliesToTweet({id, replies}:RepliesToTweetProps){
 
 
 
-export default App;
