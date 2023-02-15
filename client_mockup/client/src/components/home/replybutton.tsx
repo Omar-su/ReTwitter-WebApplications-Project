@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import {useState} from 'react';
 import axios from 'axios';
 import { Reply } from '../../App';
-import { ReplyDisplayerButton } from './displyreplies';
+import { ReplyDisplayerButton } from './displayreplies';
 
 interface ReplyButtonProps{
   id : number;

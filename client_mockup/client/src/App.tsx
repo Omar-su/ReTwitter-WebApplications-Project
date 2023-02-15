@@ -4,7 +4,6 @@ import TweetButton from './components/home/tweetbutton';
 import './App.css';
 import ReplyButton from './components/home/replybutton';
 import ReplyItem from './components/home/reply';
-import { ReplyDisplayerButton } from './components/home/displyreplies';
 
 interface Tweet {
   id : number;
@@ -28,6 +27,18 @@ export interface Reply {
 
 
 function App() {
+  const[tweets, setTweets] = useState<Tweet[]>([]);
+
+  async function updateTweets(){
+    const response = await axios.get<Tweet[]>("http://localhost:9090/tweet");
+    setTweets(response.data);
+  }
+
+  useEffect(()=>{
+    console.log("called");
+    updateTweets();
+  }, [tweets]);
+
   return (
     <div>
       <h1>Tweet Feed</h1>
@@ -97,4 +108,4 @@ export function RepliesToTweet({id, replies}:RepliesToTweetProps){
 }
 
 
-
+export default App;

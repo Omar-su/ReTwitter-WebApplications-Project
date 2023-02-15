@@ -1,6 +1,6 @@
 import ReplyForm from "./replybutton";
 import { Reply } from "../../App";
-import { ReplyDisplayerButton } from "./displyreplies";
+import { ReplyDisplayerButton } from "./displayreplies";
 
 interface ReplyProps{
   key : number;
