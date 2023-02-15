@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { Tweet } from "../model/tweet";
 import { makeTweetService } from "../service/tweet";
+import { Reply } from "../model/reply";
 
 export const tweetRouter = express.Router();
 
@@ -66,6 +67,48 @@ tweetRouter.post("/tweet/:id", async(
         }
 
         res.status(200).send("tweet number of likes increased");
+    } catch (e:any) {
+        res.status(500).send(e.message);
+    }
+
+});
+
+
+// TODO THIS IS FOR TESTING
+tweetRouter.post("/tweet/reply/:id",
+    async(
+    req : Request<{id : string},{},{ author : string, description : string, origowner : string}>,
+    res : Response<string>
+    )=>{
+    try {
+        const author = req.body.author;
+        const desc = req.body.description;
+        const origowner = req.body.origowner;
+
+        if(typeof(desc) !== "string" || typeof(author) !== "string" || typeof(origowner)!== "string" ){
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing body data`);
+            return;
+        }
+        
+        if (req.params.id == null) {
+            res.status(400).send("Id not found");
+            return;
+        }
+        const id : number = parseInt(req.params.id, 10);
+        // const id : number = req.body.id;
+        if (! (id > 0)) {
+            res.status(400).send("Not found id");
+            return;
+        }
+
+        const succeeded = await tweetService.replyOnTweet(id , author, desc, origowner);
+
+        
+        if (! succeeded) {
+            res.status(404).send("does not work");
+            return;
+        }
+        res.status(200).send("succeeded");
     } catch (e:any) {
         res.status(500).send(e.message);
     }
