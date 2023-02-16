@@ -4,25 +4,7 @@ import TweetButton from './Components/Home/tweetbutton';
 import './App.css';
 import ReplyButton from './Components/Home/replybutton';
 import ReplyItem from './Components/Home/reply';
-
-export interface Tweet {
-  id : number;
-  author : string;
-  description : string
-  numberOfLikes : number;
-  numberOfReplies : number;
-  replies : Reply[];
-}
-
-export interface Reply {
-  id : number;
-  author : string;
-  description : string
-  numberOfLikes : number;
-  numberOfReplies : number;
-  userNameOfOriginalTweet : string;
-  replies : Reply[];
-}
+import { Tweet, Reply } from './Interfaces';
 
 
 

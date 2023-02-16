@@ -4,22 +4,16 @@ import './Profile.css'
 import axios from 'axios';
 import ProfileInfo from './Components/Profile/ProfileInfo';
 import { TweetItem } from './App';
-import { Reply, Tweet } from './App';
+import { Tweet, Reply, User } from './Interfaces';
 
-interface User {
-  userNameID: string;
-  ownerName: string;
-  bio: string;
-  followers: number;
-  following: number;
-  Tweets: Tweet[];
-}
 
 
 function Profile() {
   const [profileInfo, setProfileInfo] = useState<User>();
 
   async function updateProfileInfo() {
+
+    // TODO REMOVE HARD CODING
     const response = await axios({
       method: 'get',
       url: "http://localhost:9090/profile/account1",
