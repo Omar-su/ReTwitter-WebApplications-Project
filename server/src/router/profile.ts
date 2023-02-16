@@ -2,10 +2,11 @@ import express, { Request, Response } from "express";
 import { User } from "../model/profile";
 import { makeProfileService } from "../service/profile";
 import { Tweet } from "../model/tweet";
+import { Console } from "console";
 
 export const profileRouter = express.Router();
 
-const profileService = makeProfileService();
+export const profileService = makeProfileService();
 
 profileRouter.get("/profiles", async (
   req: Request<{}, {}, {}>,
@@ -20,22 +21,28 @@ profileRouter.get("/profiles", async (
 });
 
 profileRouter.get("/profile/:userid", async(
-    req : Request<{},{},{userID : string}>,
-    res : Response<Array<Tweet> | string>
+    req : Request<{userid : string},{},{}>,
+    res : Response<User | string>
 ) => {
   try {
-    if(req.body.userID == null){
+    const userID : string = req.params.userid;
+    
+    if(userID == null){
       res.status(400).send(`Bad GET call to ${req.originalUrl} --- missing user id param`);
       return;
     }
-
-    const tweets = await profileService.getTweets(req.body.userID);
-    if(tweets == null){
-      res.status(404).send(`no user with id number ${req.body.userID}`);
+    
+    const user = await profileService.getProfile(userID);
+    if(user == null) {
+      res.status(404).send(`No user exists with id number ${userID}`);
       return;
     }
-
-    res.status(200).send(tweets);
+    
+    if(user?.getTweets == null){
+      res.status(404).send(`no tweets from user with id number ${userID}`);
+      return;
+    }
+    res.status(200).send(user);
 
   } catch (e:any) {
     res.status(500).send(e.message);
@@ -100,21 +107,20 @@ profileRouter.post("/profile/tweet/:userid", async(
 
 // TODO CHECK FOLLOWER FIRST
 profileRouter.post("/profile/:userName/follow", async(
-  req : Request<{}, {}, {followee : string, follower : string} >,
+  req : Request<{userName : string}, {}, {follower : string} >,
   res : Response<string>
 ) => {
   try {
-      if (req.body.followee == null) {
+    const followee = req.params.userName;
+      if (followee == null) {
           res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing account to follow`);
           return;
       }
-      const followee = req.body.followee;
       if (typeof(followee) !== "string") {
         res.status(400).send(`Bad POST call to ${req.originalUrl} --- account to follow has type 
         ${typeof(followee)}`);
         return;
     }
-
     const follower = req.body.follower;
     if (typeof(follower) !== "string") {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- account trying to follow has type 

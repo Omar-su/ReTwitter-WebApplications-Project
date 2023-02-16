@@ -1,10 +1,12 @@
 import { Tweet } from "../model/tweet";
 import { Reply} from "../model/reply";
+import { makeProfileService } from "../service/profile"
+import { User } from "../model/profile"
+import { profileService } from "../router/profile";
 
 class TweetService{
   
   tweets : Array<Tweet> = [];
-
 
   async getTweets() : Promise<Array<Tweet>> {
     return this.tweets;
@@ -12,6 +14,9 @@ class TweetService{
   
   async tweet(author : string, description : string) : Promise<Tweet> {
     const newTweet = new Tweet(author, description);
+    const user = await profileService.getProfile(author);
+    console.log(user);
+    user?.newTweet(newTweet)
     this.tweets.push(newTweet);
     return newTweet;
   }

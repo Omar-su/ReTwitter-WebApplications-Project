@@ -40,6 +40,7 @@ function App() {
     updateTweets();
   }, [tweets]);
 
+
   return (
     <div>
       <h1>Tweet Feed</h1>
@@ -47,7 +48,8 @@ function App() {
         <TweetButton></TweetButton>
       </div>
       <div>
-        {tweets.map((tweet) => <TweetItem key={tweet.id} id={tweet.id} replies={tweet.replies} author = {tweet.author} description = {tweet.description} 
+        {tweets.map((tweet) => <TweetItem key={tweet.id} id={tweet.id} 
+        replies={tweet.replies} author = {tweet.author} description = {tweet.description} 
         numberOfLikes={ async () => {
           await axios.post(`http://localhost:9090/tweet/${tweet.id}`);
           updateTweets();
@@ -58,6 +60,7 @@ function App() {
   );
 }
 
+//Interface for tweet item
 interface TweetItemProps{
   key : number;
   id : number;

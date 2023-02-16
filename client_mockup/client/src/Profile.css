@@ -1,0 +1,36 @@
+.profile {
+    margin: auto;
+    width: 40%;
+}
+
+#profile-information {
+    margin: auto;
+    border: 3px solid black;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#followings {
+    text-align: center;
+}
+
+#profile-feed {
+    margin: auto;
+    background: rgb(179, 179, 179);
+}
+
+#follow-button {
+    color: white;
+    background-color: purple;
+    border: 1px solid;
+    border-radius: 30px;
+    width: 85px;
+    height: 30px;
+    position: absolute;
+    cursor: hand;
+    transition-duration: 0.1s;
+}
+
+#follow-button:hover{
+   background-color: rgba(236, 0, 236, 0.541);
+}
