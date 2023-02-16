@@ -72,7 +72,7 @@ interface TweetItemProps{
   replies : Reply[];
 }
 
-function TweetItem({key, id, author, description, numberOfLikes, numberOfReplies, children, replies} : TweetItemProps){
+export function TweetItem({key, id, author, description, numberOfLikes, numberOfReplies, children, replies} : TweetItemProps){
   
   return <div className='tweet'>
     <img src={twitterImage} alt="Account" className='tweet__image'/>

@@ -2,7 +2,7 @@ import React, { Children, useEffect, useState } from 'react';
 import './App.css';
 import './Profile.css'
 import axios from 'axios';
-import ProfileInfo from './Components/Profile/ProfileInfo';
+import ProfileInfo from './components/profile/ProfileInfo';
 import { TweetItem } from './App';
 import { Tweet, Reply, User } from './Interfaces';
 
