@@ -1,5 +1,5 @@
 import ReplyForm from "./replybutton";
-import { Reply } from "../../App";
+import { Reply } from "../../Interfaces";
 import { ReplyDisplayerButton } from "./displayreplies";
 
 interface ReplyProps{
