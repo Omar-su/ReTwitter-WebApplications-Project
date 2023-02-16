@@ -8,11 +8,12 @@ interface profileInfoProps{
     userName : string;
     ownerName : string;
     bio : string;
-    followers : number;
     following : number;
+    followers : number;
+    followAccount : () => Promise<void>;
   }
 
-  function ProfileInfo({key, userName, ownerName, bio, followers, following } : profileInfoProps){
+  function ProfileInfo({key, userName, ownerName, bio, following, followers, followAccount } : profileInfoProps){
     return <div>
       <img src="" alt="" />
       <div className='account-info'>
@@ -27,8 +28,9 @@ interface profileInfoProps{
                 </Col>
             </Row>
             <Row className='mt-4' id='followings'>
-                <Col>Followers: {followers}</Col>
                 <Col>Following: {following}</Col>
+                <Col>Followers: {followers}</Col>
+                <Col><button id="follow-button" onClick={followAccount}>Follow</button></Col>
             </Row>
         </Container>
       </div>

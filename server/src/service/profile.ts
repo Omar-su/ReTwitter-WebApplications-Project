@@ -51,8 +51,6 @@ async getProfiles() : Promise<Array<User>> {
 }
 
 async getProfile(userID : string) : Promise<User | null> {
-  console.log(userID)
-  console.log(this.users)
   const user : User | undefined = this.users.find((user : User) => {
     return user.userNameID === userID;
   }); 
@@ -66,7 +64,6 @@ async getProfile(userID : string) : Promise<User | null> {
   async createUser(userID : string, ownerName : string, bio : string) : Promise<User>{
     const newUser = new User(userID, ownerName, bio);
     this.users.push(newUser);
-    console.log(this.users)
     return newUser;
   }
   

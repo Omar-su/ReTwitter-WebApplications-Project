@@ -107,21 +107,20 @@ profileRouter.post("/profile/tweet/:userid", async(
 
 // TODO CHECK FOLLOWER FIRST
 profileRouter.post("/profile/:userName/follow", async(
-  req : Request<{}, {}, {followee : string, follower : string} >,
+  req : Request<{userName : string}, {}, {follower : string} >,
   res : Response<string>
 ) => {
   try {
-      if (req.body.followee == null) {
+    const followee = req.params.userName;
+      if (followee == null) {
           res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing account to follow`);
           return;
       }
-      const followee = req.body.followee;
       if (typeof(followee) !== "string") {
         res.status(400).send(`Bad POST call to ${req.originalUrl} --- account to follow has type 
         ${typeof(followee)}`);
         return;
     }
-
     const follower = req.body.follower;
     if (typeof(follower) !== "string") {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- account trying to follow has type 

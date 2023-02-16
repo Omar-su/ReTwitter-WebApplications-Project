@@ -40,8 +40,16 @@ function Profile() {
           userName={profileInfo.userNameID}
           ownerName={profileInfo.ownerName}
           bio={profileInfo.bio}
-          followers={1}
-          following={2} 
+          following={profileInfo.following}
+          followers={profileInfo.followers}
+          followAccount={ async () => {
+            await axios.post(`http://localhost:9090/profile/${profileInfo.userNameID}/follow`,
+            {
+              // TODO: REMOVE HARD CODING
+              "follower" : "account2"
+            });
+            updateProfileInfo();
+          }}
         ></ProfileInfo>}
     </div>
     <div id="profile-feed">
@@ -55,6 +63,7 @@ function Profile() {
           description={tweet.description}
           numberOfLikes={async () => {
             await axios.post(`http://localhost:9090/tweet/${tweet.id}`);
+            updateProfileInfo();
           }}
           numberOfReplies={tweet.numberOfReplies}>{tweet.numberOfLikes}
         </TweetItem>
