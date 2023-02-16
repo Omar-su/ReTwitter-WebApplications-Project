@@ -16,10 +16,18 @@ interface ReplyProps{
 }
 
 function ReplyItem({key, id, origTweetId, author, description, numberOfLikes, numberOfReplies, children, origowner, replies} : ReplyProps){
-  return <div>
+  return <div style={{ 
+    border: '1px solid black',
+    padding: '10px',
+    margin: '10px',
+    backgroundColor: 'white',
+    borderRadius: '5px',
+    display: 'flex',
+    alignItems: 'center'
+  }}>
     <img src="" alt="" />
-    <i>This is a reply to {origTweetId}</i>
     <div className='reply-info'>
+    <i>This is a reply to {origTweetId}</i>
       <p className='id'>{id}</p>
       <b className="origowner">{origowner}</b>
       <p className='author'>{author}</p>

@@ -6,7 +6,15 @@ function TweetButton(){
   const [author, setAuthor] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
-  return <div>
+  return <div style={{ 
+    border: '1px solid black',
+    padding: '10px',
+    margin: '10px',
+    backgroundColor: 'white',
+    borderRadius: '5px',
+    display: 'flex',
+    alignItems: 'center',
+  }}>
     <form onSubmit={async e => {
       e.preventDefault();
     }}>

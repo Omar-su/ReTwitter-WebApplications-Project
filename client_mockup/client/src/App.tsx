@@ -4,6 +4,7 @@ import TweetButton from './components/home/tweetbutton';
 import './App.css';
 import ReplyButton from './components/home/replybutton';
 import ReplyItem from './components/home/reply';
+import twitterImage from "C:/Users/omars/Downloads/Webapplications_project/WebApplications-Project/client_mockup/client/src/components/util/images/twitter_test_image.png";
 
 interface Tweet {
   id : number;
@@ -69,13 +70,15 @@ interface TweetItemProps{
 }
 
 function TweetItem({key, id, author, description, numberOfLikes, numberOfReplies, children, replies} : TweetItemProps){
-  console.log("hello key : " + id);
-  return <div>
-    <img src="" alt="" />
-    <div className='tweet-info'>
-      <p className='id'>{id}</p>
-      <p className='author'>{author}</p>
-      <p className='tweet-description'>{description}</p>
+  
+  return <div className='tweet'>
+    <img src={twitterImage} alt="Account" className='tweet__image'/>
+
+    <div style={{ marginBottom: '20px'}} className='tweet-info'>
+      <p className='id' style={{ fontSize: '20px', fontWeight: 'bold' }}>{id}</p>
+      <p className='author' style={{ fontSize: '20px', fontWeight: 'bold' }} >{author}</p>
+      <p className='tweet-description' style={{ fontSize: '16px', marginBottom: '10px' }}>{description}</p> 
+      <p style={{ fontSize: '14px', color: 'grey' }}>{"2:34 PM - 16 Feb 2023"}</p>
       <div>
         <button onClick={numberOfLikes}>
           {children}
