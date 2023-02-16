@@ -6,7 +6,7 @@ import { Console } from "console";
 
 export const profileRouter = express.Router();
 
-const profileService = makeProfileService();
+export const profileService = makeProfileService();
 
 profileRouter.get("/profiles", async (
   req: Request<{}, {}, {}>,
@@ -25,7 +25,6 @@ profileRouter.get("/profile/:userid", async(
     res : Response<User | string>
 ) => {
   try {
-    console.log(req.params.userid);
     const userID : string = req.params.userid;
     
     if(userID == null){
@@ -43,9 +42,7 @@ profileRouter.get("/profile/:userid", async(
       res.status(404).send(`no tweets from user with id number ${userID}`);
       return;
     }
-
-    
-
+   
     res.status(200).send(user);
 
   } catch (e:any) {
