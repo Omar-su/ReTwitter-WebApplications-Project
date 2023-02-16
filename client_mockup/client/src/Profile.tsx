@@ -3,6 +3,8 @@ import './App.css';
 import './Profile.css'
 import axios from 'axios';
 import ProfileInfo from './Components/Profile/ProfileInfo';
+import { TweetItem } from './App';
+import { Reply, Tweet } from './App';
 
 interface User {
   userNameID : string;
@@ -10,21 +12,9 @@ interface User {
   bio : string;
   followers : number;
   following : number;
-  Tweets : Array<Tweet>;
+  Tweets : Tweet[];
 }
 
-interface Tweet{
-    id : number;  
-    author : string;
-    description : string;
-    numberOfLikes : number;
-    numberOfReplies : number;
-    comments : Reply[];
-}
-
-interface Reply extends Tweet{
-  userNameOfOriginalTweet : string;
-}
 
 function Profile() {
 const[profileInfo, setProfileInfo] = useState<User>();
@@ -42,10 +32,19 @@ useEffect(() =>{
 }, []);
 
     return <div> 
-        <div className="profile-page">
+        <div className="profile-information">
+          <h1>Account </h1>
           {!profileInfo ?  "" : <ProfileInfo key={profileInfo.userNameID}
           userName={profileInfo.userNameID} ownerName = {profileInfo.ownerName} 
           bio = {profileInfo.bio} followers ={1} following = {2} ></ProfileInfo> }
+        </div>
+        <div className="profile-feed">
+        {!profileInfo ?  "" : profileInfo.Tweets.slice(0).reverse().map((tweet) => <TweetItem key={tweet.id}
+          id={tweet.id} replies={tweet.replies} author = {tweet.author} 
+          description = {tweet.description} numberOfLikes={ async () => {
+            await axios.post(`http://localhost:9090/tweet/${tweet.id}`);
+          }} numberOfReplies={tweet.numberOfReplies}>{tweet.numberOfLikes}</TweetItem> 
+        )}
         </div>
     </div>
 }

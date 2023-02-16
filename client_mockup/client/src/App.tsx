@@ -5,7 +5,7 @@ import './App.css';
 import ReplyButton from './Components/Home/replybutton';
 import ReplyItem from './Components/Home/reply';
 
-interface Tweet {
+export interface Tweet {
   id : number;
   author : string;
   description : string
@@ -47,7 +47,8 @@ function App() {
         <TweetButton></TweetButton>
       </div>
       <div>
-        {tweets.map((tweet) => <TweetItem key={tweet.id} id={tweet.id} replies={tweet.replies} author = {tweet.author} description = {tweet.description} 
+        {tweets.map((tweet) => <TweetItem key={tweet.id} id={tweet.id} 
+        replies={tweet.replies} author = {tweet.author} description = {tweet.description} 
         numberOfLikes={ async () => {
           await axios.post(`http://localhost:9090/tweet/${tweet.id}`);
           updateTweets();
@@ -70,7 +71,7 @@ interface TweetItemProps{
   replies : Reply[];
 }
 
-function TweetItem({key, id, author, description, numberOfLikes, numberOfReplies, children, replies} : TweetItemProps){
+export function TweetItem({key, id, author, description, numberOfLikes, numberOfReplies, children, replies} : TweetItemProps){
   console.log("hello key : " + id);
   return <div>
     <img src="" alt="" />
