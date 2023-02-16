@@ -42,7 +42,6 @@ profileRouter.get("/profile/:userid", async(
       res.status(404).send(`no tweets from user with id number ${userID}`);
       return;
     }
-    console.log("This is user " + user)
     res.status(200).send(user);
 
   } catch (e:any) {
