@@ -19,8 +19,10 @@ interface profileInfoProps{
       <div className='account-info'>
         <Container>
             <Row>
-                <Col>Username: {userName}</Col>
-                <Col>Name: {ownerName}</Col>
+              <Col><h1>{ownerName}</h1></Col>
+            </Row>
+            <Row>
+                <Col id="username">@{userName}</Col>
             </Row>
             <Row className='mt-4'>
                 <Col>

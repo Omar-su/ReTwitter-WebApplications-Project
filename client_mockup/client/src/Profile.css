@@ -16,7 +16,6 @@
 
 #profile-feed {
     margin: auto;
-    background: rgb(179, 179, 179);
 }
 
 #follow-button {
@@ -33,4 +32,8 @@
 
 #follow-button:hover{
    background-color: rgba(236, 0, 236, 0.541);
+}
+
+#username{
+    color: grey; 
 }
