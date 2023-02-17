@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import TweetButton from './components/home/tweetbutton';
+import TweetButton from './Components/Home/tweetbutton';
 import './App.css';
-import ReplyButton from './components/home/replybutton';
-import ReplyItem from './components/home/reply';
-import twitterImage from "./components/util/images/twitter_test_image.png";
+import ReplyButton from './Components/Home/replybutton';
+import ReplyItem from './Components/Home/reply';
+import twitterImage from "./Components/Util/images/twitter_test_image.png";
 
 interface Tweet {
   id : number;
