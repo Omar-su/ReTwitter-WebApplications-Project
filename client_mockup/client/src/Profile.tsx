@@ -46,7 +46,8 @@ function Profile() {
     </div>
     <div id="profile-feed">
       {/*Reverse list of tweets so they are in chronological order*/}
-      {!profileInfo ? "" : profileInfo.Tweets.slice(0).reverse().map((tweet) =>
+      {!profileInfo?.Tweets.length ? <p id="notweettext">No tweets</p> : ""}
+      {!profileInfo ? "": profileInfo.Tweets.slice(0).reverse().map((tweet) =>
         <TweetItem
           key={tweet.id}
           id={tweet.id}
