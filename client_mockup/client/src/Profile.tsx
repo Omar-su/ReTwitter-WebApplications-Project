@@ -23,7 +23,7 @@ function Profile() {
 
   useEffect(() => {
     updateProfileInfo();
-  }, []);
+  }, [profileInfo]);
 
   return <div className="profile">
     <div id="profile-information">
@@ -41,7 +41,6 @@ function Profile() {
               // TODO: REMOVE HARD CODING
               "follower" : "account2"
             });
-            updateProfileInfo();
           }}
         ></ProfileInfo>}
     </div>
@@ -56,7 +55,6 @@ function Profile() {
           description={tweet.description}
           numberOfLikes={async () => {
             await axios.post(`http://localhost:9090/tweet/${tweet.id}`);
-            updateProfileInfo();
           }}
           numberOfReplies={tweet.numberOfReplies}>{tweet.numberOfLikes}
         </TweetItem>
