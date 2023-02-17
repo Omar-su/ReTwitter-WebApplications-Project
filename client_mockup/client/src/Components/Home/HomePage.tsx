@@ -46,7 +46,7 @@ interface TweetItemProps{
   children?: React.ReactNode
 }
 
-export function TweetItem({key, author, description, numberOfLikes, numberOfReplies, children} : TweetItemProps){
+function TweetItem({key, author, description, numberOfLikes, numberOfReplies, children} : TweetItemProps){
   return <div>
     <img src="" alt="" />
     <div className='tweet-info'>
