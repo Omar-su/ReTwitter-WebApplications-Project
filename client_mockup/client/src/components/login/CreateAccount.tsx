@@ -11,6 +11,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import axios from 'axios';
 
 function Copyright(props: any) {
   return (
@@ -29,6 +30,19 @@ const theme = createTheme();
 
 export default function CreateAccount() {
 
+    const createUser = async (data : any) => {
+      await axios.post('http://localhost:9090/registeration', {
+        userid: 'asd3enjjsfvjnejfv',
+        ownername: data.username,
+        email: data.email,
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    };
 
 
     const [isValidEmail, setIsValidEmail] = useState(false);
@@ -72,9 +86,16 @@ export default function CreateAccount() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
+      username: data.get('name'),
       email: data.get('email'),
       password: data.get('password'),
     });
+    const dataValue = {
+      username: data.get('name'),
+      email: data.get('email'),
+      password: data.get('password'),
+    }
+    createUser(dataValue);
   };
 
   return (
