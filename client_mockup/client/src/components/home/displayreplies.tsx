@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import { RepliesToTweet } from '../../App';
-import { RepliesToTweetProps } from '../../App';
+import { RepliesToTweet } from './HomePage';
+import { RepliesToTweetProps } from './HomePage';
 
 export function ReplyDisplayerButton({id, replies} : RepliesToTweetProps){
   const [repliesDisplayed, setRepliesDisplay] = useState<boolean>(false);
