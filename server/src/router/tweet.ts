@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { Request, response, Response } from "express";
 import { Tweet } from "../model/tweet";
 import { makeTweetService } from "../service/tweet";
 import { Reply } from "../model/reply";
@@ -10,25 +10,29 @@ const tweetService = makeTweetService();
 
 type GetTweetsRequest = Request &{
     session : {
-        user : User;
+        user ?: User;
     }
 }
 
-tweetRouter.get("/", async (
-    req: GetTweetsRequest,
-    res: Response<Array<Tweet> | String>
-) => {
+tweetRouter.get("/", async(req: GetTweetsRequest, res: Response<Tweet[] | string>) => {
     try {
-        const tweets = await tweetService.getTweets(req.session.user);
-        res.status(200).send(tweets);
+        if (req.session.user == null) {
+            res.status(401).send("Not logged in");
+            return;
+        }
+        res.status(200).send(await tweetService.getTweets(req.session.user));
     } catch (e:any) {
         res.status(500).send(e.message);
     }
 });
 
+type TweetRequest = Request &{
+    body : {author:string, description : string};
+    session : { user ?: User}
+}
 
 tweetRouter.post("/", async( 
-    req: Request<{}, {}, {author:string, description : string}>,
+    req: TweetRequest,
     res: Response<Tweet | string>
 ) => {
     try {
@@ -40,7 +44,11 @@ tweetRouter.post("/", async(
             ${typeof(description)}`);
             return;
         }
-        const newTweet = await tweetService.tweet(author, description);
+        if(req.session.user == null) {
+            res.status(401).send("Not logged in");
+            return;
+        }
+        const newTweet = await tweetService.tweet(req.session.user, description);
         res.status(201).send(newTweet);
     } catch (e:any) {
         res.status(500).send(e.message);
@@ -54,13 +62,15 @@ type LikeTweetRequest = Request & {
     };
     body : {};
     session : {
-        user : User;
+        user ?: User;
     };
 }
 
+type LikeTweetResponse = Response<string>;
+
 tweetRouter.post("/:id", async (
     req : LikeTweetRequest,
-    res : Response<string>
+    res : LikeTweetResponse
 ) => {
     try {
         if (req.params.id == null) {
@@ -72,7 +82,10 @@ tweetRouter.post("/:id", async (
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- id number must be a positive integer`);
             return;
         }
-
+        if(req.session.user == null) {
+            res.status(401).send("Not logged in");
+            return;
+        }
         const succeeded = await tweetService.likeTweet(req.session.user, id);
         
         if (! succeeded) {
@@ -87,11 +100,16 @@ tweetRouter.post("/:id", async (
 
 });
 
+type ReplyRequest = Request & {
+    params : {id : string};
+    body : { author : string, description : string, origowner : string};
+    session : { user ?: User};
+}
 
 // TODO THIS IS FOR TESTING
 tweetRouter.post("/reply/:id",
     async(
-    req : Request<{id : string},{},{ author : string, description : string, origowner : string}>,
+    req : ReplyRequest,
     res : Response<string>
     )=>{
     try {
@@ -115,9 +133,12 @@ tweetRouter.post("/reply/:id",
             return;
         }
 
-        const succeeded = await tweetService.replyOnTweet(req.session.user , req.session.user.ownerName, desc, origowner);
+        if(req.session.user == null) {
+            res.status(401).send("Not logged in");
+            return;
+        }
+        const succeeded = await tweetService.replyOnTweet(req.session.user , id, desc, origowner);
 
-        
         if (! succeeded) {
             res.status(404).send("does not work");
             return;
