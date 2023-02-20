@@ -1,12 +1,13 @@
 import express from "express";
 import { tweetRouter } from "./router/tweet";
 import { profileRouter } from "./router/profile"
+import { userRouter } from "./router/user";
+
 import cors from "cors";
 
 export const app = express();
 
 import session from "express-session";
-import { userRouter } from "./router/user";
 
 app.use(session({
   secret : "Your secret key", // TODO Move to separate file. DO NOT UPLOAD TO GITHUB!!!!

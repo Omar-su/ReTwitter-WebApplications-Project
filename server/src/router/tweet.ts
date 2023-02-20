@@ -2,17 +2,24 @@ import express, { Request, Response } from "express";
 import { Tweet } from "../model/tweet";
 import { makeTweetService } from "../service/tweet";
 import { Reply } from "../model/reply";
+import { User } from "../model/profile";
 
 export const tweetRouter = express.Router();
 
 const tweetService = makeTweetService();
 
+type GetTweetsRequest = Request &{
+    session : {
+        user : User;
+    }
+}
+
 tweetRouter.get("/", async (
-    req: Request<{}, {}, {}>,
+    req: GetTweetsRequest,
     res: Response<Array<Tweet> | String>
 ) => {
     try {
-        const tweets = await tweetService.getTweets();
+        const tweets = await tweetService.getTweets(req.session.user);
         res.status(200).send(tweets);
     } catch (e:any) {
         res.status(500).send(e.message);
@@ -41,10 +48,18 @@ tweetRouter.post("/", async(
 
 });
 
+type LikeTweetRequest = Request & {
+    params : {
+        id : string;
+    };
+    body : {};
+    session : {
+        user : User;
+    };
+}
 
-
-tweetRouter.post("/:id", async(
-    req : Request<{id : string}, {}, {} >,
+tweetRouter.post("/:id", async (
+    req : LikeTweetRequest,
     res : Response<string>
 ) => {
     try {
@@ -58,7 +73,7 @@ tweetRouter.post("/:id", async(
             return;
         }
 
-        const succeeded = await tweetService.likeTweet(id);
+        const succeeded = await tweetService.likeTweet(req.session.user, id);
         
         if (! succeeded) {
             res.status(404).send(`No tweet with id number ${id}`);
@@ -100,7 +115,7 @@ tweetRouter.post("/reply/:id",
             return;
         }
 
-        const succeeded = await tweetService.replyOnTweet(id , author, desc, origowner);
+        const succeeded = await tweetService.replyOnTweet(req.session.user , req.session.user.ownerName, desc, origowner);
 
         
         if (! succeeded) {

@@ -4,22 +4,22 @@ export class User {
 
     userNameID : string;
     ownerName : string;
-    passWord : string;
+    password : string;
     bio : string;
     email : string;
     followers : number;
     following : number;
-    Tweets : Array<Tweet>;
+    tweets : Array<Tweet>;
     
-    constructor(userNameID : string, ownerName: string, email : string, passWord : string){
+    constructor(userNameID : string, ownerName: string, email : string, password : string){
       this.userNameID = userNameID;
       this.ownerName = ownerName;
-      this.passWord = passWord;
+      this.password = password;
       this.email = email;
       this.bio = "";
       this.followers = 0;
       this.following = 0;
-      this.Tweets = [];
+      this.tweets = [];
     }
 
 
@@ -32,11 +32,11 @@ export class User {
     }
 
     newTweet(newTweet : Tweet){
-      this.Tweets.push(newTweet);
+      this.tweets.push(newTweet);
     }
     
     getTweets() : Array<Tweet>{
-      return this.Tweets;
+      return this.tweets;
     }
 
     getFollowers() : number {

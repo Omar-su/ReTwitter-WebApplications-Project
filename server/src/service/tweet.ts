@@ -1,30 +1,25 @@
 import { Tweet } from "../model/tweet";
 import { Reply} from "../model/reply";
-import { makeProfileService } from "../service/profile"
 import { User } from "../model/profile"
-import { profileService } from "../router/profile";
 
 class TweetService{
   
-  tweets : Array<Tweet> = [];
-
-  async getTweets() : Promise<Array<Tweet>> {
-    return this.tweets;
+  async getTweets(user : User) : Promise<Array<Tweet>> {
+    return user.tweets;
   }
   
-  async tweet(author : string, description : string) : Promise<Tweet> {
-    const newTweet = new Tweet(author, description);
-    const user = await profileService.getProfile(author);
+  async tweet(user : User, description : string) : Promise<Tweet> {
+    const newTweet = new Tweet(user.ownerName, description);
     console.log(user);
     user?.newTweet(newTweet)
-    this.tweets.push(newTweet);
+    user.tweets.push(newTweet);
     return newTweet;
   }
   
   
   
-  async likeTweet(id : number) : Promise<boolean>{
-      const tweet : Tweet | undefined = this.tweets.find((tweet : Tweet) => {
+  async likeTweet(user : User, id : number) : Promise<boolean>{
+      const tweet : Tweet | undefined = user.tweets.find((tweet : Tweet) => {
         return tweet.id === id;
       }); 
       if (tweet != null) {
@@ -32,7 +27,7 @@ class TweetService{
         return true;
       }
 
-      const nestedReply : Reply | undefined = this.recrusiveIdSearch(id, this.tweets.flatMap((tweet) => tweet.replies));
+      const nestedReply : Reply | undefined = this.recrusiveIdSearch(id, user.tweets.flatMap((tweet) => tweet.replies));
 
       if (nestedReply == null) {
         return false;
@@ -42,10 +37,10 @@ class TweetService{
   }
   
 
-  async replyOnTweet(id : number, author : string, description : string, origowner : string) :   Promise<boolean>{
-    const reply = new Reply(author, description, origowner);
+  async replyOnTweet(user : User, id : number, description : string, origowner : string) :   Promise<boolean>{
+    const reply = new Reply(user.ownerName, description, origowner);
 
-    const tweet : Tweet | undefined = this.tweets.find((tweet : Tweet) => {
+    const tweet : Tweet | undefined = user.tweets.find((tweet : Tweet) => {
       return tweet.id === id;
     }); 
 
@@ -54,7 +49,7 @@ class TweetService{
       return true;
     }
     
-    const nestedReply : Reply | undefined = this.recrusiveIdSearch(id, this.tweets.flatMap((tweet) => tweet.replies));
+    const nestedReply : Reply | undefined = this.recrusiveIdSearch(id, user.tweets.flatMap((tweet) => tweet.replies));
 
     if (nestedReply == null) {
       return false;
