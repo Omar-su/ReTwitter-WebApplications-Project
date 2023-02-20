@@ -1,6 +1,6 @@
 import { User } from "../model/profile";
 
-class RegistrationService{
+class UserService{
 
   users : User[] = [];
 
@@ -23,5 +23,5 @@ class RegistrationService{
 
 
 export function makeRegisterationService(){
-  return new RegistrationService;
+  return new UserService;
 }

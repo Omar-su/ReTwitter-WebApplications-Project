@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
-import { makeRegisterationService } from "../service/user";
+import { makeRegisterationService as makeUserService } from "../service/user";
 import { User } from "../model/profile";
 
-export const registerationRouter = express.Router();
+export const userRouter = express.Router();
 
-const registerationService = makeRegisterationService();
+const userService = makeUserService();
 
 interface RegisterationRequest extends Request{
   body : {
@@ -15,7 +15,7 @@ interface RegisterationRequest extends Request{
   }
 }
 // TODO erros handling types of request 
-registerationRouter.post("/", async(
+userRouter.post("/", async(
   req : RegisterationRequest,
   res : Response<string>
 )=> {
@@ -46,7 +46,7 @@ registerationRouter.post("/", async(
       return;
     }
 
-    const succeeded = await registerationService.createUser(userid, ownerName, email, passWord);
+    const succeeded = await userService.createUser(userid, ownerName, email, passWord);
 
     if (!succeeded) {
       res.status(409).send(`User with userid ${userid} already exists`);
