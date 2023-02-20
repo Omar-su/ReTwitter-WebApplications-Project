@@ -6,7 +6,7 @@ import cors from "cors";
 export const app = express();
 
 import session from "express-session";
-import { registerationRouter } from "./router/registeration";
+import { registerationRouter } from "./router/user";
 
 app.use(session({
   secret : "Your secret key", // TODO Move to separate file. DO NOT UPLOAD TO GITHUB!!!!
