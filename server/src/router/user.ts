@@ -30,6 +30,21 @@ registerationRouter.post("/", async(
       ${typeof(userid)}`);
       return;
     }
+    if (typeof(ownerName) !== "string" ) {
+      res.status(400).send(`Bad POST call to ${req.originalUrl} --- ownername has type
+      ${typeof(ownerName)}`);
+      return;
+    }
+    if (typeof(email) !== "string" ) {
+      res.status(400).send(`Bad POST call to ${req.originalUrl} --- email has type
+      ${typeof(email)}`);
+      return;
+    }
+    if (typeof(passWord) !== "string" ) {
+      res.status(400).send(`Bad POST call to ${req.originalUrl} --- passWord has type
+      ${typeof(passWord)}`);
+      return;
+    }
 
     const succeeded = await registerationService.createUser(userid, ownerName, email, passWord);
 
