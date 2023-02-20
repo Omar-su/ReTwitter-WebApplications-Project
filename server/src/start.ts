@@ -6,6 +6,7 @@ import cors from "cors";
 export const app = express();
 
 import session from "express-session";
+import { registerationRouter } from "./router/registeration";
 
 app.use(session({
   secret : "Your secret key", // TODO Move to separate file. DO NOT UPLOAD TO GITHUB!!!!
@@ -20,5 +21,6 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cors());
-app.use("/", tweetRouter);
-app.use("/", profileRouter);
+app.use("/tweet", tweetRouter);
+app.use("/profile", profileRouter);
+app.use("/registeration", registerationRouter);

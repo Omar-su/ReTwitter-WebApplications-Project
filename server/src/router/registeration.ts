@@ -6,7 +6,9 @@ export const registerationRouter = express.Router();
 
 const registerationService = makeRegisterationService();
 
-registerationRouter.post("/registeration", async(
+
+
+registerationRouter.post("/", async(
   req : Request<{},{},{userid : string, ownername : string, bio : string, email : string}>,
   res : Response<User>
 )=> {

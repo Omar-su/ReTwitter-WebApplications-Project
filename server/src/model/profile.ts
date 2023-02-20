@@ -4,15 +4,19 @@ export class User {
 
     userNameID : string;
     ownerName : string;
+    passWord : string;
     bio : string;
+    email : string;
     followers : number;
     following : number;
     Tweets : Array<Tweet>;
     
-    constructor(userNameID : string, ownerName: string, bio: string){
+    constructor(userNameID : string, ownerName: string, email : string, passWord : string){
       this.userNameID = userNameID;
       this.ownerName = ownerName;
-      this.bio = bio;
+      this.passWord = passWord;
+      this.email = email;
+      this.bio = "";
       this.followers = 0;
       this.following = 0;
       this.Tweets = [];
@@ -38,5 +42,9 @@ export class User {
     getFollowers() : number {
       return this.followers;
     } 
+
+    setBio(bio : string) {
+      this.bio = bio;
+    }
 
 }

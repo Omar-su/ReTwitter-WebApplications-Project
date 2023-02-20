@@ -7,7 +7,7 @@ export const tweetRouter = express.Router();
 
 const tweetService = makeTweetService();
 
-tweetRouter.get("/tweet", async (
+tweetRouter.get("/", async (
     req: Request<{}, {}, {}>,
     res: Response<Array<Tweet> | String>
 ) => {
@@ -20,7 +20,7 @@ tweetRouter.get("/tweet", async (
 });
 
 
-tweetRouter.post("/tweet", async( 
+tweetRouter.post("/", async( 
     req: Request<{}, {}, {author:string, description : string}>,
     res: Response<Tweet | string>
 ) => {
@@ -43,7 +43,7 @@ tweetRouter.post("/tweet", async(
 
 
 
-tweetRouter.post("/tweet/:id", async(
+tweetRouter.post("/:id", async(
     req : Request<{id : string}, {}, {} >,
     res : Response<string>
 ) => {
@@ -74,7 +74,7 @@ tweetRouter.post("/tweet/:id", async(
 
 
 // TODO THIS IS FOR TESTING
-tweetRouter.post("/tweet/reply/:id",
+tweetRouter.post("/reply/:id",
     async(
     req : Request<{id : string},{},{ author : string, description : string, origowner : string}>,
     res : Response<string>
