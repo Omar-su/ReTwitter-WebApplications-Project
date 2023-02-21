@@ -22,9 +22,7 @@ class TweetService{
         return tweet.id === id;
       }); 
       if (tweet != null) {
-        console.log("tweet nr likes : ", tweet.numberOfLikes);
-        
-        tweet.increaseNrLikes();
+        tweet.numberOfLikes += 1;
         return true;
       }
 
@@ -33,7 +31,7 @@ class TweetService{
       if (nestedReply == null) {
         return false;
       }
-      nestedReply.increaseNrLikes();
+      nestedReply.numberOfLikes += 1;
       return true;
   }
   
@@ -46,7 +44,8 @@ class TweetService{
     }); 
 
     if (tweet != null) {
-      tweet.addReply(reply);
+      tweet.replies.push(reply);
+      tweet.numberOfReplies += 1;
       return true;
     }
     
@@ -55,7 +54,8 @@ class TweetService{
     if (nestedReply == null) {
       return false;
     }
-    nestedReply.addReply(reply);
+    nestedReply.replies.push(reply);
+    nestedReply.numberOfReplies += 1;
     return true;
   }
 
