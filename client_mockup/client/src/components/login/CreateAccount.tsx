@@ -33,7 +33,7 @@ export default function CreateAccount() {
 
     const createUser = async (data : any) => {
       await axios.post("http://localhost:9090/user", {
-        userid: "1234",
+        userid: data.userid,
         ownerName: data.username,
         email: data.email,
         password : data.password
@@ -88,12 +88,14 @@ export default function CreateAccount() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      username: data.get('name'),
+      userid : data.get('id'),
+      username: data.get('username'),
       email: data.get('email'),
       password: data.get('password'),
     });
     const dataValue = {
-      username: data.get('name'),
+      userid : data.get('id'),
+      username: data.get('username'),
       email: data.get('email'),
       password: data.get('password'),
     }
@@ -124,12 +126,25 @@ export default function CreateAccount() {
                   required
                   fullWidth
                   id="username"
-                  label="Username"
+                  label="Your Name"
                   name="username"
                   autoComplete="username"
                   onChange={(event) => {
                     validateUsername(event.target.value);
                   }} 
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="id"
+                  label="User ID"
+                  name="id"
+                  autoComplete="id"
+                  onChange={(event) => {
+                    validateUsername(event.target.value);
+                }}
                 />
               </Grid>
               <Grid item xs={12}>

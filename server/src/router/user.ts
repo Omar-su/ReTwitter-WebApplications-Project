@@ -16,27 +16,27 @@ type UserRequest = Request &{
     user ?: User;
   }
 }
-// TODO erros handling types of request 
+
 userRouter.post("/", async(
   req : UserRequest,
   res : Response<string>
 )=> {
   try {
-    const userid = req.body.userid;
-    const ownerName = req.body.ownerName;
-    const email = req.body.email;
-    const password = req.body.password;
+    const userid : string = req.body.userid;
+    const ownerName : string = req.body.ownerName;
+    const email : string = req.body.email;
+    const password : string = req.body.password;
 
     if (typeof(userid) !== "string" ) {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- userid has type
       ${typeof(userid)}`);
       return;
     }
-    // if (typeof(ownerName) !== "string" ) {
-    //   res.status(400).send(`Bad POST call to ${req.originalUrl} --- ownername has type
-    //   ${typeof(ownerName)}`);
-    //   return;
-    // }
+    if (typeof(ownerName) !== "string" ) {
+      res.status(400).send(`Bad POST call to ${req.originalUrl} --- ownername has type
+      ${typeof(ownerName)}`);
+      return;
+    }
     if (typeof(email) !== "string" ) {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- email has type
       ${typeof(email)}`);
@@ -67,29 +67,19 @@ userRouter.post("/login", async (
   res : Response<string | User> 
 )=> {
     try {
-      const email = req.body.email;
-      const password = req.body.password;
+      const email : string = req.body.email;
+      const password : string = req.body.password;
 
-      // if (typeof(userid) !== "string" ) {
-      //   res.status(400).send(`Bad POST call to ${req.originalUrl} --- userid has type
-      //   ${typeof(userid)}`);
-      //   return;
-      // }
-      // if (typeof(ownerName) !== "string" ) {
-      //   res.status(400).send(`Bad POST call to ${req.originalUrl} --- ownername has type
-      //   ${typeof(ownerName)}`);
-      //   return;
-      // }
-      // if (typeof(email) !== "string" ) {
-      //   res.status(400).send(`Bad POST call to ${req.originalUrl} --- email has type
-      //   ${typeof(email)}`);
-      //   return;
-      // }
-      // if (typeof(password) !== "string" ) {
-      //   res.status(400).send(`Bad POST call to ${req.originalUrl} --- passWord has type
-      //   ${typeof(password)}`);
-      //   return;
-      // }
+      if (typeof(email) !== "string" ) {
+        res.status(400).send(`Bad POST call to ${req.originalUrl} --- email has type
+        ${typeof(email)}`);
+        return;
+      }
+      if (typeof(password) !== "string" ) {
+        res.status(400).send(`Bad POST call to ${req.originalUrl} --- passWord has type
+        ${typeof(password)}`);
+        return;
+      }
 
       const user = await userService.findUser(email, password);
 
