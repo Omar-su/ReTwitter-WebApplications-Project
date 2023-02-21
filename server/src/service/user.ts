@@ -15,8 +15,8 @@ class UserService{
     return true;
   }
 
-  async findUser(userID : string, password : string) : Promise<User | undefined>{
-    return this.users.find(user => user.userNameID == userID && user.password === password);
+  async findUser(email : string, password : string) : Promise<User | undefined>{
+    return this.users.find(user => user.email == email && user.password === password);
   }
 
 }

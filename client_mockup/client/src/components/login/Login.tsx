@@ -11,6 +11,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import axios from 'axios';
+
 
 function Copyright(props: any) {
   return (
@@ -57,6 +59,22 @@ export default function Login() {
     const navigatePage = (link : string) => {
         navigate(link);
     }
+    
+    const login = async (data : any) => {
+      await axios.post("http://localhost:9090/user/login", {
+        userid: "123",
+        ownerName: "omar",
+        email: "email",
+        password : "password"
+      })
+      .then(function (response) {
+        console.log(response);
+        navigatePage("/home");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -65,6 +83,11 @@ export default function Login() {
       email: data.get('email'),
       password: data.get('password'),
     });
+    const dataValue = {
+      email: data.get('email'),
+      password: data.get('password'),
+    }
+    login(dataValue);
   };
 
   return (

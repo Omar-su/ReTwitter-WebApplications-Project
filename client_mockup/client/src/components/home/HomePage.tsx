@@ -37,7 +37,7 @@ function App() {
   useEffect(()=>{
     console.log("called");
     updateTweets();
-  }, [tweets]);
+  }, []);
 
 
   return (

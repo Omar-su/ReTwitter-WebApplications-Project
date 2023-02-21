@@ -11,7 +11,6 @@ class TweetService{
   async tweet(user : User, description : string) : Promise<Tweet> {
     const newTweet = new Tweet(user.ownerName, description);
     console.log(user);
-    user?.newTweet(newTweet)
     user.tweets.push(newTweet);
     return newTweet;
   }

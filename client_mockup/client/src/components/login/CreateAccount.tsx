@@ -31,10 +31,11 @@ const theme = createTheme();
 export default function CreateAccount() {
 
     const createUser = async (data : any) => {
-      await axios.post('http://localhost:9090/registeration', {
-        userid: 'asd3enjjsfvjnejfv',
-        ownername: data.username,
-        email: data.email,
+      await axios.post("http://localhost:9090/user", {
+        userid: "123",
+        ownerName: "omar",
+        email: "email",
+        password : "password"
       })
       .then(function (response) {
         console.log(response);

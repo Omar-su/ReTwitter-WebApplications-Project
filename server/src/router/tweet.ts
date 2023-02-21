@@ -27,7 +27,7 @@ tweetRouter.get("/", async(req: GetTweetsRequest, res: Response<Tweet[] | string
 });
 
 type TweetRequest = Request &{
-    body : {author:string, description : string};
+    body : {description : string};
     session : { user ?: User}
 }
 
@@ -36,10 +36,9 @@ tweetRouter.post("/", async(
     res: Response<Tweet | string>
 ) => {
     try {
-        const author = req.body.author;
         const description = req.body.description;
     
-        if (typeof(description) !== "string" || typeof(author) !== "string") {
+        if (typeof(description) !== "string" ) {
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- description has type
             ${typeof(description)}`);
             return;

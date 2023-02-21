@@ -26,7 +26,7 @@ function TweetButton(){
       }} />
     </form>
     <button className='tweet-button' onClick={async () => {
-      await axios.post("http://localhost:9090/tweet/", {author, description});
+      await axios.post("http://localhost:9090/tweet", {description});
     }}>Tweet</button>
   </div>
 }

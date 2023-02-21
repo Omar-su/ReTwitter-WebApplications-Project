@@ -32,11 +32,11 @@ userRouter.post("/", async(
       ${typeof(userid)}`);
       return;
     }
-    if (typeof(ownerName) !== "string" ) {
-      res.status(400).send(`Bad POST call to ${req.originalUrl} --- ownername has type
-      ${typeof(ownerName)}`);
-      return;
-    }
+    // if (typeof(ownerName) !== "string" ) {
+    //   res.status(400).send(`Bad POST call to ${req.originalUrl} --- ownername has type
+    //   ${typeof(ownerName)}`);
+    //   return;
+    // }
     if (typeof(email) !== "string" ) {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- email has type
       ${typeof(email)}`);
@@ -62,7 +62,7 @@ userRouter.post("/", async(
 
 userRouter.post("/login", async (
   req : UserRequest,
-  res : Response<string> 
+  res : Response<string | User> 
 )=> {
     try {
       const userid = req.body.userid;
@@ -91,7 +91,7 @@ userRouter.post("/login", async (
         return;
       }
 
-      const user = await userService.findUser(userid, password);
+      const user = await userService.findUser(email, password);
 
       if(user == null){
         res.status(409).send("Invalid user name or password")
@@ -99,9 +99,9 @@ userRouter.post("/login", async (
       }
 
       req.session.user = user;
-      res.status(200).send("logged in");
+      res.status(200).send(user);
 
-    } catch (error) {
-      
+    } catch (e : any) {
+      res.status(500).send(e.message);      
     }
 });
