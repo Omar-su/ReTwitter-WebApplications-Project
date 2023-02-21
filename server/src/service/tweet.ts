@@ -22,6 +22,8 @@ class TweetService{
         return tweet.id === id;
       }); 
       if (tweet != null) {
+        console.log("tweet nr likes : ", tweet.numberOfLikes);
+        
         tweet.increaseNrLikes();
         return true;
       }

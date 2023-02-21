@@ -13,6 +13,8 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 
+axios.defaults.withCredentials = true
+
 
 function Copyright(props: any) {
   return (
@@ -62,10 +64,8 @@ export default function Login() {
     
     const login = async (data : any) => {
       await axios.post("http://localhost:9090/user/login", {
-        userid: "123",
-        ownerName: "omar",
-        email: "email",
-        password : "password"
+        email: data.email,
+        password : data.password
       })
       .then(function (response) {
         console.log(response);

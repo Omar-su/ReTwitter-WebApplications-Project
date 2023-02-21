@@ -12,6 +12,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
+axios.defaults.withCredentials = true
 
 function Copyright(props: any) {
   return (
@@ -32,10 +33,10 @@ export default function CreateAccount() {
 
     const createUser = async (data : any) => {
       await axios.post("http://localhost:9090/user", {
-        userid: "123",
-        ownerName: "omar",
-        email: "email",
-        password : "password"
+        userid: "1234",
+        ownerName: data.username,
+        email: data.email,
+        password : data.password
       })
       .then(function (response) {
         console.log(response);

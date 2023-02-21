@@ -4,6 +4,7 @@ import TweetButton from './tweetbutton';
 import ReplyButton from './replybutton';
 import ReplyItem from './reply';
 import twitterImage from "../util/images/twitter_test_image.png";
+axios.defaults.withCredentials = true
 
 interface Tweet {
   id : number;
@@ -37,7 +38,7 @@ function App() {
   useEffect(()=>{
     console.log("called");
     updateTweets();
-  }, []);
+  }, [tweets]);
 
 
   return (

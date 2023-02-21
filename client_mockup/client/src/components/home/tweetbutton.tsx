@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+axios.defaults.withCredentials = true
 
 function TweetButton(){
 
@@ -26,7 +27,7 @@ function TweetButton(){
       }} />
     </form>
     <button className='tweet-button' onClick={async () => {
-      await axios.post("http://localhost:9090/tweet", {description});
+      await axios.post("http://localhost:9090/tweet", {description: description});
     }}>Tweet</button>
   </div>
 }

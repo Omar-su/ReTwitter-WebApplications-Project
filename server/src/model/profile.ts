@@ -9,7 +9,7 @@ export class User {
     email : string;
     followers : number;
     following : number;
-    tweets : Array<Tweet>;
+    tweets : Tweet[];
     
     constructor(userNameID : string, ownerName: string, email : string, password : string){
       this.userNameID = userNameID;

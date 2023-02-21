@@ -7,8 +7,8 @@ const userService = makeUserService();
 
 type UserRequest = Request &{
   body : {
-    userid : string;
-    ownerName : string;
+    userid ?: string;
+    ownerName ?: string;
     email : string;
     password : string;
   }
@@ -52,7 +52,9 @@ userRouter.post("/", async(
 
     if (!succeeded) {
       res.status(409).send(`User with userid ${userid} already exists`);
+      return;
     }
+
     res.status(201).send("User created successfully")
   } catch (e:any) {
     res.status(500).send(e.message);
@@ -65,31 +67,29 @@ userRouter.post("/login", async (
   res : Response<string | User> 
 )=> {
     try {
-      const userid = req.body.userid;
-      const ownerName = req.body.ownerName;
       const email = req.body.email;
       const password = req.body.password;
 
-      if (typeof(userid) !== "string" ) {
-        res.status(400).send(`Bad POST call to ${req.originalUrl} --- userid has type
-        ${typeof(userid)}`);
-        return;
-      }
-      if (typeof(ownerName) !== "string" ) {
-        res.status(400).send(`Bad POST call to ${req.originalUrl} --- ownername has type
-        ${typeof(ownerName)}`);
-        return;
-      }
-      if (typeof(email) !== "string" ) {
-        res.status(400).send(`Bad POST call to ${req.originalUrl} --- email has type
-        ${typeof(email)}`);
-        return;
-      }
-      if (typeof(password) !== "string" ) {
-        res.status(400).send(`Bad POST call to ${req.originalUrl} --- passWord has type
-        ${typeof(password)}`);
-        return;
-      }
+      // if (typeof(userid) !== "string" ) {
+      //   res.status(400).send(`Bad POST call to ${req.originalUrl} --- userid has type
+      //   ${typeof(userid)}`);
+      //   return;
+      // }
+      // if (typeof(ownerName) !== "string" ) {
+      //   res.status(400).send(`Bad POST call to ${req.originalUrl} --- ownername has type
+      //   ${typeof(ownerName)}`);
+      //   return;
+      // }
+      // if (typeof(email) !== "string" ) {
+      //   res.status(400).send(`Bad POST call to ${req.originalUrl} --- email has type
+      //   ${typeof(email)}`);
+      //   return;
+      // }
+      // if (typeof(password) !== "string" ) {
+      //   res.status(400).send(`Bad POST call to ${req.originalUrl} --- passWord has type
+      //   ${typeof(password)}`);
+      //   return;
+      // }
 
       const user = await userService.findUser(email, password);
 
@@ -97,7 +97,10 @@ userRouter.post("/login", async (
         res.status(409).send("Invalid user name or password")
         return;
       }
-
+      if (req.session.user?.email == user.email) {
+        res.status(409).send("User already logged in");
+        return;
+      }
       req.session.user = user;
       res.status(200).send(user);
 
