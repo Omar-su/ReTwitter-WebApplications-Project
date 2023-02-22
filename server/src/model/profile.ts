@@ -7,8 +7,8 @@ export class User {
     password : string;
     bio : string;
     email : string;
-    followers : number;
-    following : number;
+    followers : User[];
+    following : User[];
     tweets : Tweet[];
     
     constructor(userNameID : string, ownerName: string, email : string, password : string){
@@ -17,19 +17,19 @@ export class User {
       this.password = password;
       this.email = email;
       this.bio = "";
-      this.followers = 0;
-      this.following = 0;
+      this.followers = [];
+      this.following = [];
       this.tweets = [];
     }
 
 
-    increaseFollowers(){
-        this.followers += 1;
+    addFollower(follower : User){
+        this.followers.push(follower);
     }
 
-    increaseFollowing(){
-      this.following += 1;
-    }
+    addFollowing(following : User){
+      this.following.push(following);
+  }
 
     newTweet(newTweet : Tweet){
       this.tweets.push(newTweet);
@@ -39,9 +39,13 @@ export class User {
       return this.tweets;
     }
 
-    getFollowers() : number {
+    getFollowers() : User[] {
       return this.followers;
     } 
+
+    getFollowing() : User[] {
+      return this.following;
+    }
 
     setBio(bio : string) {
       this.bio = bio;
