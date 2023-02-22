@@ -54,7 +54,8 @@ function App() {
         numberOfLikes={ async () => {
           await axios.post(`http://localhost:9090/tweet/${tweet.id}`);
           updateTweets();
-        }} numberOfReplies={tweet.numberOfReplies}>{tweet.numberOfLikes}</TweetItem> 
+        }} numberOfReplies={tweet.numberOfReplies}>{tweet.numberOfLikes}
+        </TweetItem> 
         )}
       </div>
     </div>
@@ -91,6 +92,8 @@ export function TweetItem({key, id, author, description, numberOfLikes, numberOf
         <div>
           <ReplyButton id={id} replies={replies}></ReplyButton>
         </div>
+        <button onClick={ async () => {
+          await axios.post(`http://localhost:9090/tweet/delete/${id}`);}}>Delete Tweet </button>
       </div>
     </div>
   </div>

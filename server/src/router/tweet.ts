@@ -156,6 +156,7 @@ type DeleteRequest = Request &{
 
 tweetRouter.post("/delete/:id", async( req : DeleteRequest , res : Response<string>) =>{
     try {
+
         if (req.params.id == null) {
             res.status(400).send("Id not found");
             return;
@@ -164,7 +165,7 @@ tweetRouter.post("/delete/:id", async( req : DeleteRequest , res : Response<stri
         const id : number = parseInt(req.params.id, 10);
         // const id : number = req.body.id;
         if (! (id > 0)) {
-            res.status(400).send("Not found id");
+            res.status(400).send("ID not found");
             return;
         }
     

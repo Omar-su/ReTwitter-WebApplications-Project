@@ -80,6 +80,7 @@ class TweetService{
     const tweetIndex = user.tweets.findIndex(tweet => tweet.id === tweetIdToDelete); // find the index of the tweet to delete
     if (tweetIndex !== -1) {
       user.tweets.splice(tweetIndex, 1); // remove the tweet from the array
+      return true;
     }
     return false;
   }
