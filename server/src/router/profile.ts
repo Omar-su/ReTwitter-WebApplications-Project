@@ -145,7 +145,7 @@ profileRouter.post("/:userName/follow", async (
       return;
     }
 
-    res.status(200).send("number of followers and following increased");
+    res.status(200).send("Added users to follower and following list");
   } catch (e: any) {
     res.status(500).send(e.message);
   }
