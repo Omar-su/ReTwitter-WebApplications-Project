@@ -101,7 +101,7 @@ tweetRouter.post("/:id", async (
 
 type ReplyRequest = Request & {
     params : {id : string};
-    body : { author : string, description : string, origowner : string};
+    body : { author : string, description : string};
     session : { user ?: User};
 }
 
@@ -114,9 +114,8 @@ tweetRouter.post("/reply/:id",
     try {
         const author = req.body.author;
         const desc = req.body.description;
-        const origowner = req.body.origowner;
 
-        if(typeof(desc) !== "string" || typeof(author) !== "string" || typeof(origowner)!== "string" ){
+        if(typeof(desc) !== "string" || typeof(author) !== "string" || typeof(req.session.user?.ownerName)!== "string" ){
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing body data`);
             return;
         }
@@ -136,7 +135,7 @@ tweetRouter.post("/reply/:id",
             res.status(401).send("Not logged in");
             return;
         }
-        const succeeded = await tweetService.replyOnTweet(req.session.user , id, desc, origowner);
+        const succeeded = await tweetService.replyOnTweet(req.session.user , id, desc);
 
         if (! succeeded) {
             res.status(404).send("does not work");

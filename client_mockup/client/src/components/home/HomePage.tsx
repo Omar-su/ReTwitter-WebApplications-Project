@@ -4,6 +4,7 @@ import TweetButton from './tweetbutton';
 import ReplyButton from './replybutton';
 import ReplyItem from './reply';
 import twitterImage from "../util/images/twitter_test_image.png";
+import './Home.css';
 axios.defaults.withCredentials = true
 
 interface Tweet {
@@ -78,7 +79,7 @@ export function TweetItem({key, id, author, description, numberOfLikes, numberOf
     <img src={twitterImage} alt="Account" className='tweet__image'/>
 
     <div style={{ marginBottom: '20px'}} className='tweet-info'>
-      <p className='id' style={{ fontSize: '20px', fontWeight: 'bold' }}>{id}</p>
+      {/* <p className='id' style={{ fontSize: '20px', fontWeight: 'bold' }}>{id}</p> */}
       <p className='author' style={{ fontSize: '20px', fontWeight: 'bold' }} >{author}</p>
       <p className='tweet-description' style={{ fontSize: '16px', marginBottom: '10px' }}>{description}</p> 
       <p style={{ fontSize: '14px', color: 'grey' }}>{"2:34 PM - 16 Feb 2023"}</p>

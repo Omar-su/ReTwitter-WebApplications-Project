@@ -36,8 +36,8 @@ class TweetService{
   }
   
 
-  async replyOnTweet(user : User, id : number, description : string, origowner : string) :   Promise<boolean>{
-    const reply = new Reply(user.ownerName, description, origowner);
+  async replyOnTweet(user : User, id : number, description : string) :   Promise<boolean>{
+    const reply = new Reply(user.ownerName, description, user.ownerName);
 
     const tweet : Tweet | undefined = user.tweets.find((tweet : Tweet) => {
       return tweet.id === id;
@@ -73,6 +73,18 @@ class TweetService{
       }
     }
     return undefined;
+  }
+
+  // TODO more work
+  async deleteTweet(user : User, tweetIdToDelete : number) : Promise<boolean> {
+    const tweet = user.tweets.filter(tweet => tweet.id !== tweetIdToDelete);
+    if (tweet.length > 0) {
+      //user.tweets = tweets;
+      return true;
+    }
+
+    return false;
+
   }
 
 

@@ -51,7 +51,7 @@ userRouter.post("/", async(
     const succeeded = await userService.createUser(userid, ownerName, email, password);
 
     if (!succeeded) {
-      res.status(409).send(`User with userid ${userid} already exists`);
+      res.status(409).send(`User with userid ${userid} or email ${email} already exists`);
       return;
     }
 

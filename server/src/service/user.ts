@@ -9,6 +9,10 @@ class UserService{
       return false;
     }
 
+    if(this.users.some(user => user.email === email)){
+      return false;
+    }
+
     const newUser = new User(userid, ownerName , email, password);
     this.users.push(newUser);
 
