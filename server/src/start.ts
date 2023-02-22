@@ -1,6 +1,8 @@
 import express from "express";
 import { tweetRouter } from "./router/tweet";
 import { profileRouter } from "./router/profile"
+import { userRouter } from "./router/user";
+
 import cors from "cors";
 
 export const app = express();
@@ -14,11 +16,11 @@ app.use(session({
 }));
 
 app.use(cors({
-  origin: true,
+  origin: true ,
   credentials : true
 }));
 
 app.use(express.json());
-app.use(cors());
-app.use("/", tweetRouter);
-app.use("/", profileRouter);
+app.use("/tweet", tweetRouter);
+app.use("/profile", profileRouter);
+app.use("/user", userRouter);

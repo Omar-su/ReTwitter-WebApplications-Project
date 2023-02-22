@@ -2,7 +2,6 @@ import express, { Request, Response } from "express";
 import { User } from "../model/profile";
 import { makeProfileService } from "../service/profile";
 import { Tweet } from "../model/tweet";
-import { Console } from "console";
 
 export const profileRouter = express.Router();
 
@@ -20,7 +19,7 @@ profileRouter.get("/profiles", async (
   }
 });
 
-profileRouter.get("/profile/:userid", async(
+profileRouter.get("/:userid", async(
     req : Request<{userid : string},{},{}>,
     res : Response<User | string>
 ) => {
@@ -76,7 +75,7 @@ profileRouter.post("/newuser", async(
 });
 
 
-profileRouter.post("/profile/tweet/:userid", async( 
+profileRouter.post("/tweet/:userid", async( 
   req: Request<{}, {}, {userID : string, description : string}>,
   res: Response<Tweet | string>
 ) => {
@@ -106,7 +105,7 @@ profileRouter.post("/profile/tweet/:userid", async(
 });
 
 // TODO CHECK FOLLOWER FIRST
-profileRouter.post("/profile/:userName/follow", async(
+profileRouter.post("/:userName/follow", async(
   req : Request<{userName : string}, {}, {follower : string} >,
   res : Response<string>
 ) => {

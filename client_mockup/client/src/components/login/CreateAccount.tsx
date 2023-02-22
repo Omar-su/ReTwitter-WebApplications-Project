@@ -12,6 +12,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
+axios.defaults.withCredentials = true
 
 function Copyright(props: any) {
   return (
@@ -31,10 +32,11 @@ const theme = createTheme();
 export default function CreateAccount() {
 
     const createUser = async (data : any) => {
-      await axios.post('http://localhost:9090/registeration', {
-        userid: 'asd3enjjsfvjnejfv',
-        ownername: data.username,
+      await axios.post("http://localhost:9090/user", {
+        userid: data.userid,
+        ownerName: data.username,
         email: data.email,
+        password : data.password
       })
       .then(function (response) {
         console.log(response);
@@ -86,12 +88,14 @@ export default function CreateAccount() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      username: data.get('name'),
+      userid : data.get('id'),
+      username: data.get('username'),
       email: data.get('email'),
       password: data.get('password'),
     });
     const dataValue = {
-      username: data.get('name'),
+      userid : data.get('id'),
+      username: data.get('username'),
       email: data.get('email'),
       password: data.get('password'),
     }
@@ -122,12 +126,25 @@ export default function CreateAccount() {
                   required
                   fullWidth
                   id="username"
-                  label="Username"
+                  label="Your Name"
                   name="username"
                   autoComplete="username"
                   onChange={(event) => {
                     validateUsername(event.target.value);
                   }} 
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="id"
+                  label="User ID"
+                  name="id"
+                  autoComplete="id"
+                  onChange={(event) => {
+                    validateUsername(event.target.value);
+                }}
                 />
               </Grid>
               <Grid item xs={12}>

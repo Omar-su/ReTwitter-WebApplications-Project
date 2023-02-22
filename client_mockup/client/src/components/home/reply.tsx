@@ -27,8 +27,6 @@ function ReplyItem({key, id, origTweetId, author, description, numberOfLikes, nu
   }}>
     <img src="" alt="" />
     <div className='reply-info'>
-    <i>This is a reply to {origTweetId}</i>
-      <p className='id'>{id}</p>
       <b className="origowner">{origowner}</b>
       <p className='author'>{author}</p>
       <p className='reply-description'>{description}</p>
