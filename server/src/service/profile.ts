@@ -41,8 +41,8 @@ class ProfileService{
     if (toBeFollowed == null || toFollow == null) {
       return false;
     }
-    toBeFollowed.increaseFollowers();
-    toFollow.increaseFollowing();
+    toBeFollowed.addFollower(toFollow);
+    toFollow.addFollowing(toBeFollowed);
     return true;
 }
 
@@ -59,13 +59,13 @@ async getProfile(userID : string) : Promise<User | null> {
   }
   return null;
 }
-
+/*
   // TODO TAKE THIS OUT OF HERE
   async createUser(userID : string, ownerName : string, bio : string) : Promise<User>{
     const newUser = new User(userID, ownerName, bio);
     this.users.push(newUser);
     return newUser;
-  }
+  } */
   
 }
 
