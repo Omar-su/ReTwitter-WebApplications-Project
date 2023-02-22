@@ -75,16 +75,13 @@ class TweetService{
     return undefined;
   }
 
-  // TODO more work
+  // Deletes a tweet
   async deleteTweet(user : User, tweetIdToDelete : number) : Promise<boolean> {
-    const tweet = user.tweets.filter(tweet => tweet.id !== tweetIdToDelete);
-    if (tweet.length > 0) {
-      //user.tweets = tweets;
-      return true;
+    const tweetIndex = user.tweets.findIndex(tweet => tweet.id === tweetIdToDelete); // find the index of the tweet to delete
+    if (tweetIndex !== -1) {
+      user.tweets.splice(tweetIndex, 1); // remove the tweet from the array
     }
-
     return false;
-
   }
 
 

@@ -147,3 +147,42 @@ tweetRouter.post("/reply/:id",
     }
 
 });
+
+type DeleteRequest = Request &{
+    params : { id : string};
+    body : {};
+    session : { user ?: User};
+}
+
+tweetRouter.post("/delete/:id", async( req : DeleteRequest , res : Response<string>) =>{
+    try {
+        if (req.params.id == null) {
+            res.status(400).send("Id not found");
+            return;
+        }
+    
+        const id : number = parseInt(req.params.id, 10);
+        // const id : number = req.body.id;
+        if (! (id > 0)) {
+            res.status(400).send("Not found id");
+            return;
+        }
+    
+        if(req.session.user == null) {
+            res.status(401).send("Not logged in");
+            return;
+        }
+    
+        const succeeded = await tweetService.deleteTweet(req.session.user, id);
+    
+        if (! succeeded) {
+            res.status(404).send("The tweet was not found");
+            return;
+        }
+        res.status(200).send("succeeded");
+
+    } catch (e : any) {
+        res.status(500).send(e.message);        
+    }
+    
+});
