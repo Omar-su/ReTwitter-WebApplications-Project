@@ -7,6 +7,7 @@ export const profileRouter = express.Router();
 
 export const profileService = makeProfileService();
 
+/*
 profileRouter.get("/profiles", async (
   req: Request<{}, {}, {}>,
   res: Response<Array<User> | String>
@@ -18,6 +19,7 @@ profileRouter.get("/profiles", async (
     res.status(500).send(e.message);
   }
 });
+*/
 
 profileRouter.get("/:userid", async (
   req: Request<{ userid: string }, {}, {}>,
@@ -48,7 +50,7 @@ profileRouter.get("/:userid", async (
   }
 
 });
-
+/*
 profileRouter.post("/newuser", async (
   req: Request<{}, {}, { userID: string, ownerName: string, bio: string }>,
   res: Response<User | string>
@@ -72,7 +74,7 @@ profileRouter.post("/newuser", async (
   } catch (e: any) {
     res.status(500).send(e.message);
   }
-});
+});*/
 
 
 profileRouter.post("/tweet/:userid", async (
@@ -116,7 +118,7 @@ type followRequest = Request & {
 }
 
 // TODO CHECK FOLLOWER FIRST
-profileRouter.post("/:userName/follow", async (
+profileRouter.post("/:toBeFollowedId/follow", async (
   req: followRequest,
   res: Response<string>
 ) => {

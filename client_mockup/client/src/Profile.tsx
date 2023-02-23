@@ -4,18 +4,20 @@ import axios from 'axios';
 import ProfileInfo from './components/profile/ProfileInfo';
 import { TweetItem } from './components/home/HomePage';
 import { Tweet, Reply, User } from './Interfaces';
+import { useParams } from 'react-router-dom';
 
 
 
 function Profile() {
   const [profileInfo, setProfileInfo] = useState<User>();
+  const { userNameID } = useParams();
 
   async function updateProfileInfo() {
 
     // TODO REMOVE HARD CODING
     const response = await axios({
       method: 'get',
-      url: "http://localhost:9090/profile/konto",
+      url: "http://localhost:9090/profile/" + userNameID,
     });
     setProfileInfo(response.data);
   }

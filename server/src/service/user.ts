@@ -24,6 +24,7 @@ class UserService{
   }
 
   async findUserByID(userNameID : string) : Promise<User | undefined>{
+    console.log(this.users);
     return this.users.find(user => user.userNameID === userNameID);
   }
 
