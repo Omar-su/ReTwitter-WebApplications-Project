@@ -1,75 +1,80 @@
 import { User } from "../model/profile";
 import { Tweet } from "../model/tweet";
+import { makeUserService } from "./user";
 
-class ProfileService{
+const userService = makeUserService();
 
-  tweets : Array<Tweet> = [];
-  users : Array<User> = [];
+class ProfileService {
 
-  async getTweets(userID : string) : Promise<Array<Tweet> | null>{
-    const user : User | undefined = this.users.find((user : User) => {
-      return user.userNameID === userID;
-    }); 
-    if(user != null){ 
+  tweets: Array<Tweet> = [];
+
+  async getTweets(userID: string): Promise<Array<Tweet> | null> {
+    const user : User | undefined = await userService.findUserByID(userID);
+    if (user != null) {
       const tweets = user.getTweets();
       return tweets;
-    }else{
+    } else {
       return null;
-    }   
+    }
   }
- 
-  async tweet(userID : string, description : string) : Promise<boolean>{
-    const user : User | undefined = this.users.find((user : User) => {
-      return user.userNameID === userID;
-    }); 
-    if(user != null){
-      const newTweet = new Tweet(user.userNameID, description); 
+
+  async tweet(userID: string, description: string): Promise<boolean> {
+    const user : User | undefined = await userService.findUserByID(userID); 
+    if (user != null) {
+      const newTweet = new Tweet(user.userNameID, description);
       user.newTweet(newTweet);
       return true;
-    }else{
+    } else {
       return false;
     }
   }
 
-  async followProfile(followee : string, follower : string) : Promise<boolean>{
-    const toBeFollowed : User | undefined = this.users.find((user : User) => {
-      return user.userNameID === followee;
-    }); 
-    const toFollow : User | undefined = this.users.find((user : User) => {
-      return user.userNameID === follower;
-    }); 
+  async followProfile(followee: string, follower: string): Promise<boolean> {
+    const toBeFollowed : User | undefined = await userService.findUserByID(followee);
+    const toFollow : User | undefined = await userService.findUserByID(follower);
     if (toBeFollowed == null || toFollow == null) {
       return false;
     }
     toBeFollowed.addFollower(toFollow);
     toFollow.addFollowing(toBeFollowed);
     return true;
-}
-
-async getProfiles() : Promise<Array<User>> {
-  return this.users;
-}
-
-async getProfile(userID : string) : Promise<User | null> {
-  const user : User | undefined = this.users.find((user : User) => {
-    return user.userNameID === userID;
-  }); 
-  if(user){
-    return user;
   }
-  return null;
-}
-/*
-  // TODO TAKE THIS OUT OF HERE
-  async createUser(userID : string, ownerName : string, bio : string) : Promise<User>{
-    const newUser = new User(userID, ownerName, bio);
-    this.users.push(newUser);
-    return newUser;
-  } */
+
+  async getFollowers(userID : string): Promise<Array<User> | null> {
+    const user : User | undefined = await userService.findUserByID(userID);
+    if(user){
+      return user.getFollowers();
+    }
+    return null;
+  }
+
+  async getFollowing(userID : string): Promise<Array<User> | null> {
+    const user : User | undefined = await userService.findUserByID(userID);
+    if(user){
+      return user.getFollowing();
+    }
+    return null;
+  }
+
+  async getProfile(userID: string): Promise<User | null> {
+    const user : User | undefined = await userService.findUserByID(userID);
+    if (user) {
+      return user;
+    }
+    return null;
+  }
   
+  /*
+    // TODO TAKE THIS OUT OF HERE
+    async createUser(userID : string, ownerName : string, bio : string) : Promise<User>{
+      const newUser = new User(userID, ownerName, bio);
+      this.users.push(newUser);
+      return newUser;
+    } */
+
 }
 
-export function makeProfileService() : ProfileService{
+export function makeProfileService(): ProfileService {
   return new ProfileService;
 }
 

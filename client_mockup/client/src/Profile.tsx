@@ -15,7 +15,7 @@ function Profile() {
     // TODO REMOVE HARD CODING
     const response = await axios({
       method: 'get',
-      url: "http://localhost:9090/profile/account1",
+      url: "http://localhost:9090/profile/konto",
     });
     setProfileInfo(response.data);
   }

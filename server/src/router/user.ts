@@ -81,7 +81,7 @@ userRouter.post("/login", async (
         return;
       }
 
-      const user = await userService.findUser(email, password);
+      const user = await userService.findUserByEmailAndPwd(email, password);
 
       if(user == null){
         res.status(409).send("Invalid user name or password")
