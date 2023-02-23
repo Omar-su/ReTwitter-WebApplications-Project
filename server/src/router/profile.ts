@@ -110,7 +110,6 @@ type followRequest = Request & {
   params: {
     toBeFollowedId: string;
   };
-  body: {};
   session: {
     userFollowing?: User;
   };
@@ -132,6 +131,7 @@ profileRouter.post("/:toBeFollowedId/follow", async (
         ${typeof (followee)}`);
       return;
     }
+    console.log(req.session.userFollowing)
     if (req.session.userFollowing == null) {
       res.status(401).send("Not logged in");
       return;

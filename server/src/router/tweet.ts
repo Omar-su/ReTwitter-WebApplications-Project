@@ -43,6 +43,7 @@ tweetRouter.post("/", async(
             ${typeof(description)}`);
             return;
         }
+        console.log(req.session.user)
         if(req.session.user == null) {
             res.status(401).send("Not logged in");
             return;

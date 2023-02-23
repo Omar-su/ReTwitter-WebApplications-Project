@@ -1,20 +1,18 @@
 import React, { Children, useEffect, useState } from 'react';
 import './Profile.css'
 import axios from 'axios';
-import ProfileInfo from './components/profile/ProfileInfo';
-import { TweetItem } from './components/home/HomePage';
-import { Tweet, Reply, User } from './Interfaces';
+import ProfileInfo from './ProfileInfo';
+import { TweetItem } from '../home/HomePage';
+import { Tweet, Reply, User } from '../../Interfaces';
 import { useParams } from 'react-router-dom';
+axios.defaults.withCredentials = true
 
-
-
-function Profile() {
+function ProfilePage() {
   const [profileInfo, setProfileInfo] = useState<User>();
   const { userNameID } = useParams();
 
   async function updateProfileInfo() {
 
-    // TODO REMOVE HARD CODING
     const response = await axios({
       method: 'get',
       url: "http://localhost:9090/profile/" + userNameID,
@@ -37,11 +35,7 @@ function Profile() {
           following={profileInfo.following.length}
           followers={profileInfo.followers.length}
           followAccount={ async () => {
-            await axios.post(`http://localhost:9090/profile/${profileInfo.userNameID}/follow`,
-            {
-              // TODO: REMOVE HARD CODING
-              "follower" : "account2"
-            });
+            await axios.post(`http://localhost:9090/profile/${profileInfo.userNameID}/follow`)
           }}
         ></ProfileInfo>}
     </div>
@@ -65,4 +59,4 @@ function Profile() {
   </div>
 }
 
-export default Profile;
+export default ProfilePage;
