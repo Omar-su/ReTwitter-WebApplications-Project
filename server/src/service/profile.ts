@@ -1,8 +1,7 @@
 import { User } from "../model/profile";
 import { Tweet } from "../model/tweet";
-import { makeUserService } from "./user";
+import { userService } from "../router/user";
 
-const userService = makeUserService();
 
 class ProfileService {
 
@@ -56,7 +55,10 @@ class ProfileService {
     return null;
   }
 
-  async getProfile(userID: string): Promise<User | null> {
+  async getProfile(userID: string): Promise<User | null> {  
+    console.log("iam here")
+    console.log(userID)
+    console.log(userService)
     const user : User | undefined = await userService.findUserByID(userID);
     if (user) {
       return user;

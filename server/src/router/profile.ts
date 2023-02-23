@@ -4,7 +4,6 @@ import { makeProfileService } from "../service/profile";
 import { Tweet } from "../model/tweet";
 
 export const profileRouter = express.Router();
-
 export const profileService = makeProfileService();
 
 /*

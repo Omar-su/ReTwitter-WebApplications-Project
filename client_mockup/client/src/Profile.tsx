@@ -34,8 +34,8 @@ function Profile() {
           userName={profileInfo.userNameID}
           ownerName={profileInfo.ownerName}
           bio={profileInfo.bio}
-          following={profileInfo.following}
-          followers={profileInfo.followers}
+          following={profileInfo.following.length}
+          followers={profileInfo.followers.length}
           followAccount={ async () => {
             await axios.post(`http://localhost:9090/profile/${profileInfo.userNameID}/follow`,
             {
@@ -46,9 +46,9 @@ function Profile() {
         ></ProfileInfo>}
     </div>
     <div id="profile-feed">
-      {!profileInfo?.Tweets.length ? <p id="notweettext">No tweets</p> : ""}
+      {!profileInfo?.tweets.length ? <p id="notweettext">No tweets</p> : ""}
       {/*Reverse list of tweets so they are in chronological order*/}
-      {!profileInfo ? "": profileInfo.Tweets.slice(0).reverse().map((tweet) =>
+      {!profileInfo ? "": profileInfo.tweets.slice(0).reverse().map((tweet) =>
         <TweetItem
           key={tweet.id}
           id={tweet.id}

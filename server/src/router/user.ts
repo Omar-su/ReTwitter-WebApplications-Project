@@ -3,7 +3,7 @@ import { makeUserService } from "../service/user";
 import { User } from "../model/profile";
 export const userRouter = express.Router();
 
-const userService = makeUserService();
+export const userService = makeUserService();
 
 type UserRequest = Request &{
   body : {
