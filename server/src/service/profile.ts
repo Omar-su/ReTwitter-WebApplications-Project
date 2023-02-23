@@ -56,9 +56,6 @@ class ProfileService {
   }
 
   async getProfile(userID: string): Promise<User | null> {  
-    console.log("iam here")
-    console.log(userID)
-    console.log(userService)
     const user : User | undefined = await userService.findUserByID(userID);
     if (user) {
       return user;
