@@ -42,6 +42,7 @@ profileRouter.get("/:userid", async (
       res.status(404).send(`no tweets from user with id number ${userID}`);
       return;
     }
+    
     res.status(200).send(user);
 
   } catch (e: any) {
@@ -111,7 +112,7 @@ type followRequest = Request & {
     toBeFollowedId: string;
   };
   session: {
-    userFollowing?: User;
+    user?: User;
   };
 }
 
@@ -131,13 +132,12 @@ profileRouter.post("/:toBeFollowedId/follow", async (
         ${typeof (followee)}`);
       return;
     }
-    console.log(req.session.userFollowing)
-    if (req.session.userFollowing == null) {
+    if (req.session.user == null) {
       res.status(401).send("Not logged in");
       return;
     }
 
-    const userFollowingId : string = req.session.userFollowing.userNameID;
+    const userFollowingId : string = req.session.user.userNameID;
     const succeeded = await profileService.followProfile(followee, userFollowingId);
 
     if (!succeeded) {
@@ -152,6 +152,51 @@ profileRouter.post("/:toBeFollowedId/follow", async (
   }
 
 });
+
+type unFollowRequest = Request & {
+  params: {
+    toBeUnFollowedId: string;
+  };
+  session: {
+    user?: User;
+  };
+}
+
+profileRouter.post("/:toBeUnfollowedId/unfollow", async (
+  req: unFollowRequest,
+  res: Response<string>
+) => {
+  try {
+    const toBeUnfollowedId = req.params.toBeUnfollowedId;
+    if (toBeUnfollowedId == null) {
+      res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing account to unfollow`);
+      return;
+    }
+    if (typeof (toBeUnfollowedId) !== "string") {
+      res.status(400).send(`Bad POST call to ${req.originalUrl} --- account to unfollow has type 
+        ${typeof (toBeUnfollowedId)}`);
+      return;
+    }
+    if (req.session.user == null) {
+      res.status(401).send("Not logged in");
+      return;
+    }
+
+    const userUnfollowingId : string = req.session.user.userNameID;
+    const succeeded = await profileService.unfollowProfile(toBeUnfollowedId, userUnfollowingId);
+
+    if (!succeeded) {
+      res.status(404).send(`No user with id ${toBeUnfollowedId} 
+          or no user with id ${userUnfollowingId}`);
+      return;
+    }
+
+    res.status(200).send("Removed users from follower and following list");
+  } catch (e: any) {
+    res.status(500).send(e.message);
+  }
+});
+
 
 
 

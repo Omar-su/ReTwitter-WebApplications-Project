@@ -98,3 +98,26 @@ userRouter.post("/login", async (
       res.status(500).send(e.message);      
     }
 });
+
+type currentUserReq = Request & {
+  session: {
+    user?: User;
+  };
+}
+
+
+userRouter.get("/current_user", async (
+  req: currentUserReq,
+  res: Response<User | string>
+) => {
+  try {
+    if(req.session.user == null){
+      res.status(400).send("No user is logged in");
+      return;
+    }
+    res.status(200).send(req.session.user);
+  } catch (e : any) {
+    res.status(500).send(e.message);      
+  }
+  
+});

@@ -35,9 +35,25 @@ class ProfileService {
       return false;
     }
     toBeFollowed.addFollower(toFollow);
-    toFollow.addFollowing(toBeFollowed);
+    toFollow.addFollowing();
     return true;
   }
+
+  async unfollowProfile(unFollowee: string, unFollower: string): Promise<boolean> {
+    const toBeUnfollowed: User | undefined = await userService.findUserByID(unFollowee);
+    const toUnfollow: User | undefined = await userService.findUserByID(unFollower);
+  
+    if (toBeUnfollowed == null || toUnfollow == null) {
+      return false;
+    }
+  
+    toBeUnfollowed.removeFollower(toUnfollow);
+    toUnfollow.removeFollowing();
+  
+    return true;
+  }
+
+
 
   async getFollowers(userID : string): Promise<Array<User> | null> {
     const user : User | undefined = await userService.findUserByID(userID);
@@ -47,7 +63,7 @@ class ProfileService {
     return null;
   }
 
-  async getFollowing(userID : string): Promise<Array<User> | null> {
+  async getFollowing(userID : string): Promise<number | null> {
     const user : User | undefined = await userService.findUserByID(userID);
     if(user){
       return user.getFollowing();

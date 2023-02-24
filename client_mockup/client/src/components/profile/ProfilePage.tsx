@@ -1,62 +1,102 @@
-import React, { Children, useEffect, useState } from 'react';
-import './Profile.css'
+import React, { useEffect, useState } from 'react';
+import './Profile.css';
 import axios from 'axios';
 import ProfileInfo from './ProfileInfo';
 import { TweetItem } from '../home/HomePage';
 import { Tweet, Reply, User } from '../../Interfaces';
 import { useParams } from 'react-router-dom';
-axios.defaults.withCredentials = true
+axios.defaults.withCredentials = true;
+
+interface currentUserReq extends Request {
+  session: {
+    user?: User;
+  };
+}
 
 function ProfilePage() {
   const [profileInfo, setProfileInfo] = useState<User>();
-  const { userNameID } = useParams();
+  const { userNameID } = useParams<{userNameID: string}>();
+  const [isFollowed, setIsfollowed] = useState(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   async function updateProfileInfo() {
-
-    const response = await axios({
-      method: 'get',
-      url: "http://localhost:9090/profile/" + userNameID,
-    });
+    const response = await axios.get<User>(`http://localhost:9090/profile/${userNameID}`);
     setProfileInfo(response.data);
+
+    
   }
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const response = await axios.get<User>('http://localhost:9090/user/current_user');
+        setCurrentUser(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchUser();
+  }, []);
+  // Check if the list of followers includes the logged-in user's ID
+  useEffect(() => {
+    if (profileInfo && currentUser) {
+      setIsfollowed(profileInfo.followers.some(follower => follower.userNameID === currentUser.userNameID));
+    }
+  }, [currentUser, profileInfo]);
+  
 
   useEffect(() => {
     updateProfileInfo();
-  }, [profileInfo]);
+  }, [userNameID]);
 
-  return <div className="profile">
-    <div id="profile-information">
-      {!profileInfo ? "" :
-        <ProfileInfo
-          key={profileInfo.userNameID}
-          userName={profileInfo.userNameID}
-          ownerName={profileInfo.ownerName}
-          bio={profileInfo.bio}
-          following={profileInfo.following.length}
-          followers={profileInfo.followers.length}
-          followAccount={ async () => {
-            await axios.post(`http://localhost:9090/profile/${profileInfo.userNameID}/follow`)
-          }}
-        ></ProfileInfo>}
+  async function followAccount() {
+    if (isFollowed) {
+      await axios.post(`http://localhost:9090/profile/${profileInfo?.userNameID}/unfollow`);
+    } else {
+      await axios.post(`http://localhost:9090/profile/${profileInfo?.userNameID}/follow`);
+    }
+    setIsfollowed(!isFollowed);
+  }
+
+  return (
+    <div className="profile">
+      <div id="profile-information">
+        {!profileInfo ? "" :
+          <ProfileInfo
+            key={profileInfo.userNameID}
+            userName={profileInfo.userNameID}
+            ownerName={profileInfo.ownerName}
+            bio={profileInfo.bio}
+            following={profileInfo.following}
+            followers={profileInfo.followers.length}
+            isFollowing={isFollowed}
+            followAccount={followAccount}
+          >
+            <button onClick={followAccount}>{isFollowed ? "Unfollow" : "Follow"}</button>
+          </ProfileInfo>
+        }
+      </div>
+      <div id="profile-feed">
+        {!profileInfo?.tweets.length ? <p id="notweettext">No tweets</p> : ""}
+        {/* Reverse list of tweets so they are in chronological order */}
+        {!profileInfo ? "" : profileInfo.tweets.slice(0).reverse().map((tweet) =>
+          <TweetItem
+            key={tweet.id}
+            id={tweet.id}
+            replies={tweet.replies}
+            author={tweet.author}
+            description={tweet.description}
+            numberOfLikes={async () => {
+              await axios.post(`http://localhost:9090/tweet/${tweet.id}`);
+            }}
+            numberOfReplies={tweet.numberOfReplies}
+          >
+            {tweet.numberOfLikes}
+          </TweetItem>
+        )}
+      </div>
     </div>
-    <div id="profile-feed">
-      {!profileInfo?.tweets.length ? <p id="notweettext">No tweets</p> : ""}
-      {/*Reverse list of tweets so they are in chronological order*/}
-      {!profileInfo ? "": profileInfo.tweets.slice(0).reverse().map((tweet) =>
-        <TweetItem
-          key={tweet.id}
-          id={tweet.id}
-          replies={tweet.replies}
-          author={tweet.author}
-          description={tweet.description}
-          numberOfLikes={async () => {
-            await axios.post(`http://localhost:9090/tweet/${tweet.id}`);
-          }}
-          numberOfReplies={tweet.numberOfReplies}>{tweet.numberOfLikes}
-        </TweetItem>
-      )}
-    </div>
-  </div>
+  );
 }
 
 export default ProfilePage;
