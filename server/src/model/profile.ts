@@ -7,7 +7,7 @@ export class User {
   password: string;
   bio: string;
   email: string;
-  followers: User[];
+  followers: string[];
   following: number;
   tweets: Tweet[];
 
@@ -23,7 +23,7 @@ export class User {
   }
 
 
-  addFollower(follower: User) {
+  addFollower(follower: string) {
     this.followers.push(follower);
   }
 
@@ -32,15 +32,15 @@ export class User {
   }
 
   removeFollower(follower: User) {
-    function removeObjectWithId(arr: User[], userNameID: string) {
-      return arr.filter((obj) => obj.userNameID !== userNameID);
+    function removeObjectWithId(arr: string[], toRemove: string) {
+      return arr.filter((userName) => userName !== toRemove);
     }
 
     this.followers = removeObjectWithId(this.followers, follower.userNameID);
   }
 
-  isFollowedBy(user : User) : boolean{
-    return this.followers.includes(user);
+  isFollowedBy(userNameID : string) : boolean{
+    return this.followers.includes(userNameID);
   }
 
   removeFollowing() {
@@ -55,7 +55,7 @@ export class User {
     return this.tweets;
   }
 
-  getFollowers(): User[] {
+  getFollowers(): string[] {
     return this.followers;
   }
 

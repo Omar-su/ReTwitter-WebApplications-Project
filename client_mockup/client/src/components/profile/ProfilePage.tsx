@@ -34,7 +34,7 @@ function ProfilePage() {
   // Check if the list of followers includes the logged-in user's ID
   useEffect(() => {
     if (profileInfo && currentUser) {
-      setIsfollowed(profileInfo.followers.some(follower => follower.userNameID === currentUser.userNameID));
+      setIsfollowed(profileInfo.followers.some(followerID => followerID === currentUser.userNameID));
     }
     if(currentUser && profileInfo && currentUser.userNameID === profileInfo.userNameID){
       setIsOwner(true);

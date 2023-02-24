@@ -34,7 +34,7 @@ class ProfileService {
     if (toBeFollowed == null || toFollow == null) {
       return false;
     }
-    toBeFollowed.addFollower(toFollow);
+    toBeFollowed.addFollower(toFollow.userNameID);
     toFollow.addFollowing();
     return true;
   }
@@ -55,7 +55,7 @@ class ProfileService {
 
 
 
-  async getFollowers(userID : string): Promise<Array<User> | null> {
+  async getFollowers(userID : string): Promise<Array<string> | null> {
     const user : User | undefined = await userService.findUserByID(userID);
     if(user){
       return user.getFollowers();
