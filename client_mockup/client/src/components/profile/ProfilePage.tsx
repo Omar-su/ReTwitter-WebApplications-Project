@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import './Profile.css';
 import axios from 'axios';
 import ProfileInfo from './ProfileInfo';
@@ -7,24 +7,18 @@ import { Tweet, Reply, User } from '../../Interfaces';
 import { useParams } from 'react-router-dom';
 axios.defaults.withCredentials = true;
 
-interface currentUserReq extends Request {
-  session: {
-    user?: User;
-  };
-}
-
 function ProfilePage() {
   const [profileInfo, setProfileInfo] = useState<User>();
-  const { userNameID } = useParams<{userNameID: string}>();
+  const { userNameID } = useParams<{ userNameID: string }>();
   const [isFollowed, setIsfollowed] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [isOwner, setIsOwner] = useState(false);
 
-  async function updateProfileInfo() {
+  const updateProfileInfo = useCallback(async () => {
     const response = await axios.get<User>(`http://localhost:9090/profile/${userNameID}`);
     setProfileInfo(response.data);
+  }, [userNameID]);
 
-    
-  }
   useEffect(() => {
     async function fetchUser() {
       try {
@@ -42,12 +36,15 @@ function ProfilePage() {
     if (profileInfo && currentUser) {
       setIsfollowed(profileInfo.followers.some(follower => follower.userNameID === currentUser.userNameID));
     }
+    if(currentUser && profileInfo && currentUser.userNameID === profileInfo.userNameID){
+      setIsOwner(true);
+    }
   }, [currentUser, profileInfo]);
-  
+
 
   useEffect(() => {
     updateProfileInfo();
-  }, [userNameID]);
+  }, [isFollowed, updateProfileInfo]);
 
   async function followAccount() {
     if (isFollowed) {
@@ -70,9 +67,9 @@ function ProfilePage() {
             following={profileInfo.following}
             followers={profileInfo.followers.length}
             isFollowing={isFollowed}
+            isOwner={isOwner}
             followAccount={followAccount}
-          >
-            <button onClick={followAccount}>{isFollowed ? "Unfollow" : "Follow"}</button>
+          >           
           </ProfileInfo>
         }
       </div>

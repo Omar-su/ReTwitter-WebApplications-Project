@@ -10,11 +10,12 @@ interface profileInfoProps {
   following: number;
   followers: number;
   isFollowing: boolean;
+  isOwner: boolean;
   followAccount: () => Promise<void>;
   children?: React.ReactNode;
   key?: string;
 }
-function ProfileInfo({key, userName, ownerName, bio, following, followers, isFollowing, followAccount } : profileInfoProps){
+function ProfileInfo({key, userName, ownerName, bio, following, followers, isFollowing, isOwner, followAccount } : profileInfoProps){
   return <div>
     <img src="" alt="" />
     <div className='account-info'>
@@ -33,11 +34,13 @@ function ProfileInfo({key, userName, ownerName, bio, following, followers, isFol
           <Row className='mt-4' id='followings'>
               <Col>Following: {following}</Col>
               <Col>Followers: {followers}</Col>
+              {!isOwner && (
               <Col>
                 <button id="follow-button" onClick={followAccount}>
-                  {isFollowing ? 'Unfollow' : 'Follow'}
+                  {isFollowing ? "Unfollow" : "Follow"}
                 </button>
               </Col>
+            )}
           </Row>
       </Container>
     </div>
