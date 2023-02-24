@@ -64,7 +64,7 @@ function ProfilePage() {
             userName={profileInfo.userNameID}
             ownerName={profileInfo.ownerName}
             bio={profileInfo.bio}
-            following={profileInfo.following}
+            following={profileInfo.following.length}
             followers={profileInfo.followers.length}
             isFollowing={isFollowed}
             isOwner={isOwner}

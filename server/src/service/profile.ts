@@ -35,20 +35,20 @@ class ProfileService {
       return false;
     }
     toBeFollowed.addFollower(toFollow.userNameID);
-    toFollow.addFollowing();
+    toFollow.addFollowing(toBeFollowed.userNameID);
     return true;
   }
 
-  async unfollowProfile(unFollowee: string, unFollower: string): Promise<boolean> {
-    const toBeUnfollowed: User | undefined = await userService.findUserByID(unFollowee);
-    const toUnfollow: User | undefined = await userService.findUserByID(unFollower);
+  async unfollowProfile(toBeUnfollowedId: string, userUnfollowingId: string): Promise<boolean> {
+    const toBeUnfollowed: User | undefined = await userService.findUserByID(toBeUnfollowedId);
+    const userUnfollowing: User | undefined = await userService.findUserByID(userUnfollowingId);
   
-    if (toBeUnfollowed == null || toUnfollow == null) {
+    if (toBeUnfollowed == null || userUnfollowing == null) {
       return false;
     }
   
-    toBeUnfollowed.removeFollower(toUnfollow);
-    toUnfollow.removeFollowing();
+    toBeUnfollowed.removeFollower(userUnfollowing.userNameID);
+    userUnfollowing.removeFollowing(toBeUnfollowed.userNameID);
   
     return true;
   }
@@ -63,7 +63,7 @@ class ProfileService {
     return null;
   }
 
-  async getFollowing(userID : string): Promise<number | null> {
+  async getFollowing(userID : string): Promise<string[] | null> {
     const user : User | undefined = await userService.findUserByID(userID);
     if(user){
       return user.getFollowing();

@@ -115,6 +115,7 @@ userRouter.get("/current_user", async (
       res.status(400).send("No user is logged in");
       return;
     }
+    console.log("Current user: " + req.session.user)
     res.status(200).send(req.session.user);
   } catch (e : any) {
     res.status(500).send(e.message);      

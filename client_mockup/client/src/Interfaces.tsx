@@ -22,6 +22,6 @@ export interface User {
     ownerName: string;
     bio: string;
     followers: string[];
-    following: number;
+    following: string[];
     tweets: Tweet[];
   }
