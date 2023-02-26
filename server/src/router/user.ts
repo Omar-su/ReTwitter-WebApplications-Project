@@ -3,7 +3,7 @@ import { makeUserService } from "../service/user";
 import { User } from "../model/profile";
 export const userRouter = express.Router();
 
-const userService = makeUserService();
+export const userService = makeUserService();
 
 type UserRequest = Request &{
   body : {
@@ -93,7 +93,7 @@ userRouter.post("/login", async (
         return;
       }
 
-      const user = await userService.findUser(email, password);
+      const user = await userService.findUserByEmailAndPwd(email, password);
 
       if(user == null){
         res.status(409).send("Invalid user name or password")
@@ -109,4 +109,28 @@ userRouter.post("/login", async (
     } catch (e : any) {
       res.status(500).send(e.message);      
     }
+});
+
+type currentUserReq = Request & {
+  session: {
+    user?: User;
+  };
+}
+
+
+userRouter.get("/current_user", async (
+  req: currentUserReq,
+  res: Response<User | string>
+) => {
+  try {
+    if(req.session.user == null){
+      res.status(400).send("No user is logged in");
+      return;
+    }
+    console.log("Current user: " + req.session.user)
+    res.status(200).send(req.session.user);
+  } catch (e : any) {
+    res.status(500).send(e.message);      
+  }
+  
 });

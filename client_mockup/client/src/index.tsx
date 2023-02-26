@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import Profile from './Profile';
+import Profile from './components/profile/ProfilePage';
 import reportWebVitals from './reportWebVitals';
 
 // Bootstrap CSS

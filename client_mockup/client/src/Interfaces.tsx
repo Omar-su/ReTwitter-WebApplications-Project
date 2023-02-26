@@ -21,7 +21,7 @@ export interface User {
     userNameID: string;
     ownerName: string;
     bio: string;
-    followers: number;
-    following: number;
-    Tweets: Tweet[];
+    followers: string[];
+    following: string[];
+    tweets: Tweet[];
   }
