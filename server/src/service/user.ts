@@ -23,6 +23,10 @@ class UserService{
     return this.users.find(user => user.email == email && user.password === password);
   }
 
+  async getUsers() : Promise<User [] | undefined>{
+    return this.users;
+  }
+
 }
 
 

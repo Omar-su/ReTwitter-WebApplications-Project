@@ -62,6 +62,18 @@ userRouter.post("/", async(
 
 });
 
+type GetUserssRequest = Request &{
+}
+
+userRouter.get("/", async(req: GetUserssRequest, res: Response<User[] | string>) => {
+  try {
+      res.status(200).send(await userService.getUsers());
+  } catch (e:any) {
+      res.status(500).send(e.message);
+  }
+});
+
+
 userRouter.post("/login", async (
   req : UserRequest,
   res : Response<string | User> 

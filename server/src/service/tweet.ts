@@ -4,7 +4,7 @@ import { User } from "../model/profile"
 
 class TweetService{
   
-  async getTweets(user : User) : Promise<Array<Tweet>> {
+  async getTweets(user : User) : Promise<Tweet[]> {
     return user.tweets;
   }
   
@@ -12,6 +12,7 @@ class TweetService{
     const newTweet = new Tweet(user.ownerName, description);
     console.log(user);
     user.tweets.push(newTweet);
+    console.log("tweets "  + user.tweets.length);
     return newTweet;
   }
   
