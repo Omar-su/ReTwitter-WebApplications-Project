@@ -10,6 +10,13 @@ export class UserDBService {
     }
 
     async createUser(userNameID: string, ownerName: string, email: string, password: string): Promise<boolean> {
+        const existingUsername = await userModel.findOne({ userNameID: userNameID });
+        const existingEmail = await userModel.findOne({ email: email });
+        if (existingUsername || existingEmail) {
+            // A user with the given userNameID already exists, return false
+            return false;
+        }
+    
         const newUser = await userModel.create(
             {
                 userNameID: userNameID,
