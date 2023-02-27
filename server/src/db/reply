@@ -10,7 +10,8 @@ const replySchema = new Schema({
     unique : true
   },
   author : {
-    type : String,
+    type : ObjectId,
+    ref: "Users",
     required : true,
   },
   threadauthor : {

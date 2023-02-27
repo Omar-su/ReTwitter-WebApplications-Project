@@ -17,17 +17,6 @@ class ProfileService {
     }
   }
 
-  async tweet(userID: string, description: string): Promise<boolean> {
-    const user : User | undefined = await userService.findUserByID(userID); 
-    if (user != null) {
-      const newTweet = new Tweet(user.userNameID, description);
-      user.newTweet(newTweet);
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   async followProfile(followee: string, follower: string): Promise<boolean> {
     const toBeFollowed : User | undefined = await userService.findUserByID(followee);
     const toFollow : User | undefined = await userService.findUserByID(follower);

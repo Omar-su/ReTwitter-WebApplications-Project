@@ -9,10 +9,8 @@ class TweetService{
   }
   
   async tweet(user : User, description : string) : Promise<Tweet> {
-    const newTweet = new Tweet(user.ownerName, description);
-    console.log(user);
+    const newTweet = new Tweet(user, description);
     user.tweets.push(newTweet);
-    console.log("tweets "  + user.tweets.length);
     return newTweet;
   }
   
@@ -38,7 +36,7 @@ class TweetService{
   
 
   async replyOnTweet(user : User, id : number, description : string) :   Promise<boolean>{
-    const reply = new Reply(user.ownerName, description, user.ownerName);
+    const reply = new Reply(user, description, user.ownerName);
 
     const tweet : Tweet | undefined = user.tweets.find((tweet : Tweet) => {
       return tweet.id === id;

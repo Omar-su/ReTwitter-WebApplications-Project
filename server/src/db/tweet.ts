@@ -10,7 +10,8 @@ const tweetSchema = new Schema({
     unique : true
   },
   author : {
-    type : String,
+    type : ObjectId,
+    ref: "Users",
     required : true,
   },
   description : {
@@ -31,4 +32,4 @@ const tweetSchema = new Schema({
   }] 
 })
 
-export const twitterModel = conn.model<Tweet>("Tweets", tweetSchema);
+export const tweetModel = conn.model<Tweet>("Tweets", tweetSchema);

@@ -32,8 +32,8 @@ class UserService {
 
   async findUserByID(userNameID: string): Promise<User | undefined> {
     return this.users.find(user => user.userNameID === userNameID);
-
   }
+
 }
 export function makeUserService() {
   return new UserService;

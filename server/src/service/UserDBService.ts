@@ -3,7 +3,7 @@ import { User } from '../model/profile'
 import { userModel } from '../db/user'
 import { Tweet } from '../model/tweet';
 
-class UserDBService {
+export class UserDBService {
 
     async getUsers(): Promise<User[]> {
         return await userModel.find();
@@ -37,11 +37,26 @@ class UserDBService {
         return null;
     }
 
-    async getUsersFollowers(userNameID : string): Promise<Array<string> | null> {
-        const user = await userModel.findOne({userNameID: userNameID});
-        if(user){
-          return user.getFollowers();
+    async getUsersFollowers(userNameID: string): Promise<Array<string> | null> {
+        const user = await userModel.findOne({ userNameID: userNameID });
+        if (user) {
+            return user.getFollowers();
         }
         return null;
+    }
+
+    async getUsersFollowing(userNameID: string): Promise<Array<string> | null> {
+        const user = await userModel.findOne({ userNameID: userNameID });
+        if (user) {
+            return user.getFollowing();
+        }
+        return null;
+    }
+
+    async updateUser(user: User): Promise<User | null> {
+        const updatedUser = await userModel.findOneAndUpdate({userNameID: user.userNameID}, user, { new: true });
+        return updatedUser;
       }
 }
+
+export const userDBService = new UserDBService();

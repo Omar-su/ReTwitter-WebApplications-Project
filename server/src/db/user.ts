@@ -4,6 +4,7 @@ import { User } from "../model/profile";
 import { conn } from "./conn";
 
 const userSchema = new Schema({
+  
   username : {
     type : String,
     required : true,

@@ -6,20 +6,6 @@ import { Tweet } from "../model/tweet";
 export const profileRouter = express.Router();
 export const profileService = makeProfileService();
 
-/*
-profileRouter.get("/profiles", async (
-  req: Request<{}, {}, {}>,
-  res: Response<Array<User> | String>
-) => {
-  try {
-    const users = await profileService.getProfiles();
-    res.status(200).send(users);
-  } catch (e: any) {
-    res.status(500).send(e.message);
-  }
-});
-*/
-
 profileRouter.get("/:userid", async (
   req: Request<{ userid: string }, {}, {}>,
   res: Response<User | string>
