@@ -1,8 +1,8 @@
-import { tweetModel } from "../db/tweet";
-import { Tweet } from "../model/tweet";
-import { User } from "../model/profile";
+import { tweetModel } from "../../db/tweet";
+import { Tweet } from "../../model/tweet";
+import { User } from "../../model/profile";
 import { userDBService } from "./UserDBService";
-import { Reply } from "../model/reply";
+import { Reply } from "../../model/reply";
 
 class TweetDBService {
 

@@ -1,6 +1,6 @@
-import { replyModel } from "../db/reply";
-import { User } from "../model/profile";
-import { Reply } from "../model/reply";
+import { replyModel } from "../../db/reply";
+import { User } from "../../model/profile";
+import { Reply } from "../../model/reply";
 import { userDBService } from "./UserDBService";
 
 class ReplyDBService {

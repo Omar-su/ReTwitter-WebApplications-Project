@@ -1,7 +1,7 @@
 
-import { User } from '../model/profile'
-import { userModel } from '../db/user'
-import { Tweet } from '../model/tweet';
+import { User } from '../../model/profile'
+import { userModel } from '../../db/user'
+import { Tweet } from '../../model/tweet';
 
 export class UserDBService {
 
@@ -13,7 +13,7 @@ export class UserDBService {
         const existingUsername = await userModel.findOne({ userNameID: userNameID });
         const existingEmail = await userModel.findOne({ email: email });
         if (existingUsername || existingEmail) {
-            // A user with the given userNameID already exists, return false
+            // A user with the given userNameID or email already exists, return false
             return false;
         }
     

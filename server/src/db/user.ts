@@ -3,7 +3,7 @@ import { Schema } from "mongoose";
 import { User } from "../model/profile";
 import { conn } from "./conn";
 
-const userSchema = new Schema({
+const userSchema : Schema = new Schema({
   
   userNameID : {
     type : String,
