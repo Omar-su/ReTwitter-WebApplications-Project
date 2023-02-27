@@ -14,9 +14,12 @@ export class UserDBService {
             {
                 userNameID: userNameID,
                 ownerName: ownerName,
-                email: email,
                 password: password,
-
+                email: email,
+                bio: "",
+                followers: [],
+                following: [],
+                tweets: [],
             })
         return (newUser instanceof User);
     }
@@ -54,9 +57,9 @@ export class UserDBService {
     }
 
     async updateUser(user: User): Promise<User | null> {
-        const updatedUser = await userModel.findOneAndUpdate({userNameID: user.userNameID}, user, { new: true });
+        const updatedUser = await userModel.findOneAndUpdate({ userNameID: user.userNameID }, user, { new: true });
         return updatedUser;
-      }
+    }
 }
 
 export const userDBService = new UserDBService();
