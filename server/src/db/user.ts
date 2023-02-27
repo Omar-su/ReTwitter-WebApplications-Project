@@ -23,12 +23,12 @@ const userSchema = new Schema({
     required : true
   },
   followers : {
-    type : Number,
+    type: [String],
     required : true
   },
   following : {
-    type : Number,
-    required : true
+    type: [String],
+    required: true
   },
   password : {
     type : String,
