@@ -1,6 +1,7 @@
 
 import { User } from '../model/profile'
 import { userModel } from '../db/user'
+import { Tweet } from '../model/tweet';
 
 class UserDBService {
 
@@ -27,4 +28,20 @@ class UserDBService {
     async findUserByID(userNameID: string): Promise<User | null> {
         return await userModel.findOne({ userNameID: userNameID });
     }
+
+    async getUserTweets(userNameID: string): Promise<Array<Tweet> | null> {
+        const user = await userModel.findOne({ userNameID: userNameID })
+        if (user != null) {
+            return user.getTweets();
+        }
+        return null;
+    }
+
+    async getUsersFollowers(userNameID : string): Promise<Array<string> | null> {
+        const user = await userModel.findOne({userNameID: userNameID});
+        if(user){
+          return user.getFollowers();
+        }
+        return null;
+      }
 }
