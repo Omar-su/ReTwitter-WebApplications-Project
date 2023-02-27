@@ -5,12 +5,12 @@ import { conn } from "./conn";
 
 const userSchema = new Schema({
   
-  usernameid : {
+  userNameID : {
     type : String,
     required : true,
     unique : true
   },
-  name : {
+  ownerName : {
     type : String,
     required : true
   },

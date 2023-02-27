@@ -12,8 +12,8 @@ export class UserDBService {
     async createUser(userNameID: string, ownerName: string, email: string, password: string): Promise<boolean> {
         const newUser = await userModel.create(
             {
-                usernameid: userNameID,
-                name: ownerName,
+                userNameID: userNameID,
+                ownerName: ownerName,
                 email: email,
                 password: password,
 
