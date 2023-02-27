@@ -1,4 +1,5 @@
 import express, {Request, Response } from "express"
+import { User } from "../model/profile";
 import { Reply } from "../model/reply";
 import { makeReplyService } from "../service/reply";
 
@@ -7,8 +8,10 @@ export const replyRouter = express.Router();
 const replyService = makeReplyService();
 
 replyRouter.post("/tweet/reply",
+
+// TODO author should be logged in user
 async(
-  req : Request<{},{},{author : string, desc : string, origowner : string}>,
+  req : Request<{},{},{author : User, desc : string, origowner : string}>,
   res : Response<Reply>
 )=>{
   try {

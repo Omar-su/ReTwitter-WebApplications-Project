@@ -5,7 +5,7 @@ import { conn } from "./conn";
 
 const userSchema = new Schema({
   
-  username : {
+  usernameid : {
     type : String,
     required : true,
     unique : true

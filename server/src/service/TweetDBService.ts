@@ -65,20 +65,18 @@ class TweetDBService {
   async deleteTweet(tweetAuthor: User, id: number): Promise<boolean> {
     // Find the index of the tweet to remove in the user's tweets array
     const tweetIndex = tweetAuthor.tweets.findIndex((tweet: Tweet) => tweet.id === id);
-  
+
     if (tweetIndex >= 0) {
       // Remove the tweet
       tweetAuthor.tweets.splice(tweetIndex, 1);
-  
+
       await tweetModel.findOneAndDelete({ id });
       await userDBService.updateUser(tweetAuthor);
-  
+
       return true;
     }
-  
+
     return false;
   }
-
-
-
 }
+export const tweetDBService = new TweetDBService();

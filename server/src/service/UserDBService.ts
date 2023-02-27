@@ -12,8 +12,8 @@ export class UserDBService {
     async createUser(userNameID: string, ownerName: string, email: string, password: string): Promise<boolean> {
         const newUser = await userModel.create(
             {
-                userNameID: userNameID,
-                ownerName: ownerName,
+                usernameid: userNameID,
+                name: ownerName,
                 email: email,
                 password: password,
 
@@ -22,15 +22,15 @@ export class UserDBService {
     }
 
     async findUserByEmailAndPwd(email: string, password: string): Promise<User | null> {
-        return await userModel.findOne({ email: email }, { password: password });
+        return await userModel.findOne({ email: email }, { password: password }).populate("tweets");
     }
 
     async findUserByID(userNameID: string): Promise<User | null> {
-        return await userModel.findOne({ userNameID: userNameID });
+        return await userModel.findOne({ userNameID: userNameID }).populate("tweets");
     }
 
     async getUserTweets(userNameID: string): Promise<Array<Tweet> | null> {
-        const user = await userModel.findOne({ userNameID: userNameID })
+        const user = await this.findUserByID(userNameID);
         if (user != null) {
             return user.getTweets();
         }
@@ -38,7 +38,7 @@ export class UserDBService {
     }
 
     async getUsersFollowers(userNameID: string): Promise<Array<string> | null> {
-        const user = await userModel.findOne({ userNameID: userNameID });
+        const user = await this.findUserByID(userNameID);
         if (user) {
             return user.getFollowers();
         }
@@ -46,7 +46,7 @@ export class UserDBService {
     }
 
     async getUsersFollowing(userNameID: string): Promise<Array<string> | null> {
-        const user = await userModel.findOne({ userNameID: userNameID });
+        const user = await this.findUserByID(userNameID);
         if (user) {
             return user.getFollowing();
         }
