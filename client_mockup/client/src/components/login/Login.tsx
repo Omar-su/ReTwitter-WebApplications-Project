@@ -12,69 +12,58 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
+import { Copyright } from '../util/CopyrightFooter';
 
 axios.defaults.withCredentials = true
-
-
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="">
-        TwitterClone
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
 
 const theme = createTheme();
 
 export default function Login() {
 
-    const [isValidEmail, setIsValidEmail] = useState(false);
-    const [isValidPassword, setIsValidPassword] = useState(false);
+  const [loginError, setLoginError] = useState("");
 
-    const validateEmail = (email : string) => {
-        const emailRegexValidator = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-        
-        if (emailRegexValidator.test(email)) {
-            setIsValidEmail(true);
-        }
-        else {
-            setIsValidEmail(false);
-        }
-    }
-    const validatePassword = (password : string) => {
-        if (password !== "") {
-            setIsValidPassword(true);
-        }
-        else {
-            setIsValidPassword(false);
-        }
-    }
+  const [isValidEmail, setIsValidEmail] = useState(false);
+  const [isValidPassword, setIsValidPassword] = useState(false);
 
-    const navigate = useNavigate();
+  const validateEmail = (email: string) => {
+    const emailRegexValidator = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
-    const navigatePage = (link : string) => {
-        navigate(link);
+    if (emailRegexValidator.test(email)) {
+      setIsValidEmail(true);
     }
-    
-    const login = async (data : any) => {
-      await axios.post("http://localhost:9090/user/login", {
-        email: data.email,
-        password : data.password
-      })
+    else {
+      setIsValidEmail(false);
+    }
+  }
+  const validatePassword = (password: string) => {
+    if (password !== "") {
+      setIsValidPassword(true);
+    }
+    else {
+      setIsValidPassword(false);
+    }
+  }
+
+  const navigate = useNavigate();
+
+  const navigatePage = (link: string) => {
+    navigate(link);
+  }
+
+  const login = async (data: any) => {
+    await axios.post("http://localhost:9090/user/login", {
+      email: data.email,
+      password: data.password
+    })
       .then(function (response) {
         console.log(response);
         navigatePage("/home");
       })
       .catch(function (error) {
+        setLoginError(error.response.data)
         console.log(error);
       });
-    };
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -134,6 +123,11 @@ export default function Login() {
                 validatePassword(event.target.value);
               }}
             />
+            {loginError ? <Box sx=
+              {{
+                color: "red",
+                fontSize: "12px",
+              }}>{loginError}</Box> : null}
             <Button
               type="submit"
               fullWidth
@@ -150,14 +144,14 @@ export default function Login() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="" variant="body2" onClick = {() => navigatePage("/register")}>
+                <Link href="" variant="body2" onClick={() => navigatePage("/register")}>
                   Click here to register
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        <Copyright />
       </Container>
     </ThemeProvider>
   );
