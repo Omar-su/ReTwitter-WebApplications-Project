@@ -1,6 +1,6 @@
 import { Tweet } from "../model/tweet";
 import { Reply} from "../model/reply";
-import { User } from "../model/profile"
+import { User } from "../model/user"
 
 class TweetService{
   

@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { User } from "../model/profile";
+import { User } from "../model/user";
 import { makeProfileService } from "../service/profile";
 import { Tweet } from "../model/tweet";
 

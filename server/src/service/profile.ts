@@ -1,4 +1,4 @@
-import { User } from "../model/profile";
+import { User } from "../model/user";
 import { Tweet } from "../model/tweet";
 import { userService } from "../router/user";
 

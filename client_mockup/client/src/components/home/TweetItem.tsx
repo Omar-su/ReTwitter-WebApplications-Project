@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import TweetButton from './tweetbutton';
-import ReplyButton from './replybutton';
-import ReplyItem from './reply';
 import twitterImage from "../util/images/twitter_test_image.png";
 import './Home.css';
+import ReplyItem from './Reply';
+import TweetButton from './TweetButton';
+import ReplyForm from './ReplyButton';
+import 'bootstrap/dist/css/bootstrap.min.css';
 axios.defaults.withCredentials = true
 
 interface Tweet {
@@ -27,8 +28,7 @@ export interface Reply {
 }
 
 
-
-function App() {
+export function App() {
   const[tweets, setTweets] = useState<Tweet[]>([]);
 
   async function updateTweets(){
@@ -40,7 +40,6 @@ function App() {
     console.log("called");
     updateTweets();
   }, [tweets]);
-
 
   return (
     <div>
@@ -90,7 +89,7 @@ export function TweetItem({key, id, author, description, numberOfLikes, numberOf
         </button>
         <span>{numberOfReplies}</span>
         <div>
-          <ReplyButton id={id} replies={replies}></ReplyButton>
+          <ReplyForm id={id} replies={replies}></ReplyForm>
         </div>
         <button onClick={ async () => {
           await axios.post(`http://localhost:9090/tweet/delete/${id}`);}}>Delete Tweet </button>
