@@ -28,7 +28,7 @@ export interface Reply {
 }
 
 
-export function App() {
+export function TweetPage() {
   const[tweets, setTweets] = useState<Tweet[]>([]);
 
   async function updateTweets(){
@@ -117,4 +117,4 @@ export function RepliesToTweet({id, replies}:RepliesToTweetProps){
 }
 
 
-export default App;
+export default TweetPage;
