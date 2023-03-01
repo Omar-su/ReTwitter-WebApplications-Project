@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Main.css'
 import TweetPage from './TweetItem';
 import { NavBar } from './NavBar';
+import { NewsItems } from './NewsItem';
 // import { useNavigate } from 'react-router-dom';
 
 // const navigate = useNavigate();
@@ -19,7 +20,9 @@ function Home() {
         <div className="col">
           <TweetPage></TweetPage>
         </div>
-        <div className="col">Popular tweets/Popular TwitClone</div>
+        <div className="col">
+          <NewsItems></NewsItems>
+        </div>
       </div>
     </div>
   );

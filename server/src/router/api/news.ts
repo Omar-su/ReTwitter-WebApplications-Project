@@ -13,7 +13,7 @@ type NewsGetRequest = Request &{
 
 newsRouter.get("/", async ( 
   req : NewsGetRequest,
-  res : Response<News[] | any>, 
+  res : Response<News[]>, 
 ) => {
   try {
     // if (req.session.user == null) {
