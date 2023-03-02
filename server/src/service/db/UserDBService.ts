@@ -16,7 +16,7 @@ export class UserDBService {
             // A user with the given userNameID or email already exists, return false
             return false;
         }
-    
+
         const newUser = await userModel.create(
             {
                 userNameID: userNameID,
@@ -69,4 +69,7 @@ export class UserDBService {
     }
 }
 
-export const userDBService = new UserDBService();
+//export const userDBService = new UserDBService();
+export function makeUserDBService() {
+    return new UserDBService;
+}

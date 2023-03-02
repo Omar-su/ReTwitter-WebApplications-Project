@@ -1,12 +1,13 @@
 import { tweetModel } from "../../db/tweet";
 import { Tweet } from "../../model/tweet";
 import { User } from "../../model/profile";
-import { userDBService } from "./UserDBService";
+import { makeUserDBService } from "./UserDBService";
 import { Reply } from "../../model/reply";
 
+export const userDBService = makeUserDBService();
+
 class TweetDBService {
-
-
+  
   async createTweet(author: User, description: string): Promise<Tweet> {
     const newTweet = new tweetModel({
       id: Date.now().valueOf(),

@@ -1,9 +1,10 @@
 import express, { Request, Response } from "express";
-import { makeUserService } from "../service/user";
+import { makeUserDBService } from "../service/db/UserDBService";
 import { User } from "../model/profile";
+
 export const userRouter = express.Router();
 
-export const userService = makeUserService();
+export const userService = makeUserDBService();
 
 type UserRequest = Request &{
   body : {

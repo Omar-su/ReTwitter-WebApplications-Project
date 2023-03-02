@@ -1,7 +1,10 @@
 import { replyModel } from "../../db/reply";
 import { User } from "../../model/profile";
 import { Reply } from "../../model/reply";
-import { userDBService } from "./UserDBService";
+import { makeUserDBService } from "./UserDBService";
+
+
+export const userDBService = makeUserDBService();
 
 class ReplyDBService {
 
