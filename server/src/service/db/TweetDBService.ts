@@ -3,6 +3,7 @@ import { Tweet } from "../../model/tweet";
 import { User } from "../../model/profile";
 import { makeUserDBService } from "./UserDBService";
 import { Reply } from "../../model/reply";
+import { userModel } from "../../db/user";
 
 export const userDBService = makeUserDBService();
 
@@ -11,7 +12,7 @@ class TweetDBService {
   async createTweet(author: User, description: string): Promise<Tweet> {
     const newTweet = new tweetModel({
       id: Date.now().valueOf(),
-      author: author,
+      author: author._id,
       description: description,
       numberOfReplies: 0,
       numberOfLikes: 0,
@@ -80,4 +81,6 @@ class TweetDBService {
     return false;
   }
 }
-export const tweetDBService = new TweetDBService();
+export function makeTweetDBService() {
+  return new TweetDBService;
+}

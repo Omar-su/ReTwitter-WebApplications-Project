@@ -11,7 +11,7 @@ class ReplyDBService {
     async createReply(author : User, description : string, ownerOfTweet : string): Promise<Reply> {
     const newReply = new replyModel({
       id: Date.now().valueOf(),
-      author: author,
+      author: author._id,
       userNameOfOriginalTweet: ownerOfTweet,
       description: description,
       numberOfReplies: 0,
@@ -24,4 +24,6 @@ class ReplyDBService {
     return newReply;
   }
 }
-export const replyDBService = new ReplyDBService();
+export function makeReplyDBService() {
+  return new ReplyDBService;
+}

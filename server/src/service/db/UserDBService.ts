@@ -23,53 +23,52 @@ export class UserDBService {
                 ownerName: ownerName,
                 password: password,
                 email: email,
-                bio: "",
+                bio: "Test bio",
                 followers: [],
                 following: [],
                 tweets: [],
             })
-        return (newUser instanceof User);
+        return !!newUser;
     }
 
     async findUserByEmailAndPwd(email: string, password: string): Promise<User | null> {
         return await userModel.findOne({ email: email }, { password: password }).populate("tweets");
     }
 
-    async findUserByID(userNameID: string): Promise<User | null> {
-        return await userModel.findOne({ userNameID: userNameID }).populate("tweets");
+    async findUserByID(user_id: string): Promise<User | null> {
+        return await userModel.findById(user_id).populate("tweets");
     }
 
-    async getUserTweets(userNameID: string): Promise<Array<Tweet> | null> {
-        const user = await this.findUserByID(userNameID);
-        if (user != null) {
-            return user.getTweets();
+    async getUserTweets(user: User): Promise<Array<Tweet> | null> {
+        const foundUser = await this.findUserByID(user._id.toString());
+        if (foundUser) {
+            return foundUser.tweets;
         }
         return null;
     }
 
-    async getUsersFollowers(userNameID: string): Promise<Array<string> | null> {
-        const user = await this.findUserByID(userNameID);
-        if (user) {
-            return user.getFollowers();
+    async getUsersFollowers(user: User): Promise<Array<string> | null> {
+        const foundUser = await this.findUserByID(user._id.toString());
+        if (foundUser) {
+            return foundUser.followers;
         }
         return null;
     }
 
-    async getUsersFollowing(userNameID: string): Promise<Array<string> | null> {
-        const user = await this.findUserByID(userNameID);
-        if (user) {
-            return user.getFollowing();
+    async getUsersFollowing(user: User): Promise<Array<string> | null> {
+        const foundUser = await this.findUserByID(user._id.toString());
+        if (foundUser) {
+            return foundUser.following;
         }
         return null;
     }
 
     async updateUser(user: User): Promise<User | null> {
-        const updatedUser = await userModel.findOneAndUpdate({ userNameID: user.userNameID }, user, { new: true });
+        const updatedUser = await userModel.findByIdAndUpdate(user._id.toString(), user, { new: true });
         return updatedUser;
     }
 }
 
-//export const userDBService = new UserDBService();
 export function makeUserDBService() {
     return new UserDBService;
 }

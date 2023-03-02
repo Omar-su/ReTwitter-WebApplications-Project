@@ -1,11 +1,12 @@
 import express, {Request, Response } from "express"
 import { User } from "../model/profile";
 import { Reply } from "../model/reply";
+import { makeReplyDBService } from "../service/db/ReplyDBService";
 import { makeReplyService } from "../service/reply";
 
 export const replyRouter = express.Router();
 
-const replyService = makeReplyService();
+const replyService = makeReplyDBService();
 
 replyRouter.post("/tweet/reply",
 
@@ -19,7 +20,7 @@ async(
     const desc = req.body.desc;
     const origowner = req.body.origowner;
     
-    const newReply = await replyService.reply(author, desc, origowner);
+    const newReply = await replyService.createReply(author, desc, origowner);
     res.status(201).send(newReply);
   } catch (e:any) {
     res.status(500).send(e.message);

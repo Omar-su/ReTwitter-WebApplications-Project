@@ -100,7 +100,7 @@ userRouter.post("/login", async (
         res.status(409).send("Invalid user name or password")
         return;
       }
-      if (req.session.user?.email == user.email) {
+      if (req.session.user == user) {
         res.status(409).send("User already logged in");
         return;
       }
