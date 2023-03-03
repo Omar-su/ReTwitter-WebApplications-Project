@@ -12,90 +12,90 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
+import { Copyright } from '../util/CopyrightFooter';
 axios.defaults.withCredentials = true
-
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="">
-        TwitterClone
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const theme = createTheme();
 
 export default function CreateAccount() {
 
-    const createUser = async (data : any) => {
-      await axios.post("http://localhost:9090/user", {
-        userid: data.userid,
-        ownerName: data.username,
-        email: data.email,
-        password : data.password
-      })
+  const createUser = async (data: any) => {
+    await axios.post("http://localhost:9090/user", {
+      userid: data.userid,
+      ownerName: data.name,
+      email: data.email,
+      password: data.password
+    })
       .then(function (response) {
         console.log(response);
+        navigatePage("/login");
       })
       .catch(function (error) {
+        setRegistrationError(error.response.data)
         console.log(error);
       });
-    };
+  };
 
+  const [registrationError, setRegistrationError] = useState("");
 
-    const [isValidEmail, setIsValidEmail] = useState(false);
-    const [isValidUsername, setIsValidUsername] = useState(false);
-    const [isValidPassword, setIsValidPassword] = useState(false);
-    
-    const validateEmail = (email : string) => {
-        const emailRegexValidator = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-        
-        if (emailRegexValidator.test(email)) {
-            setIsValidEmail(true);
-        }
-        else {
-            setIsValidEmail(false);
-        }
+  const [isValidEmail, setIsValidEmail] = useState([false, true]);
+  const [isValidName, setIsValidName] = useState([false, true]);
+  const [isValidUserID, setIsValidUserID] = useState([false, true]);
+  const [isValidPassword, setIsValidPassword] = useState([false, true]);
+
+  const validateEmail = (email: string) => {
+    const emailRegexValidator = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+
+    if (emailRegexValidator.test(email)) {
+      setIsValidEmail([true, true]);
     }
-    const validateUsername = (username : string) => {
-        if (username !== "") {
-            setIsValidUsername(true);
-        }
-        else {
-            setIsValidUsername(false);
-        }
+    else {
+      setIsValidEmail([false, false]);
     }
-    const validatePassword = (password : string) => {
-        if (password !== "") {
-            setIsValidPassword(true);
-        }
-        else {
-            setIsValidPassword(false);
-        }
+  }
+  const validateName = (name: string) => {
+    if (name !== "") {
+      setIsValidName([true, true]);
     }
-    
-    const navigate = useNavigate();
-    const navigatePage = (link : string) => {
-        navigate(link);
+    else {
+      setIsValidName([false, false]);
     }
+  }
+  const validateUserID = (userID: string) => {
+    if (userID !== "") {
+      setIsValidUserID([true, true]);
+    }
+    else {
+      setIsValidUserID([false, false]);
+    }
+  }
+  const validatePassword = (password: string) => {
+    if (password !== "") {
+      setIsValidPassword([true, true]);
+    }
+    else {
+      setIsValidPassword([false, false]);
+    }
+  }
+
+  const navigate = useNavigate();
+  const navigatePage = (link: string) => {
+    navigate(link);
+  }
 
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      userid : data.get('id'),
-      username: data.get('username'),
+      userid: data.get('id'),
+      name: data.get('name'),
       email: data.get('email'),
       password: data.get('password'),
     });
     const dataValue = {
-      userid : data.get('id'),
-      username: data.get('username'),
+      userid: data.get('id'),
+      name: data.get('name'),
       email: data.get('email'),
       password: data.get('password'),
     }
@@ -123,19 +123,23 @@ export default function CreateAccount() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
                 <TextField
+                  error={!isValidName[1]}
+                  helperText={!isValidName[1] ? "Field can not be empty." : ""}
                   required
                   fullWidth
-                  id="username"
+                  id="name"
                   label="Your Name"
-                  name="username"
-                  autoComplete="username"
+                  name="name"
+                  autoComplete="name"
                   onChange={(event) => {
-                    validateUsername(event.target.value);
-                  }} 
+                    validateName(event.target.value);
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  error={!isValidUserID[1]}
+                  helperText={!isValidUserID[1] ? "Field can not be empty." : ""}
                   required
                   fullWidth
                   id="id"
@@ -143,12 +147,14 @@ export default function CreateAccount() {
                   name="id"
                   autoComplete="id"
                   onChange={(event) => {
-                    validateUsername(event.target.value);
-                }}
+                    validateUserID(event.target.value);
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  error={!isValidEmail[1]}
+                  helperText={!isValidEmail[1] ? "Please use a valid email format." : ""}
                   required
                   fullWidth
                   id="email"
@@ -157,11 +163,13 @@ export default function CreateAccount() {
                   autoComplete="email"
                   onChange={(event) => {
                     validateEmail(event.target.value);
-                }}
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  error={!isValidPassword[1]}
+                  helperText={!isValidPassword[1] ? "Field can not be empty." : ""}
                   required
                   fullWidth
                   name="password"
@@ -177,12 +185,17 @@ export default function CreateAccount() {
               <Grid item xs={12}>
               </Grid>
             </Grid>
+            {registrationError ? <Box sx=
+              {{
+                color: "red",
+                fontSize: "12px",
+              }}>{registrationError}</Box> : null}
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              disabled={!isValidEmail || !isValidPassword || !isValidUsername}
+              disabled={!isValidEmail[0] || !isValidPassword[0] || !isValidName[0] || !isValidUserID[0]}
             >
               Sign Up
             </Button>
@@ -195,7 +208,7 @@ export default function CreateAccount() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
+        <Copyright />
       </Container>
     </ThemeProvider>
   );

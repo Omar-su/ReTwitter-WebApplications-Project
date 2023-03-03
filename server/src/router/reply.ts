@@ -1,8 +1,7 @@
 import express, {Request, Response } from "express"
-import { User } from "../model/profile";
+import { User } from "../model/user";
 import { Reply } from "../model/reply";
 import { makeReplyDBService } from "../service/db/ReplyDBService";
-import { makeReplyService } from "../service/reply";
 
 export const replyRouter = express.Router();
 

@@ -1,4 +1,4 @@
-import { makeTweetService } from "./tweet";
+import { makeTweetService } from "./oldservices/tweet";
 
 test("If a tweet is added to the list then it should be in the list", async () => {
   const desc = "Test description";

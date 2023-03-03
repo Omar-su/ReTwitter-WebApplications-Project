@@ -1,51 +1,51 @@
 import express, { Request, Response } from "express";
 import { makeUserDBService } from "../service/db/UserDBService";
-import { User } from "../model/profile";
+import { User } from "../model/user";
 
 export const userRouter = express.Router();
 
 export const userService = makeUserDBService();
 
-type UserRequest = Request &{
-  body : {
-    userid ?: string;
-    ownerName ?: string;
-    email : string;
-    password : string;
+type UserRequest = Request & {
+  body: {
+    userid?: string;
+    ownerName?: string;
+    email: string;
+    password: string;
   }
-  session : {
-    user ?: User;
+  session: {
+    user?: User;
   }
 }
 
-userRouter.post("/", async(
-  req : UserRequest,
-  res : Response<string>
-)=> {
+userRouter.post("/", async (
+  req: UserRequest,
+  res: Response<string>
+) => {
   try {
-    const userid : string = req.body.userid;
-    const ownerName : string = req.body.ownerName;
-    const email : string = req.body.email;
-    const password : string = req.body.password;
+    const userid: string = req.body.userid;
+    const ownerName: string = req.body.ownerName;
+    const email: string = req.body.email;
+    const password: string = req.body.password;
 
-    if (typeof(userid) !== "string" ) {
+    if (typeof (userid) !== "string") {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- userid has type
-      ${typeof(userid)}`);
+      ${typeof (userid)}`);
       return;
     }
-    if (typeof(ownerName) !== "string" ) {
+    if (typeof (ownerName) !== "string") {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- ownername has type
-      ${typeof(ownerName)}`);
+      ${typeof (ownerName)}`);
       return;
     }
-    if (typeof(email) !== "string" ) {
+    if (typeof (email) !== "string") {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- email has type
-      ${typeof(email)}`);
+      ${typeof (email)}`);
       return;
     }
-    if (typeof(password) !== "string" ) {
+    if (typeof (password) !== "string") {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- passWord has type
-      ${typeof(password)}`);
+      ${typeof (password)}`);
       return;
     }
 
@@ -57,44 +57,44 @@ userRouter.post("/", async(
     }
 
     res.status(201).send("User created successfully")
-  } catch (e:any) {
+  } catch (e: any) {
     res.status(500).send(e.message);
   }
 
 });
 
-type GetUserssRequest = Request &{
+type GetUserssRequest = Request & {
 }
 
-userRouter.get("/", async(req: GetUserssRequest, res: Response<User[] | string>) => {
+userRouter.get("/", async (req: GetUserssRequest, res: Response<User[] | string>) => {
   try {
-      res.status(200).send(await userService.getUsers());
-  } catch (e:any) {
-      res.status(500).send(e.message);
+    res.status(200).send(await userService.getUsers());
+  } catch (e: any) {
+    res.status(500).send(e.message);
   }
 });
 
 
 userRouter.post("/login", async (
-  req : UserRequest,
-  res : Response<string | User> 
-)=> {
-    try {
-      const email : string = req.body.email;
-      const password : string = req.body.password;
+  req: UserRequest,
+  res: Response<string | User>
+) => {
+  try {
+    const email: string = req.body.email;
+    const password: string = req.body.password;
 
-      if (typeof(email) !== "string" ) {
-        res.status(400).send(`Bad POST call to ${req.originalUrl} --- email has type
-        ${typeof(email)}`);
-        return;
-      }
-      if (typeof(password) !== "string" ) {
-        res.status(400).send(`Bad POST call to ${req.originalUrl} --- passWord has type
-        ${typeof(password)}`);
-        return;
-      }
+    if (typeof (email) !== "string") {
+      res.status(400).send(`Bad POST call to ${req.originalUrl} --- email has type
+        ${typeof (email)}`);
+      return;
+    }
+    if (typeof (password) !== "string") {
+      res.status(400).send(`Bad POST call to ${req.originalUrl} --- passWord has type
+        ${typeof (password)}`);
+      return;
+    }
 
-      const user = await userService.findUserByEmailAndPwd(email, password);
+    const user = await userService.findUserByEmailAndPwd(email, password);
 
       if(user == null){
         res.status(409).send("Invalid user name or password")
@@ -107,9 +107,9 @@ userRouter.post("/login", async (
       req.session.user = user;
       res.status(200).send(user);
 
-    } catch (e : any) {
-      res.status(500).send(e.message);      
-    }
+  } catch (e: any) {
+    res.status(500).send(e.message);
+  }
 });
 
 type currentUserReq = Request & {
@@ -123,7 +123,7 @@ userRouter.get("/current_user", async (
   res: Response<User | string>
 ) => {
   try {
-    if(req.session.user == null){
+    if (req.session.user == null) {
       res.status(400).send("No user is logged in");
       return;
     }
@@ -137,5 +137,5 @@ userRouter.get("/current_user", async (
   } catch (e : any) {
     res.status(500).send(e.message);      
   }
-  
+
 });

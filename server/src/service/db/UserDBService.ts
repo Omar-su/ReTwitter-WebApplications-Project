@@ -1,5 +1,5 @@
 
-import { User } from '../../model/profile'
+import { User } from '../../model/user'
 import { userModel } from '../../db/user'
 import { Tweet } from '../../model/tweet';
 
