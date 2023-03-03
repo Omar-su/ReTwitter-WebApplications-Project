@@ -3,7 +3,7 @@ import axios from 'axios';
 import twitterImage from "../util/images/twitter_test_image.png";
 import './Home.css';
 import ReplyItem from './reply';
-import TweetButton from './tweetbutton';
+import TweetButton from './TweetButton';
 import ReplyForm from './replybutton';
 import 'bootstrap/dist/css/bootstrap.min.css';
 axios.defaults.withCredentials = true
