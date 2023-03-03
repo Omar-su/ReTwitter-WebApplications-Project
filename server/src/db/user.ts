@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { Schema } from "mongoose";
-import { User } from "../model/profile";
+import { User } from "../model/user";
 import { conn } from "./conn";
 
 const userSchema = new Schema({

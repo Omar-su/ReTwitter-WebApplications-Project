@@ -2,7 +2,7 @@ import express, { Request, response, Response } from "express";
 import { Tweet } from "../model/tweet";
 import { makeTweetService } from "../service/tweet";
 import { Reply } from "../model/reply";
-import { User } from "../model/profile";
+import { User } from "../model/user";
 
 export const tweetRouter = express.Router();
 

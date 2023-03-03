@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import axios from 'axios';
 import { Reply } from '../../Interfaces';
-import { ReplyDisplayerButton } from './displayreplies';
+import { ReplyDisplayerButton } from './DisplayReplies';
 axios.defaults.withCredentials = true
 
 interface ReplyButtonProps{

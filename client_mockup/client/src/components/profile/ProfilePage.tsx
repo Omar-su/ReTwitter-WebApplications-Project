@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './Profile.css';
 import axios from 'axios';
 import ProfileInfo from './ProfileInfo';
-import { TweetItem } from '../home/HomePage';
+import { TweetItem } from '../home/TweetItem';
 import { Tweet, Reply, User } from '../../Interfaces';
 import { useParams } from 'react-router-dom';
 axios.defaults.withCredentials = true;

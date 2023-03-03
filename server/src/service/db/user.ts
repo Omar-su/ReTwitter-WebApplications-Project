@@ -1,5 +1,5 @@
 import { userModel } from "../../db/user";
-import { User } from "../../model/profile";
+import { User } from "../../model/user";
 
 export async function createUser(username : string, name : string, email : string, password : string) : Promise<boolean> {
   if (await userModel.findOne({username : username, email : email})){
