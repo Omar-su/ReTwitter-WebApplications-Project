@@ -60,6 +60,7 @@ export function NewsItems(){
   return(
     <div>
       {news.map((news) => <NewsItem title={news.title} link={news.link} summary={news.summary} published_date={news.published_date}></NewsItem>)}
+      {/* <NewsItem title={"Latest video"} link={"news.link"} summary={"news.summary"} published_date={new Date()}></NewsItem> <NewsItem title={"My youtube channel"} link={"https://www.youtube.com/channel/UCz68Gj-pU58z2HM7oX6v6VA"} summary={"This is my youtube channel. Subscribe please :)"} published_date={new Date()}></NewsItem> */}
     </div>
   );
 }
