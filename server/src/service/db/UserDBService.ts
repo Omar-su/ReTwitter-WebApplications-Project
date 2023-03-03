@@ -74,9 +74,6 @@ export class UserDBService {
         if (toBeFollowed == null || toFollow == null) {
             return false;
         }
-        function removeObjectWithId(arr: string[], unfollowerID: string) {
-            return arr.filter((userName) => userName !== unfollowerID);
-        }
 
         //TODO, Somehow use user objects methods for adding followers and following
         toBeFollowed.followers.push(toFollow.userNameID);
