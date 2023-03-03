@@ -10,13 +10,16 @@ class UserService {
     }
 
     if (this.users.some(user => user.email === email)) {
-      return false;
+      if (this.users.some(user => user.email === email)) {
+        return false;
+      }
+
+      const newUser = new User(userid, ownerName, email, password);
+      const newUser = new User(userid, ownerName, email, password);
+      this.users.push(newUser);
+
+      return true;
     }
-
-    const newUser = new User(userid, ownerName, email, password);
-    this.users.push(newUser);
-
-    return true;
   }
 
   async findUserByEmailAndPwd(email: string, password: string): Promise<User | undefined> {
@@ -24,17 +27,20 @@ class UserService {
   }
 
 
+
   async getUsers(): Promise<User[] | undefined> {
     return this.users;
   }
 
-  async findUserByID(userNameID: string): Promise<User | undefined> {
-    return this.users.find(user => user.userNameID === userNameID);
+
+  async findUserByID(userNameID: string): Promise < User | undefined > {
+  return this.users.find(user => user.userNameID === userNameID);
+}
+
+
+
+}
+
+  export function makeUserService() {
+    return new UserService;
   }
-
-
-
-}
-export function makeUserService() {
-  return new UserService;
-}

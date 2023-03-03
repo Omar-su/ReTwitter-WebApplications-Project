@@ -1,4 +1,4 @@
-import ReplyForm from "./ReplyButton";
+import ReplyForm from "./replybutton";
 import { Reply } from "../../Interfaces";
 import { ReplyDisplayerButton } from "./Displayreplies";
 

@@ -1,9 +1,10 @@
 import express, { Request, Response } from "express";
-import { makeUserService } from "../service/user";
+import { makeUserDBService } from "../service/db/UserDBService";
 import { User } from "../model/user";
+
 export const userRouter = express.Router();
 
-export const userService = makeUserService();
+export const userService = makeUserDBService();
 
 type UserRequest = Request & {
   body: {
@@ -95,16 +96,16 @@ userRouter.post("/login", async (
 
     const user = await userService.findUserByEmailAndPwd(email, password);
 
-    if (user == null) {
-      res.status(409).send("Invalid user name or password")
-      return;
-    }
-    if (req.session.user?.email == user.email) {
-      res.status(409).send("User already logged in");
-      return;
-    }
-    req.session.user = user;
-    res.status(200).send(user);
+      if(user == null){
+        res.status(409).send("Invalid user name or password")
+        return;
+      }
+      if (req.session.user == user) {
+        res.status(409).send("User already logged in");
+        return;
+      }
+      req.session.user = user;
+      res.status(200).send(user);
 
   } catch (e: any) {
     res.status(500).send(e.message);
@@ -117,7 +118,6 @@ type currentUserReq = Request & {
   };
 }
 
-
 userRouter.get("/current_user", async (
   req: currentUserReq,
   res: Response<User | string>
@@ -127,10 +127,15 @@ userRouter.get("/current_user", async (
       res.status(400).send("No user is logged in");
       return;
     }
-    console.log("Current user: " + req.session.user)
-    res.status(200).send(req.session.user);
-  } catch (e: any) {
-    res.status(500).send(e.message);
+    console.log("Current user: " + req.session.user);
+    const currentUserFromDb = await userService.findUserByID(req.session.user._id.toString());
+    if(currentUserFromDb == null) {
+      res.status(404).send("Could not find user data")
+      return;
+    }
+    res.status(200).send(currentUserFromDb);
+  } catch (e : any) {
+    res.status(500).send(e.message);      
   }
 
 });

@@ -1,9 +1,10 @@
 import { Reply } from "./reply";
+import { User } from "./profile";
 
 export class Tweet {
   
     id : number;  
-    author : string;
+    author : User;
     description : string;
     numberOfLikes : number;
     numberOfReplies : number;
@@ -13,7 +14,7 @@ export class Tweet {
     // number of views, number of shares, 
     
     //Default values for some parameters as they should not be set 
-    constructor(author : string, description : string) {
+    constructor(author : User, description : string) {
         this.id = Date.now();
         this.author = author;
         this.description = description;
@@ -30,7 +31,7 @@ export class Tweet {
     }
 
 
-    private increaseNrComments(){
+    increaseNrComments(){
       this.numberOfReplies += 1;
     }
 

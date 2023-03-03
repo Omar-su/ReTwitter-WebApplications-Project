@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb";
 import { Schema } from "mongoose";
 import { conn } from "./conn";
 import { Tweet } from "../model/tweet";
+import { Reply } from "../model/reply";
 
 const replySchema = new Schema({
   id : {
@@ -10,10 +11,11 @@ const replySchema = new Schema({
     unique : true
   },
   author : {
-    type : String,
+    type : ObjectId,
+    ref: "Users",
     required : true,
   },
-  threadauthor : {
+  userNameOfOriginalTweet : {
     type : String,
     required : true
   },
@@ -35,4 +37,4 @@ const replySchema = new Schema({
   }] 
 })
 
-export const twitterModel = conn.model<Tweet>("Replies", replySchema);
+export const replyModel = conn.model<Reply>("Replies", replySchema);

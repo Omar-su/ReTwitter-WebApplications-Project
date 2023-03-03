@@ -1,12 +1,13 @@
 import express, { Request, response, Response } from "express";
 import { Tweet } from "../model/tweet";
-import { makeTweetService } from "../service/tweet";
-import { Reply } from "../model/reply";
 import { User } from "../model/user";
+import { makeTweetDBService } from "../service/db/TweetDBService";
+import { makeUserDBService } from "../service/db/UserDBService";
 
 export const tweetRouter = express.Router();
 
-const tweetService = makeTweetService();
+const tweetService = makeTweetDBService();
+const userService = makeUserDBService();
 
 type GetTweetsRequest = Request &{
     session : {
@@ -20,7 +21,12 @@ tweetRouter.get("/", async(req: GetTweetsRequest, res: Response<Tweet[] | string
             res.status(401).send("Not logged in");
             return;
         }
-        res.status(200).send(await tweetService.getTweets(req.session.user));
+        const tweets = await userService.getUserTweets(req.session.user);
+        if (tweets == null) {
+            res.status(500).send("Failed to get user tweets");
+            return;
+        }
+        res.status(200).send(tweets);
     } catch (e:any) {
         res.status(500).send(e.message);
     }
@@ -47,7 +53,7 @@ tweetRouter.post("/", async(
             res.status(401).send("Not logged in");
             return;
         }
-        const newTweet = await tweetService.tweet(req.session.user, description);
+        const newTweet = await tweetService.createTweet(req.session.user, description);
         res.status(201).send(newTweet);
     } catch (e:any) {
         res.status(500).send(e.message);
@@ -106,47 +112,47 @@ type ReplyRequest = Request & {
 }
 
 // TODO THIS IS FOR TESTING
-tweetRouter.post("/reply/:id",
-    async(
-    req : ReplyRequest,
-    res : Response<string>
-    )=>{
-    try {
-        const author = req.body.author;
-        const desc = req.body.description;
+// tweetRouter.post("/reply/:id",
+//     async(
+//     req : ReplyRequest,
+//     res : Response<string>
+//     )=>{
+//     try {
+//         const author = req.body.author;
+//         const desc = req.body.description;
 
-        if(typeof(desc) !== "string" || typeof(author) !== "string" || typeof(req.session.user?.ownerName)!== "string" ){
-            res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing body data`);
-            return;
-        }
+//         if(typeof(desc) !== "string" || typeof(author) !== "string" || typeof(req.session.user?.ownerName)!== "string" ){
+//             res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing body data`);
+//             return;
+//         }
         
-        if (req.params.id == null) {
-            res.status(400).send("Id not found");
-            return;
-        }
-        const id : number = parseInt(req.params.id, 10);
-        // const id : number = req.body.id;
-        if (! (id > 0)) {
-            res.status(400).send("Not found id");
-            return;
-        }
+//         if (req.params.id == null) {
+//             res.status(400).send("Id not found");
+//             return;
+//         }
+//         const id : number = parseInt(req.params.id, 10);
+//         // const id : number = req.body.id;
+//         if (! (id > 0)) {
+//             res.status(400).send("Not found id");
+//             return;
+//         }
 
-        if(req.session.user == null) {
-            res.status(401).send("Not logged in");
-            return;
-        }
-        const succeeded = await tweetService.replyOnTweet(req.session.user , id, desc);
+//         if(req.session.user == null) {
+//             res.status(401).send("Not logged in");
+//             return;
+//         }
+//         const succeeded = await tweetService.replyOnTweet(req.session.user , id, desc);
 
-        if (! succeeded) {
-            res.status(404).send("does not work");
-            return;
-        }
-        res.status(200).send("succeeded");
-    } catch (e:any) {
-        res.status(500).send(e.message);
-    }
+//         if (! succeeded) {
+//             res.status(404).send("does not work");
+//             return;
+//         }
+//         res.status(200).send("succeeded");
+//     } catch (e:any) {
+//         res.status(500).send(e.message);
+//     }
 
-});
+// });
 
 type DeleteRequest = Request &{
     params : { id : string};

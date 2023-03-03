@@ -1,7 +1,9 @@
+import mongoose, { ObjectId } from "mongoose";
 import { Tweet } from "./tweet";
 
 export class User {
 
+  _id!: ObjectId;
   userNameID: string;
   ownerName: string;
   password: string;

@@ -1,14 +1,17 @@
 import express, {Request, Response } from "express"
+import { User } from "../model/user";
 import { Reply } from "../model/reply";
-import { makeReplyService } from "../service/reply";
+import { makeReplyDBService } from "../service/db/ReplyDBService";
 
 export const replyRouter = express.Router();
 
-const replyService = makeReplyService();
+const replyService = makeReplyDBService();
 
 replyRouter.post("/tweet/reply",
+
+// TODO author should be logged in user
 async(
-  req : Request<{},{},{author : string, desc : string, origowner : string}>,
+  req : Request<{},{},{author : User, desc : string, origowner : string}>,
   res : Response<Reply>
 )=>{
   try {
@@ -16,7 +19,7 @@ async(
     const desc = req.body.desc;
     const origowner = req.body.origowner;
     
-    const newReply = await replyService.reply(author, desc, origowner);
+    const newReply = await replyService.createReply(author, desc, origowner);
     res.status(201).send(newReply);
   } catch (e:any) {
     res.status(500).send(e.message);

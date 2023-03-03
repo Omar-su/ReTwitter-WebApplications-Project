@@ -3,13 +3,14 @@ import { Schema } from "mongoose";
 import { User } from "../model/user";
 import { conn } from "./conn";
 
-const userSchema = new Schema({
-  username : {
+const userSchema : Schema = new Schema({
+  
+  userNameID : {
     type : String,
     required : true,
     unique : true
   },
-  name : {
+  ownerName : {
     type : String,
     required : true
   },
@@ -23,12 +24,12 @@ const userSchema = new Schema({
     required : true
   },
   followers : {
-    type : Number,
+    type: [String],
     required : true
   },
   following : {
-    type : Number,
-    required : true
+    type: [String],
+    required: true
   },
   password : {
     type : String,
