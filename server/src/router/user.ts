@@ -118,7 +118,6 @@ type currentUserReq = Request & {
   };
 }
 
-
 userRouter.get("/current_user", async (
   req: currentUserReq,
   res: Response<User | string>
@@ -128,8 +127,13 @@ userRouter.get("/current_user", async (
       res.status(400).send("No user is logged in");
       return;
     }
-    console.log("Current user: " + req.session.user)
-    res.status(200).send(req.session.user);
+    console.log("Current user: " + req.session.user);
+    const currentUserFromDb = await userService.findUserByID(req.session.user._id.toString());
+    if(currentUserFromDb == null) {
+      res.status(404).send("Could not find user data")
+      return;
+    }
+    res.status(200).send(currentUserFromDb);
   } catch (e : any) {
     res.status(500).send(e.message);      
   }

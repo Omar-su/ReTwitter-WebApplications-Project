@@ -39,9 +39,14 @@ export class UserDBService {
         return await userModel.findById(user_id).populate("tweets");
     }
 
+    async findUserByUsername(userName: string): Promise<User | null> {
+        return await userModel.findOne({ "userNameID": userName }).populate("tweets");
+    }
+
     async getUserTweets(user: User): Promise<Array<Tweet> | null> {
         const foundUser = await this.findUserByID(user._id.toString());
         if (foundUser) {
+            //TODO Somehow use foundUser.getTweets(); 
             return foundUser.tweets;
         }
         return null;
@@ -63,10 +68,51 @@ export class UserDBService {
         return null;
     }
 
+    async followProfile(userNameBeingFollowed: string, user_idFollowing: string): Promise<boolean> {
+        const toBeFollowed: User | null = await this.findUserByUsername(userNameBeingFollowed);
+        const toFollow: User | null = await this.findUserByID(user_idFollowing);
+        if (toBeFollowed == null || toFollow == null) {
+            return false;
+        }
+        function removeObjectWithId(arr: string[], unfollowerID: string) {
+            return arr.filter((userName) => userName !== unfollowerID);
+        }
+
+        //TODO, Somehow use user objects methods for adding followers and following
+        toBeFollowed.followers.push(toFollow.userNameID);
+        toFollow.following.push(toBeFollowed.userNameID);
+        this.updateUser(toBeFollowed);
+        this.updateUser(toFollow);
+        return true;
+    }
+
+    async unfollowProfile(toBeUnfollowedUserName: string, userUnfollowingId: string): Promise<boolean> {
+        const toBeUnfollowed: User | null = await this.findUserByUsername(toBeUnfollowedUserName);
+        const userUnfollowing: User | null = await this.findUserByID(userUnfollowingId);
+        console.log("TBU" + toBeUnfollowed);
+        console.log("UU " + userUnfollowing);
+
+        if (toBeUnfollowed == null || userUnfollowing == null) {
+            return false;
+        }
+        function removeObjectWithId(arr: string[], unfollowerID: string) {
+            return arr.filter((userName) => userName !== unfollowerID);
+        }
+
+        //TODO, Somehow use user objects methods for removing followers and following
+        toBeUnfollowed.followers = removeObjectWithId(toBeUnfollowed.followers, userUnfollowing.userNameID);
+        userUnfollowing.following = removeObjectWithId(userUnfollowing.following, toBeUnfollowed.userNameID);
+        this.updateUser(toBeUnfollowed);
+        this.updateUser(userUnfollowing);
+        return true;
+    }
+
+
     async updateUser(user: User): Promise<User | null> {
         const updatedUser = await userModel.findByIdAndUpdate(user._id.toString(), user, { new: true });
         return updatedUser;
     }
+
 }
 
 export function makeUserDBService() {
