@@ -52,6 +52,27 @@ export class UserDBService {
         return null;
     }
 
+    async getFollowingTweets(user: User): Promise<Array<Tweet> | null> {
+        const foundUser = await this.findUserByID(user._id.toString());
+        if (!foundUser) {
+            return null;
+        }
+
+        const followings = foundUser.following;
+        const tweets = foundUser.tweets;
+      
+        for (const following of followings) {
+          const foundFollowing = await this.findUserByUsername(following.toString());
+          if (foundFollowing) {
+            tweets.push(...foundFollowing.tweets);
+          }
+        }
+
+        tweets.sort(() => Math.random() - 0.5);
+
+        return tweets;
+    }
+
     async getUsersFollowers(user: User): Promise<Array<string> | null> {
         const foundUser = await this.findUserByID(user._id.toString());
         if (foundUser) {
