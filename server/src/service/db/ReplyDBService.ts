@@ -1,5 +1,5 @@
 import { replyModel } from "../../db/reply";
-import { User } from "../../model/profile";
+import { User } from "../../model/user";
 import { Reply } from "../../model/reply";
 import { makeUserDBService } from "./UserDBService";
 

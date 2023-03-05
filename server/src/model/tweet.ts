@@ -1,5 +1,5 @@
 import { Reply } from "./reply";
-import { User } from "./profile";
+import { User } from "./user";
 
 export class Tweet {
   

@@ -1,6 +1,6 @@
 import { tweetModel } from "../../db/tweet";
 import { Tweet } from "../../model/tweet";
-import { User } from "../../model/profile";
+import { User } from "../../model/user";
 import { makeUserDBService } from "./UserDBService";
 import { Reply } from "../../model/reply";
 import { userModel } from "../../db/user";
