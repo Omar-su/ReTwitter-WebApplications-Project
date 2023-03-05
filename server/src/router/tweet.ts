@@ -32,6 +32,24 @@ tweetRouter.get("/", async(req: GetTweetsRequest, res: Response<Tweet[] | string
     }
 });
 
+tweetRouter.get("/feed", async(req: GetTweetsRequest, res: Response<Tweet[] | string>) => {
+    try {
+        if (req.session.user == null) {
+            res.status(401).send("Not logged in");
+            return;
+        }
+        const tweets = await userService.getFollowingTweets(req.session.user);
+        if (tweets == null) {
+            res.status(500).send("Failed to get feed tweets");
+            return;
+        }
+        res.status(200).send(tweets);
+    } catch (e:any) {
+        res.status(500).send(e.message);
+    }
+});
+
+
 type TweetRequest = Request &{
     body : {description : string};
     session : { user ?: User}
