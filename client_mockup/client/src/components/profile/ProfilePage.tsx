@@ -76,7 +76,7 @@ function ProfileFeed(){
   }
   return(
     <div>
-      <div className="profile">
+      <div className="">
         <div id="profile-information">
           {!profileInfo ? "" :
             <ProfileInfo
@@ -101,7 +101,7 @@ function ProfileFeed(){
               key={tweet.id}
               id={tweet.id}
               replies={tweet.replies}
-              author={tweet.author}
+              author={tweet.author.userNameID}
               description={tweet.description}
               numberOfLikes={async () => {
                 await axios.post(`http://localhost:9090/tweet/${tweet.id}`);
