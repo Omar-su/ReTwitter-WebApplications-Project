@@ -2,6 +2,7 @@ import { TweetItem } from './TweetItem';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Main.css'
 import TweetPage from './TweetItem';
+import { TweetFeed } from './TweetFeed';
 import { NavBar } from './NavBar';
 import { NewsItems } from './NewsItem';
 // import { useNavigate } from 'react-router-dom';
@@ -18,7 +19,7 @@ function Home() {
       <div className="row align-items-start">
         <NavBar></NavBar>
         <div className="col">
-          <TweetPage></TweetPage>
+          <TweetFeed></TweetFeed>
         </div>
         <div className="col">
           <NewsItems></NewsItems>
