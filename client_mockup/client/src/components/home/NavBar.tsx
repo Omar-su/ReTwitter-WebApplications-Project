@@ -5,7 +5,7 @@ export function NavBar() {
       Menu
       <ul className="nav flex-column">
         <li className="nav-item">
-          <a className="nav-link active top-buffer menu-links nav-button" aria-current="page" href="home">
+          <a className="nav-link active top-buffer menu-links nav-button" aria-current="page" href="/home">
             Home
           </a>
         </li>
