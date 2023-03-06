@@ -4,7 +4,6 @@ axios.defaults.withCredentials = true
 
 function TweetButton(){
 
-  const [author, setAuthor] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
   return <div style={{ 
