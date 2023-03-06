@@ -10,8 +10,7 @@ const tweetSchema = new Schema({
     unique : true
   },
   author : {
-    type : ObjectId,
-    ref: "Users",
+    type : String,
     required : true,
   },
   description : {

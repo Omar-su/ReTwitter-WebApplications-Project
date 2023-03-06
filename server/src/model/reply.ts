@@ -9,7 +9,7 @@ import { Tweet } from "./tweet";
 export class Reply extends Tweet{
     userNameOfOriginalTweet : string;
     
-    constructor( author : User, description : string, userNameOfOriginalTweet : string){
+    constructor( author : string, description : string, userNameOfOriginalTweet : string){
         super(author, description);
         this.userNameOfOriginalTweet = userNameOfOriginalTweet;
     }

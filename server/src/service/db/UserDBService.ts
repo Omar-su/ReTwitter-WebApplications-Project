@@ -32,7 +32,11 @@ export class UserDBService {
     }
 
     async findUserByEmailAndPwd(email: string, password: string): Promise<User | null> {
-        return await userModel.findOne({ email: email }, { password: password }).populate("tweets");
+        const userLoggingIn = await userModel.findOne({ "email": email }).populate("tweets").exec();
+        if(userLoggingIn?.password == password){
+            return userLoggingIn;
+        }
+        return null;
     }
 
     async findUserByID(user_id: string): Promise<User | null> {

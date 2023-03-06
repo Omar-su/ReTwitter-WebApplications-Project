@@ -101,7 +101,7 @@ function ProfileFeed(){
               key={tweet.id}
               id={tweet.id}
               replies={tweet.replies}
-              author={tweet.author.userNameID}
+              author={tweet.author}
               description={tweet.description}
               numberOfLikes={async () => {
                 await axios.post(`http://localhost:9090/tweet/${tweet.id}`);

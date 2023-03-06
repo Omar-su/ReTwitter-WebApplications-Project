@@ -12,16 +12,6 @@ import { Tweet, User } from '../../Interfaces';
 
 axios.defaults.withCredentials = true
 
-export interface Reply {
-  id: number;
-  author: User;
-  description: string
-  numberOfLikes: number;
-  numberOfReplies: number;
-  userNameOfOriginalTweet: string;
-  replies: Reply[];
-}
-
 export function TweetFeed() {
   const [tweets, setTweets] = useState<Tweet[]>([]);
 
@@ -49,7 +39,7 @@ export function TweetFeed() {
             key={tweet.id}
             id={tweet.id}
             replies={tweet.replies}
-            author={tweet.author.userNameID}
+            author={tweet.author}
             description={tweet.description}
             numberOfLikes={async () => {
               await axios.post(`http://localhost:9090/tweet/${tweet.id}`);

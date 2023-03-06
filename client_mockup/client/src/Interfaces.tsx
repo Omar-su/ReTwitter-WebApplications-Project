@@ -1,6 +1,6 @@
 export interface Tweet {
     id : number;
-    author : User;
+    author : string;
     description : string
     numberOfLikes : number;
     numberOfReplies : number;

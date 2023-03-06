@@ -71,7 +71,7 @@ tweetRouter.post("/", async(
             res.status(401).send("Not logged in");
             return;
         }
-        const newTweet = await tweetService.createTweet(req.session.user, description);
+        const newTweet = await tweetService.createTweet(req.session.user.userNameID, description);
         res.status(201).send(newTweet);
     } catch (e:any) {
         res.status(500).send(e.message);

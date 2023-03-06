@@ -6,27 +6,8 @@ import ReplyItem from './reply';
 import TweetButton from './tweetbutton';
 import ReplyForm from './replybutton';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Tweet, Reply } from '../../Interfaces';
 axios.defaults.withCredentials = true
-
-interface Tweet {
-  id: number;
-  author: string;
-  description: string
-  numberOfLikes: number;
-  numberOfReplies: number;
-  replies: Reply[];
-}
-
-export interface Reply {
-  id: number;
-  author: string;
-  description: string
-  numberOfLikes: number;
-  numberOfReplies: number;
-  userNameOfOriginalTweet: string;
-  replies: Reply[];
-}
-
 
 export function TweetPage() {
   const [tweets, setTweets] = useState<Tweet[]>([]);

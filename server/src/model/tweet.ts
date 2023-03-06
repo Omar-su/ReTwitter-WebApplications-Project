@@ -4,7 +4,7 @@ import { User } from "./user";
 export class Tweet {
   
     id : number;  
-    author : User;
+    author : string;
     description : string;
     numberOfLikes : number;
     numberOfReplies : number;
@@ -14,7 +14,7 @@ export class Tweet {
     // number of views, number of shares, 
     
     //Default values for some parameters as they should not be set 
-    constructor(author : User, description : string) {
+    constructor(author : string, description : string) {
         this.id = Date.now();
         this.author = author;
         this.description = description;

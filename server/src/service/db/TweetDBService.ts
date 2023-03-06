@@ -9,18 +9,22 @@ export const userDBService = makeUserDBService();
 
 class TweetDBService {
   
-  async createTweet(author: User, description: string): Promise<Tweet> {
+  async createTweet(author: string, description: string): Promise<Tweet> {
     const newTweet = new tweetModel({
       id: Date.now().valueOf(),
-      author: author._id,
+      author: author,
       description: description,
       numberOfReplies: 0,
       numberOfLikes: 0,
       replies: []
     });
+    console.log(author);
     await newTweet.save();
-    author.tweets.push(newTweet);
-    await userDBService.updateUser(author);
+    const authorToUpdate = await userDBService.findUserByUsername(author);
+    if(authorToUpdate) {
+      authorToUpdate.tweets.push(newTweet);
+      await userDBService.updateUser(authorToUpdate);
+    }
     return newTweet;
   }
 
