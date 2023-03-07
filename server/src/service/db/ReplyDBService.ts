@@ -1,12 +1,13 @@
 import { replyModel } from "../../db/reply";
 import { ReplyInterface } from "../../model/interfaces/reply.interface";
 import { UserInterface } from "../../model/interfaces/user.interface";
+import { ReplyServiceInterface } from "../interfaces/replyservice.interface";
 import { makeUserDBService } from "./UserDBService";
 
 
 export const userDBService = makeUserDBService();
 
-class ReplyDBService {
+class ReplyDBService implements ReplyServiceInterface {
 
     async createReply(author : UserInterface, description : string, ownerOfTweet : string): Promise<ReplyInterface> {
     const newReply = new replyModel({
