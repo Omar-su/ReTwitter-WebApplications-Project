@@ -1,7 +1,9 @@
 import mongoose, { ObjectId } from "mongoose";
 import { Tweet } from "./tweet";
+import { UserInterface } from "./interfaces/user.interface";
+import { TweetInterface } from "./interfaces/tweet.interface";
 
-export class User {
+export class User implements UserInterface {
 
   _id!: ObjectId;
   userNameID: string;
@@ -11,7 +13,7 @@ export class User {
   email: string;
   followers: string[];
   following: string[];
-  tweets: Tweet[];
+  tweets: TweetInterface[];
 
   constructor(userNameID: string, ownerName: string, email: string, password: string) {
     this.userNameID = userNameID;
@@ -53,7 +55,7 @@ export class User {
     this.followers = removeObjectWithId(this.following, toUnfollowID);
   }
 
-  newTweet(newTweet: Tweet) {
+  addTweet(newTweet: Tweet) {
     this.tweets.push(newTweet);
   }
 
