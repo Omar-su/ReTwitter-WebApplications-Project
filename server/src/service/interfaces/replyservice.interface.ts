@@ -7,5 +7,5 @@ export interface ReplyServiceInterface {
      * Create a reply with the given author and description and owner of tweet being
      * replied to and add it to authors list of tweets. Return the created reply
      */
-    createReply(author : UserInterface, description : string, ownerOfTweet : string): Promise<ReplyInterface>;
+    createReply(author : string, description : string, ownerOfTweet : string): Promise<ReplyInterface>;
 }

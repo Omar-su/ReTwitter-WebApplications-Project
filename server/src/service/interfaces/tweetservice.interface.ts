@@ -24,4 +24,6 @@ export interface TweetServiceInterface {
      */
     deleteTweet(tweetAuthor: UserInterface, id: number): Promise<boolean>;
 
+    replyOnTweet(user: UserInterface, id: number, desc : string): Promise<boolean>;
+
 }
