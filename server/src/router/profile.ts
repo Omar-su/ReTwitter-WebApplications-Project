@@ -1,9 +1,10 @@
 import express, { Request, Response } from "express";
 import { UserInterface } from "../model/interfaces/user.interface";
 import { makeUserDBService } from "../service/db/UserDBService";
+import { UserServiceInterface } from "../service/interfaces/userservice.interface";
 
 export const profileRouter = express.Router();
-const userService = makeUserDBService();
+const userService: UserServiceInterface = makeUserDBService();
 
 profileRouter.get("/:userid", async (
   req: Request<{ userid: string }, {}, {}>,

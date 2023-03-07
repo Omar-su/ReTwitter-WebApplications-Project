@@ -3,11 +3,13 @@ import { TweetInterface } from "../model/interfaces/tweet.interface";
 import { UserInterface } from "../model/interfaces/user.interface";
 import { makeTweetDBService } from "../service/db/TweetDBService";
 import { makeUserDBService } from "../service/db/UserDBService";
+import { TweetServiceInterface } from "../service/interfaces/tweetservice.interface";
+import { UserServiceInterface } from "../service/interfaces/userservice.interface";
 
 export const tweetRouter = express.Router();
 
-const tweetService = makeTweetDBService();
-const userService = makeUserDBService();
+const tweetService: TweetServiceInterface = makeTweetDBService();
+const userService: UserServiceInterface = makeUserDBService();
 
 type GetTweetsRequest = Request &{
     session : {

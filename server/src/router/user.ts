@@ -1,10 +1,11 @@
 import express, { Request, Response } from "express";
 import { UserInterface } from "../model/interfaces/user.interface";
 import { makeUserDBService } from "../service/db/UserDBService";
+import { UserServiceInterface } from "../service/interfaces/userservice.interface";
 
 export const userRouter = express.Router();
 
-export const userService = makeUserDBService();
+export const userService: UserServiceInterface = makeUserDBService();
 
 type UserRequest = Request & {
   body: {

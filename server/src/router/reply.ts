@@ -2,10 +2,11 @@ import express, {Request, Response } from "express"
 import { makeReplyDBService } from "../service/db/ReplyDBService";
 import { UserInterface } from "../model/interfaces/user.interface";
 import { ReplyInterface } from "../model/interfaces/reply.interface";
+import { ReplyServiceInterface } from "../service/interfaces/replyservice.interface";
 
 export const replyRouter = express.Router();
 
-const replyService = makeReplyDBService();
+const replyService: ReplyServiceInterface = makeReplyDBService();
 
 replyRouter.post("/tweet/reply",
 
