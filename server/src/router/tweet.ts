@@ -129,50 +129,50 @@ type ReplyRequest = Request & {
     params : {id : string};
     body : { author : string, description : string};
     session : { user ?: UserInterface};
+
 }
 
 // TODO THIS IS FOR TESTING
-// tweetRouter.post("/reply/:id",
-//     async(
-//     req : ReplyRequest,
-//     res : Response<string>
-//     )=>{
-//     try {
-//         const author = req.body.author;
-//         const desc = req.body.description;
+tweetRouter.post("/reply/:id",
+    async(
+    req : ReplyRequest,
+    res : Response<string>
+    )=>{
+    try {
+        const desc = req.body.description;
 
-//         if(typeof(desc) !== "string" || typeof(author) !== "string" || typeof(req.session.user?.ownerName)!== "string" ){
-//             res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing body data`);
-//             return;
-//         }
+        if(typeof(desc) !== "string" ){
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing body data`);
+            return;
+        }
         
-//         if (req.params.id == null) {
-//             res.status(400).send("Id not found");
-//             return;
-//         }
-//         const id : number = parseInt(req.params.id, 10);
-//         // const id : number = req.body.id;
-//         if (! (id > 0)) {
-//             res.status(400).send("Not found id");
-//             return;
-//         }
+        if (req.params.id == null) {
+            res.status(400).send("Id not found");
+            return;
+        }
+        const id : number = parseInt(req.params.id, 10);
+        // const id : number = req.body.id;
+        if (! (id > 0)) {
+            res.status(400).send("Not found id");
+            return;
+        }
 
-//         if(req.session.user == null) {
-//             res.status(401).send("Not logged in");
-//             return;
-//         }
-//         const succeeded = await tweetService.replyOnTweet(req.session.user , id, desc);
+        if(req.session.user == null) {
+            res.status(401).send("Not logged in");
+            return;
+        }
+        const succeeded = await tweetService.replyOnTweet(req.session.user , id, desc);
 
-//         if (! succeeded) {
-//             res.status(404).send("does not work");
-//             return;
-//         }
-//         res.status(200).send("succeeded");
-//     } catch (e:any) {
-//         res.status(500).send(e.message);
-//     }
+        if (! succeeded) {
+            res.status(404).send("does not work");
+            return;
+        }
+        res.status(200).send("succeeded");
+    } catch (e:any) {
+        res.status(500).send(e.message);
+    }
 
-// });
+});
 
 type DeleteRequest = Request &{
     params : { id : string};
