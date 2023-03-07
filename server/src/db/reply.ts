@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { Schema } from "mongoose";
+import { ReplyInterface } from "../model/interfaces/reply.interface";
 import { conn } from "./conn";
-import { Reply } from "../model/reply";
 
 const replySchema = new Schema({
   id : {
@@ -36,4 +36,4 @@ const replySchema = new Schema({
   }] 
 })
 
-export const replyModel = conn.model<Reply>("Replies", replySchema);
+export const replyModel = conn.model<ReplyInterface>("Replies", replySchema);

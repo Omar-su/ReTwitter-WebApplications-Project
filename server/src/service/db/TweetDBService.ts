@@ -1,8 +1,8 @@
 import { tweetModel } from "../../db/tweet";
 import { makeUserDBService } from "./UserDBService";
-import { Reply } from "../../model/reply";
 import { UserInterface } from "../../model/interfaces/user.interface";
 import { TweetInterface } from "../../model/interfaces/tweet.interface";
+import { ReplyInterface } from "../../model/interfaces/reply.interface";
 
 export const userDBService = makeUserDBService();
 
@@ -40,7 +40,7 @@ class TweetDBService {
       return true;
     }
 
-    const nestedReply: Reply | undefined = this.recrusiveIdSearch(id, tweetAuthor.tweets.flatMap((tweet) => tweet.replies));
+    const nestedReply: ReplyInterface | undefined = this.recrusiveIdSearch(id, tweetAuthor.tweets.flatMap((tweet) => tweet.replies));
 
     if (nestedReply == null) {
       return false;
@@ -52,7 +52,7 @@ class TweetDBService {
   }
 
   // Search for a reply with an id recrusivaly 
-  recrusiveIdSearch(id: number, replyToBeSearched: Reply[]): Reply | undefined {
+  recrusiveIdSearch(id: number, replyToBeSearched: ReplyInterface[]): ReplyInterface | undefined {
     for (const reply of replyToBeSearched) {
       if (reply.id === id) {
         return reply;

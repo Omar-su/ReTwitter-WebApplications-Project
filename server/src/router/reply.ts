@@ -1,7 +1,7 @@
 import express, {Request, Response } from "express"
-import { Reply } from "../model/reply";
 import { makeReplyDBService } from "../service/db/ReplyDBService";
 import { UserInterface } from "../model/interfaces/user.interface";
+import { ReplyInterface } from "../model/interfaces/reply.interface";
 
 export const replyRouter = express.Router();
 
@@ -12,7 +12,7 @@ replyRouter.post("/tweet/reply",
 // TODO author should be logged in user
 async(
   req : Request<{},{},{author : UserInterface, desc : string, origowner : string}>,
-  res : Response<Reply>
+  res : Response<ReplyInterface>
 )=>{
   try {
     const author = req.body.author;
