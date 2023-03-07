@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { Schema } from "mongoose";
+import { TweetInterface } from "../model/interfaces/tweet.interface";
 import { conn } from "./conn";
-import { Tweet } from "../model/tweet";
 
 const tweetSchema = new Schema({
   id : {
@@ -31,4 +31,4 @@ const tweetSchema = new Schema({
   }] 
 })
 
-export const tweetModel = conn.model<Tweet>("Tweets", tweetSchema);
+export const tweetModel = conn.model<TweetInterface>("Tweets", tweetSchema);

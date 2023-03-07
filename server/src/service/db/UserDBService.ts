@@ -1,6 +1,6 @@
 import { userModel } from '../../db/user'
+import { TweetInterface } from '../../model/interfaces/tweet.interface';
 import { UserInterface } from '../../model/interfaces/user.interface';
-import { Tweet } from '../../model/tweet';
 
 export class UserDBService {
 
@@ -46,7 +46,7 @@ export class UserDBService {
         return await userModel.findOne({ "userNameID": userName }).populate("tweets");
     }
 
-    async getUserTweets(user: UserInterface): Promise<Array<Tweet> | null> {
+    async getUserTweets(user: UserInterface): Promise<Array<TweetInterface> | null> {
         const foundUser = await this.findUserByID(user._id.toString());
         if (foundUser) {
             //TODO Somehow use foundUser.getTweets(); 
@@ -55,7 +55,7 @@ export class UserDBService {
         return null;
     }
 
-    async getFollowingTweets(user: UserInterface): Promise<Array<Tweet> | null> {
+    async getFollowingTweets(user: UserInterface): Promise<Array<TweetInterface> | null> {
         const foundUser = await this.findUserByID(user._id.toString());
         if (!foundUser) {
             return null;

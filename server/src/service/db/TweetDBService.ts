@@ -1,15 +1,14 @@
 import { tweetModel } from "../../db/tweet";
-import { Tweet } from "../../model/tweet";
 import { makeUserDBService } from "./UserDBService";
 import { Reply } from "../../model/reply";
-import { userModel } from "../../db/user";
 import { UserInterface } from "../../model/interfaces/user.interface";
+import { TweetInterface } from "../../model/interfaces/tweet.interface";
 
 export const userDBService = makeUserDBService();
 
 class TweetDBService {
   
-  async createTweet(author: string, description: string): Promise<Tweet> {
+  async createTweet(author: string, description: string): Promise<TweetInterface> {
     const newTweet = new tweetModel({
       id: Date.now().valueOf(),
       author: author,
@@ -30,7 +29,7 @@ class TweetDBService {
 
   // No nested reply update. How would that work here? 
   async likeTweet(tweetAuthor: UserInterface, id: number): Promise<boolean> {
-    const tweet: Tweet | undefined = tweetAuthor.tweets.find((tweet: Tweet) => {
+    const tweet: TweetInterface | undefined = tweetAuthor.tweets.find((tweet: TweetInterface) => {
       return tweet.id === id;
     });
 
@@ -70,7 +69,7 @@ class TweetDBService {
 
   async deleteTweet(tweetAuthor: UserInterface, id: number): Promise<boolean> {
     // Find the index of the tweet to remove in the user's tweets array
-    const tweetIndex = tweetAuthor.tweets.findIndex((tweet: Tweet) => tweet.id === id);
+    const tweetIndex = tweetAuthor.tweets.findIndex((tweet: TweetInterface) => tweet.id === id);
 
     if (tweetIndex >= 0) {
       // Remove the tweet

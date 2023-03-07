@@ -1,6 +1,6 @@
 import * as SuperTest from "supertest";
+import { TweetInterface } from "./model/interfaces/tweet.interface";
 import { app } from "./start";
-import { Tweet } from "./model/tweet";
 
 const request = SuperTest.default(app);
 
@@ -12,7 +12,7 @@ test("End-to-end test", async () => {
     expect(res1.body.description).toEqual(description);
     const res2 = await request.get("/tweet");
     expect(res2.statusCode).toEqual(200);
-    expect(res2.body.map((tweet : Tweet) => tweet.description)).toContain(description);
+    expect(res2.body.map((tweet : TweetInterface) => tweet.description)).toContain(description);
 });
 
 test("Follow test", async () => {

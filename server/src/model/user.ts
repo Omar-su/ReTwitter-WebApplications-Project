@@ -1,5 +1,4 @@
 import mongoose, { ObjectId } from "mongoose";
-import { Tweet } from "./tweet";
 import { UserInterface } from "./interfaces/user.interface";
 import { TweetInterface } from "./interfaces/tweet.interface";
 
@@ -55,11 +54,11 @@ export class User implements UserInterface {
     this.followers = removeObjectWithId(this.following, toUnfollowID);
   }
 
-  addTweet(newTweet: Tweet) {
+  addTweet(newTweet: TweetInterface) {
     this.tweets.push(newTweet);
   }
 
-  getTweets(): Array<Tweet> {
+  getTweets(): Array<TweetInterface> {
     return this.tweets;
   }
 

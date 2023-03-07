@@ -1,7 +1,6 @@
 import { ObjectId } from "mongodb";
 import { Schema } from "mongoose";
 import { conn } from "./conn";
-import { Tweet } from "../model/tweet";
 import { Reply } from "../model/reply";
 
 const replySchema = new Schema({

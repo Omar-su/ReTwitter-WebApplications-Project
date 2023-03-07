@@ -1,6 +1,6 @@
 import express, { Request, response, Response } from "express";
+import { TweetInterface } from "../model/interfaces/tweet.interface";
 import { UserInterface } from "../model/interfaces/user.interface";
-import { Tweet } from "../model/tweet";
 import { makeTweetDBService } from "../service/db/TweetDBService";
 import { makeUserDBService } from "../service/db/UserDBService";
 
@@ -15,7 +15,7 @@ type GetTweetsRequest = Request &{
     }
 }
 
-tweetRouter.get("/", async(req: GetTweetsRequest, res: Response<Tweet[] | string>) => {
+tweetRouter.get("/", async(req: GetTweetsRequest, res: Response<TweetInterface[] | string>) => {
     try {
         if (req.session.user == null) {
             res.status(401).send("Not logged in");
@@ -32,7 +32,7 @@ tweetRouter.get("/", async(req: GetTweetsRequest, res: Response<Tweet[] | string
     }
 });
 
-tweetRouter.get("/feed", async(req: GetTweetsRequest, res: Response<Tweet[] | string>) => {
+tweetRouter.get("/feed", async(req: GetTweetsRequest, res: Response<TweetInterface[] | string>) => {
     try {
         if (req.session.user == null) {
             res.status(401).send("Not logged in");
@@ -57,7 +57,7 @@ type TweetRequest = Request &{
 
 tweetRouter.post("/", async( 
     req: TweetRequest,
-    res: Response<Tweet | string>
+    res: Response<TweetInterface | string>
 ) => {
     try {
         const description = req.body.description;
