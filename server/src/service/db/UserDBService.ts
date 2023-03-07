@@ -1,8 +1,9 @@
 import { userModel } from '../../db/user'
 import { TweetInterface } from '../../model/interfaces/tweet.interface';
 import { UserInterface } from '../../model/interfaces/user.interface';
+import { UserServiceInterface } from '../interfaces/userservice.interface';
 
-export class UserDBService {
+export class UserDBService implements UserServiceInterface {
 
     async getUsers(): Promise<UserInterface[]> {
         return await userModel.find();
