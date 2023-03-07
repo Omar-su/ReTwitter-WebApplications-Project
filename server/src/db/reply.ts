@@ -32,7 +32,8 @@ const replySchema = new Schema({
   },
   replies : [{
     type : ObjectId,
-    ref : "Replies"
+    ref : "Replies",
+    required : true,
   }] 
 })
 

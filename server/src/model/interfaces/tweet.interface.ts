@@ -1,6 +1,7 @@
 import { ReplyInterface } from "./reply.interface";
 
 export interface TweetInterface {
+    _id: any;
     id: number;
     author: string;
     description: string;

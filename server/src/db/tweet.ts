@@ -27,7 +27,8 @@ const tweetSchema = new Schema({
   },
   replies : [{
     type : ObjectId,
-    ref : "Replies"
+    ref : "Replies",
+    required : true,
   }] 
 })
 
