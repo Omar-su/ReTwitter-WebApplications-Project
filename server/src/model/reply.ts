@@ -4,9 +4,10 @@
 
 import { User } from "./user";
 import { Tweet } from "./tweet";
+import { ReplyInterface } from "./interfaces/reply.interface";
 
 // Comment has a reference to the original tweet
-export class Reply extends Tweet{
+export class Reply extends Tweet implements ReplyInterface{
     userNameOfOriginalTweet : string;
     
     constructor( author : string, description : string, userNameOfOriginalTweet : string){

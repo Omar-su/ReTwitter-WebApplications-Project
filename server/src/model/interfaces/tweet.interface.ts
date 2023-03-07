@@ -1,12 +1,14 @@
+import { ReplyInterface } from "./reply.interface";
+
 export interface TweetInterface {
     id: number;
     author: string;
     description: string;
     numberOfLikes: number;
     numberOfReplies: number;
-    replies: Reply[];
+    replies: ReplyInterface[];
 
     increaseNrLikes(): void;
     increaseNrComments(): void;
-    addReply(newReply: Reply): void;
+    addReply(newReply: ReplyInterface): void;
 }

@@ -1,6 +1,7 @@
 import { Reply } from "./reply";
 import { User } from "./user";
 import { TweetInterface } from "./interfaces/tweet.interface";
+import { ReplyInterface } from "./interfaces/reply.interface";
 
 export class Tweet implements TweetInterface {
 
@@ -9,7 +10,7 @@ export class Tweet implements TweetInterface {
   description: string;
   numberOfLikes: number;
   numberOfReplies: number;
-  replies: Reply[];
+  replies: ReplyInterface[];
 
   // Optional
   // number of views, number of shares, 
@@ -35,7 +36,7 @@ export class Tweet implements TweetInterface {
     this.numberOfReplies += 1;
   }
 
-  addReply(newReply: Reply) {
+  addReply(newReply: ReplyInterface) {
     this.replies.push(newReply);
     this.increaseNrComments();
   }
