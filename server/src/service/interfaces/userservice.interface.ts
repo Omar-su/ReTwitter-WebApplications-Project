@@ -9,7 +9,7 @@ export interface UserServiceInterface {
 
     /**
      * Create a user with given username, owner name, email and password
-     *  and add it to registered users
+     * and add it to registered users
      * Return true if user is successfully created
      * Return false if there is already a user with the given username or email
      * or if there was an error in creating the user

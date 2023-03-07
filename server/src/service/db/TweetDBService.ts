@@ -3,10 +3,11 @@ import { makeUserDBService } from "./UserDBService";
 import { UserInterface } from "../../model/interfaces/user.interface";
 import { TweetInterface } from "../../model/interfaces/tweet.interface";
 import { ReplyInterface } from "../../model/interfaces/reply.interface";
+import { TweetServiceInterface } from "../interfaces/tweetservice.interface";
 
 export const userDBService = makeUserDBService();
 
-class TweetDBService {
+class TweetDBService implements TweetServiceInterface{
   
   async createTweet(author: string, description: string): Promise<TweetInterface> {
     const newTweet = new tweetModel({
@@ -40,6 +41,10 @@ class TweetDBService {
       return true;
     }
 
+    if (tweet == null) {
+      return false;
+    }
+
     const nestedReply: ReplyInterface | undefined = this.recrusiveIdSearch(id, tweetAuthor.tweets.flatMap((tweet) => tweet.replies));
 
     if (nestedReply == null) {
@@ -52,7 +57,7 @@ class TweetDBService {
   }
 
   // Search for a reply with an id recrusivaly 
-  recrusiveIdSearch(id: number, replyToBeSearched: ReplyInterface[]): ReplyInterface | undefined {
+  private recrusiveIdSearch(id: number, replyToBeSearched: ReplyInterface[]): ReplyInterface | undefined {
     for (const reply of replyToBeSearched) {
       if (reply.id === id) {
         return reply;
