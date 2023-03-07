@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
+import { UserInterface } from "../../model/interfaces/user.interface";
 import { News } from "../../model/news";
-import { User } from "../../model/user";
 import { makeNewsApiService } from "../../service/api/news";
 
 export const newsRouter = express.Router();
@@ -8,7 +8,7 @@ export const newsRouter = express.Router();
 const newsService = makeNewsApiService();
 
 type NewsGetRequest = Request &{
-  session : {user ?: User};
+  session : {user ?: UserInterface};
 } 
 
 newsRouter.get("/", async ( 

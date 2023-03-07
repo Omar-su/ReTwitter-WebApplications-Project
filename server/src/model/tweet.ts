@@ -1,5 +1,3 @@
-import { Reply } from "./reply";
-import { User } from "./user";
 import { TweetInterface } from "./interfaces/tweet.interface";
 import { ReplyInterface } from "./interfaces/reply.interface";
 

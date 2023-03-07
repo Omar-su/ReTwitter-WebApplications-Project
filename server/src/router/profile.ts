@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { User } from "../model/user";
+import { UserInterface } from "../model/interfaces/user.interface";
 import { makeUserDBService } from "../service/db/UserDBService";
 
 export const profileRouter = express.Router();
@@ -7,7 +7,7 @@ const userService = makeUserDBService();
 
 profileRouter.get("/:userid", async (
   req: Request<{ userid: string }, {}, {}>,
-  res: Response<User | string>
+  res: Response<UserInterface | string>
 ) => {
   try {
     const userID: string = req.params.userid;
@@ -41,7 +41,7 @@ type followRequest = Request & {
     toBeFollowedId: string;
   };
   session: {
-    user?: User;
+    user?: UserInterface;
   };
 }
 
@@ -86,7 +86,7 @@ type unFollowRequest = Request & {
     toBeUnFollowedId: string;
   };
   session: {
-    user?: User;
+    user?: UserInterface;
   };
 }
 

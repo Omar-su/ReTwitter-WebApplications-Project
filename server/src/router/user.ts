@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
+import { UserInterface } from "../model/interfaces/user.interface";
 import { makeUserDBService } from "../service/db/UserDBService";
-import { User } from "../model/user";
 
 export const userRouter = express.Router();
 
@@ -14,7 +14,7 @@ type UserRequest = Request & {
     password: string;
   }
   session: {
-    user?: User;
+    user?: UserInterface;
   }
 }
 
@@ -66,7 +66,7 @@ userRouter.post("/", async (
 type GetUserssRequest = Request & {
 }
 
-userRouter.get("/", async (req: GetUserssRequest, res: Response<User[] | string>) => {
+userRouter.get("/", async (req: GetUserssRequest, res: Response<UserInterface[] | string>) => {
   try {
     res.status(200).send(await userService.getUsers());
   } catch (e: any) {
@@ -77,7 +77,7 @@ userRouter.get("/", async (req: GetUserssRequest, res: Response<User[] | string>
 
 userRouter.post("/login", async (
   req: UserRequest,
-  res: Response<string | User>
+  res: Response<string | UserInterface>
 ) => {
   try {
     const email: string = req.body.email;
@@ -114,13 +114,13 @@ userRouter.post("/login", async (
 
 type currentUserReq = Request & {
   session: {
-    user?: User;
+    user?: UserInterface;
   };
 }
 
 userRouter.get("/current_user", async (
   req: currentUserReq,
-  res: Response<User | string>
+  res: Response<UserInterface | string>
 ) => {
   try {
     if (req.session.user == null) {

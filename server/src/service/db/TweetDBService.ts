@@ -1,9 +1,9 @@
 import { tweetModel } from "../../db/tweet";
 import { Tweet } from "../../model/tweet";
-import { User } from "../../model/user";
 import { makeUserDBService } from "./UserDBService";
 import { Reply } from "../../model/reply";
 import { userModel } from "../../db/user";
+import { UserInterface } from "../../model/interfaces/user.interface";
 
 export const userDBService = makeUserDBService();
 
@@ -29,7 +29,7 @@ class TweetDBService {
   }
 
   // No nested reply update. How would that work here? 
-  async likeTweet(tweetAuthor: User, id: number): Promise<boolean> {
+  async likeTweet(tweetAuthor: UserInterface, id: number): Promise<boolean> {
     const tweet: Tweet | undefined = tweetAuthor.tweets.find((tweet: Tweet) => {
       return tweet.id === id;
     });
@@ -68,7 +68,7 @@ class TweetDBService {
     return undefined;
   }
 
-  async deleteTweet(tweetAuthor: User, id: number): Promise<boolean> {
+  async deleteTweet(tweetAuthor: UserInterface, id: number): Promise<boolean> {
     // Find the index of the tweet to remove in the user's tweets array
     const tweetIndex = tweetAuthor.tweets.findIndex((tweet: Tweet) => tweet.id === id);
 

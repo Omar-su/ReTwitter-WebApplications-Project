@@ -1,11 +1,10 @@
-
-import { User } from '../../model/user'
 import { userModel } from '../../db/user'
+import { UserInterface } from '../../model/interfaces/user.interface';
 import { Tweet } from '../../model/tweet';
 
 export class UserDBService {
 
-    async getUsers(): Promise<User[]> {
+    async getUsers(): Promise<UserInterface[]> {
         return await userModel.find();
     }
 
@@ -31,7 +30,7 @@ export class UserDBService {
         return !!newUser;
     }
 
-    async findUserByEmailAndPwd(email: string, password: string): Promise<User | null> {
+    async findUserByEmailAndPwd(email: string, password: string): Promise<UserInterface | null> {
         const userLoggingIn = await userModel.findOne({ "email": email }).populate("tweets").exec();
         if(userLoggingIn?.password == password){
             return userLoggingIn;
@@ -39,15 +38,15 @@ export class UserDBService {
         return null;
     }
 
-    async findUserByID(user_id: string): Promise<User | null> {
+    async findUserByID(user_id: string): Promise<UserInterface | null> {
         return await userModel.findById(user_id).populate("tweets");
     }
 
-    async findUserByUsername(userName: string): Promise<User | null> {
+    async findUserByUsername(userName: string): Promise<UserInterface | null> {
         return await userModel.findOne({ "userNameID": userName }).populate("tweets");
     }
 
-    async getUserTweets(user: User): Promise<Array<Tweet> | null> {
+    async getUserTweets(user: UserInterface): Promise<Array<Tweet> | null> {
         const foundUser = await this.findUserByID(user._id.toString());
         if (foundUser) {
             //TODO Somehow use foundUser.getTweets(); 
@@ -56,7 +55,7 @@ export class UserDBService {
         return null;
     }
 
-    async getFollowingTweets(user: User): Promise<Array<Tweet> | null> {
+    async getFollowingTweets(user: UserInterface): Promise<Array<Tweet> | null> {
         const foundUser = await this.findUserByID(user._id.toString());
         if (!foundUser) {
             return null;
@@ -77,7 +76,7 @@ export class UserDBService {
         return tweets;
     }
 
-    async getUsersFollowers(user: User): Promise<Array<string> | null> {
+    async getUsersFollowers(user: UserInterface): Promise<Array<string> | null> {
         const foundUser = await this.findUserByID(user._id.toString());
         if (foundUser) {
             return foundUser.followers;
@@ -85,7 +84,7 @@ export class UserDBService {
         return null;
     }
 
-    async getUsersFollowing(user: User): Promise<Array<string> | null> {
+    async getUsersFollowing(user: UserInterface): Promise<Array<string> | null> {
         const foundUser = await this.findUserByID(user._id.toString());
         if (foundUser) {
             return foundUser.following;
@@ -94,8 +93,8 @@ export class UserDBService {
     }
 
     async followProfile(userNameBeingFollowed: string, user_idFollowing: string): Promise<boolean> {
-        const toBeFollowed: User | null = await this.findUserByUsername(userNameBeingFollowed);
-        const toFollow: User | null = await this.findUserByID(user_idFollowing);
+        const toBeFollowed: UserInterface | null = await this.findUserByUsername(userNameBeingFollowed);
+        const toFollow: UserInterface | null = await this.findUserByID(user_idFollowing);
         if (toBeFollowed == null || toFollow == null) {
             return false;
         }
@@ -109,10 +108,8 @@ export class UserDBService {
     }
 
     async unfollowProfile(toBeUnfollowedUserName: string, userUnfollowingId: string): Promise<boolean> {
-        const toBeUnfollowed: User | null = await this.findUserByUsername(toBeUnfollowedUserName);
-        const userUnfollowing: User | null = await this.findUserByID(userUnfollowingId);
-        console.log("TBU" + toBeUnfollowed);
-        console.log("UU " + userUnfollowing);
+        const toBeUnfollowed: UserInterface | null = await this.findUserByUsername(toBeUnfollowedUserName);
+        const userUnfollowing: UserInterface | null = await this.findUserByID(userUnfollowingId);
 
         if (toBeUnfollowed == null || userUnfollowing == null) {
             return false;
@@ -130,7 +127,7 @@ export class UserDBService {
     }
 
 
-    async updateUser(user: User): Promise<User | null> {
+    async updateUser(user: UserInterface): Promise<UserInterface | null> {
         const updatedUser = await userModel.findByIdAndUpdate(user._id.toString(), user, { new: true });
         return updatedUser;
     }

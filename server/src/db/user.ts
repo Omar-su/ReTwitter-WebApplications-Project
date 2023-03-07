@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { Schema } from "mongoose";
-import { User } from "../model/user";
+import { UserInterface } from "../model/interfaces/user.interface";
 import { conn } from "./conn";
 
 const userSchema : Schema = new Schema({
@@ -41,5 +41,5 @@ const userSchema : Schema = new Schema({
   }]
 });
 
-export const userModel = conn.model<User>("Users", userSchema);
+export const userModel = conn.model<UserInterface>("Users", userSchema);
 

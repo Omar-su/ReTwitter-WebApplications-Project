@@ -1,6 +1,6 @@
 import express, { Request, response, Response } from "express";
+import { UserInterface } from "../model/interfaces/user.interface";
 import { Tweet } from "../model/tweet";
-import { User } from "../model/user";
 import { makeTweetDBService } from "../service/db/TweetDBService";
 import { makeUserDBService } from "../service/db/UserDBService";
 
@@ -11,7 +11,7 @@ const userService = makeUserDBService();
 
 type GetTweetsRequest = Request &{
     session : {
-        user ?: User;
+        user ?: UserInterface;
     }
 }
 
@@ -52,7 +52,7 @@ tweetRouter.get("/feed", async(req: GetTweetsRequest, res: Response<Tweet[] | st
 
 type TweetRequest = Request &{
     body : {description : string};
-    session : { user ?: User}
+    session : { user ?: UserInterface}
 }
 
 tweetRouter.post("/", async( 
@@ -85,7 +85,7 @@ type LikeTweetRequest = Request & {
     };
     body : {};
     session : {
-        user ?: User;
+        user ?: UserInterface;
     };
 }
 
@@ -126,7 +126,7 @@ tweetRouter.post("/:id", async (
 type ReplyRequest = Request & {
     params : {id : string};
     body : { author : string, description : string};
-    session : { user ?: User};
+    session : { user ?: UserInterface};
 }
 
 // TODO THIS IS FOR TESTING
@@ -175,7 +175,7 @@ type ReplyRequest = Request & {
 type DeleteRequest = Request &{
     params : { id : string};
     body : {};
-    session : { user ?: User};
+    session : { user ?: UserInterface};
 }
 
 tweetRouter.post("/delete/:id", async( req : DeleteRequest , res : Response<string>) =>{
