@@ -1,3 +1,4 @@
+
 import { TweetInterface } from "./interfaces/tweet.interface";
 import { ReplyInterface } from "./interfaces/reply.interface";
 
@@ -9,6 +10,7 @@ export class Tweet implements TweetInterface {
   numberOfLikes: number;
   numberOfReplies: number;
   replies: ReplyInterface[];
+  _id: any;
 
   // Optional
   // number of views, number of shares, 
