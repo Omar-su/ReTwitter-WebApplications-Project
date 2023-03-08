@@ -10,7 +10,6 @@ function TweetButton(){
     border: '1px solid black',
     padding: '10px',
     margin: '10px',
-    backgroundColor: 'white',
     borderRadius: '5px',
     display: 'flex',
     alignItems: 'center',
@@ -22,7 +21,9 @@ function TweetButton(){
         setDescription(e.target.value);
       }} />
     </form>
-    <button className='tweet-button' onClick={async () => {
+    <button style={{
+      backgroundColor : 'RGB(174, 171, 155)'
+    }} className='tweet-button' onClick={async () => {
       await axios.post("http://localhost:9090/tweet", {description: description});
     }}>Tweet</button>
   </div>

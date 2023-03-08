@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import twitterImage from "../util/images/twitter_test_image.png";
 import './Home.css';
+import './NavBar.css';
 import ReplyItem from './reply';
 import TweetButton from './TweetButton';
 import ReplyForm from './replybutton';
@@ -28,7 +29,7 @@ export function TweetFeed() {
   })
   return (
     <div>
-      <h1>Tweet Feed</h1>
+      <h1 className='text-color'>Tweet Feed</h1>
       <div>
         <TweetButton></TweetButton>
       </div>
