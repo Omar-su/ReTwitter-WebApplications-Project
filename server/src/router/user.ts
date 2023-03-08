@@ -12,6 +12,7 @@ type UserRequest = Request & {
   body: {
     userid?: string;
     ownerName?: string;
+    bio : string;
     email: string;
     password: string;
   }
@@ -27,12 +28,18 @@ userRouter.post("/", async (
   try {
     const userid: string = req.body.userid;
     const ownerName: string = req.body.ownerName;
+    const bio : string = req.body.bio;
     const email: string = req.body.email;
     const password: string = req.body.password;
 
     if (typeof (userid) !== "string") {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- userid has type
       ${typeof (userid)}`);
+      return;
+    }
+    if (typeof (bio) !== "string") {
+      res.status(400).send(`Bad POST call to ${req.originalUrl} --- bio has type
+      ${typeof (bio)}`);
       return;
     }
     if (typeof (ownerName) !== "string") {
@@ -51,7 +58,7 @@ userRouter.post("/", async (
       return;
     }
 
-    const succeeded = await userService.createUser(userid, ownerName, email, password);
+    const succeeded = await userService.createUser(userid, ownerName, bio, email, password);
 
     if (!succeeded) {
       res.status(409).send(`User with userid ${userid} or email ${email} already exists`);
