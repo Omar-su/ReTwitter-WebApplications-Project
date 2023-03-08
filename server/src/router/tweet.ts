@@ -1,4 +1,5 @@
 import express, { Request, response, Response } from "express";
+import { ReplyInterface } from "../model/interfaces/reply.interface";
 import { TweetInterface } from "../model/interfaces/tweet.interface";
 import { UserInterface } from "../model/interfaces/user.interface";
 import { makeTweetDBService } from "../service/db/TweetDBService";
@@ -12,6 +13,9 @@ const tweetService: TweetServiceInterface = makeTweetDBService();
 const userService: UserServiceInterface = makeUserDBService();
 
 type GetTweetsRequest = Request &{
+    params : {
+        id ? : string;
+    };
     session : {
         user ?: UserInterface;
     }
@@ -51,6 +55,31 @@ tweetRouter.get("/feed", async(req: GetTweetsRequest, res: Response<TweetInterfa
     }
 });
 
+tweetRouter.get("/feed/replies/:id", async(req : GetTweetsRequest, res : Response<ReplyInterface[] | string>) =>{
+    try {
+        if (req.session.user == null) {
+            res.status(401).send("Not logged in");
+            return;
+        }
+        if (req.params.id == null) {
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing id param`);
+            return;
+        }
+        const id : number = parseInt(req.params.id, 10);
+        if (! (id > 0)) {
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- id number must be a positive integer`);
+            return;
+        }
+        const replies = await tweetService.getRepliesOnTweet(id);
+        if (replies == null) {
+            res.status(500).send("Failed to get feed tweets");
+            return;
+        }
+        res.status(200).send(replies);
+    } catch (e:any) {
+        res.status(500).send(e.message);
+    }
+});
 
 type TweetRequest = Request &{
     body : {description : string};
