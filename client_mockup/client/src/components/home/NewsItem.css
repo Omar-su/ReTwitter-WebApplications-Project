@@ -4,10 +4,17 @@
   padding: 16px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 2px 4px rgba(255, 254, 254, 0.1);
+  background-color: rgba(0,0,0,0);
   font-size: 16px;
   line-height: 24px;
 }
+
+.news-content {
+  color: #e5dcdc;
+}
+
+
 
 .news-card img {
   width: 64px;
@@ -28,7 +35,7 @@
 
 .news-card .news-date {
   font-size: 14px;
-  color: #999;
+  color: #e5dcdc;
   margin-left: auto;
 }
 
