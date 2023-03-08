@@ -81,21 +81,6 @@ class TweetDBService implements TweetServiceInterface{
     return true;
   }
 
-  // Search for a reply with an id recrusivaly 
-  private recrusiveIdSearch(id: number, replyToBeSearched: ReplyInterface[]): ReplyInterface | undefined {
-    for (const reply of replyToBeSearched) {
-      if (reply.id === id) {
-        return reply;
-      }
-      if (reply.replies) {
-        const nestedReply = this.recrusiveIdSearch(id, reply.replies);
-        if (nestedReply) {
-          return nestedReply;
-        }
-      }
-    }
-    return undefined;
-  }
 
   async replyOnTweet(user: UserInterface, id: number, desc : string): Promise<boolean> {
 
