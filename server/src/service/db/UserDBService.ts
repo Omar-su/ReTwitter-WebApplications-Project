@@ -10,7 +10,7 @@ export class UserDBService implements UserServiceInterface {
         return await userModel.find();
     }
 
-    async createUser(userNameID: string, ownerName: string, email: string, password: string): Promise<boolean> {
+    async createUser(userNameID: string, ownerName: string, bio : string, email: string, password: string): Promise<boolean> {
         const existingUsername = await userModel.findOne({ userNameID: userNameID });
         const existingEmail = await userModel.findOne({ email: email });
         if (existingUsername || existingEmail) {
@@ -24,7 +24,7 @@ export class UserDBService implements UserServiceInterface {
                 ownerName: ownerName,
                 password: password,
                 email: email,
-                bio: "Test bio",
+                bio: bio,
                 followers: [],
                 following: [],
                 tweets: [],

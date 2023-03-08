@@ -14,7 +14,7 @@ export interface UserServiceInterface {
      * Return false if there is already a user with the given username or email
      * or if there was an error in creating the user
      */
-    createUser(userNameID: string, ownerName: string, email:string, password:string): Promise<boolean>;
+    createUser(userNameID: string, ownerName: string, bio : string, email:string, password:string): Promise<boolean>;
 
     /**
      * Return user with given email and password
