@@ -49,17 +49,17 @@ export function NavBar() {
           </a>
         </li>
         <li className="nav-item">
-          <a className="nav-link top-buffer menu-links nav-button" href="">
+          <a className="nav-link top-buffer menu-links nav-button" href="" onClick={() => navigatePage(`/notifications`)}>
             Notifications
           </a>
         </li>
         <li className="nav-item">
-          <a className="nav-link top-buffer menu-links nav-button" href="">
+          <a className="nav-link top-buffer menu-links nav-button" href="" onClick={() => navigatePage(`/messages`)}>
             Messages
           </a>
         </li>
         <li className="nav-item">
-          <a className="nav-link top-buffer menu-links nav-button" href="">
+          <a className="nav-link top-buffer menu-links nav-button" href="" onClick={() => navigatePage(`/bookmarks`)}>
             Bookmark
           </a>
         </li>
@@ -74,7 +74,7 @@ export function NavBar() {
           </a>
         </li>
         <li className="nav-item">
-          <a className="nav-link top-buffer menu-links nav-button" href="">
+          <a className="nav-link top-buffer menu-links nav-button" href="" onClick={() => navigatePage(`/settings`)}>
             Settings
           </a>
         </li>
