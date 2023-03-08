@@ -12,7 +12,7 @@ replyRouter.post("/tweet/reply",
 
 // TODO author should be logged in user
 async(
-  req : Request<{},{},{author : UserInterface, desc : string, origowner : string}>,
+  req : Request<{},{},{author : string, desc : string, origowner : string}>,
   res : Response<ReplyInterface>
 )=>{
   try {
