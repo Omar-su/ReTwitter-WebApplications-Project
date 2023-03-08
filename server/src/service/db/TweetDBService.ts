@@ -35,30 +35,36 @@ class TweetDBService implements TweetServiceInterface{
   }
 
   // No nested reply update. How would that work here? 
-  async likeTweet(tweetAuthor: UserInterface, id: number): Promise<boolean> {
-    const tweet: TweetInterface | undefined = tweetAuthor.tweets.find((tweet: TweetInterface) => {
-      return tweet.id === id;
-    });
-
-    if (tweet != null) {
-      tweet.numberOfLikes += 1;
-      await tweetModel.findOneAndUpdate({ id: tweet.id }, tweet, { new: true });
-      await userDBService.updateUser(tweetAuthor);
-      return true;
-    }
-
-    if (tweet == null) {
+  async likeTweet(user: UserInterface, id: number): Promise<boolean> {
+    const foundUser = await this.findUserByID(user._id.toString());
+    if (!foundUser) {
       return false;
     }
+    console.log("test" , foundUser)
 
-    const nestedReply: ReplyInterface | undefined = this.recrusiveIdSearch(id, tweetAuthor.tweets.flatMap((tweet) => tweet.replies));
+    const tweet : null | TweetInterface = await this.findTweetByDateID(id);
+    console.log("test" , tweet)
+
+    if (tweet != null) {
+
+      console.log("test tesy" )
+      tweet.numberOfLikes += 1;
+      const fu = await this.updateTweet(tweet);
+      console.log("test tweet fu " , fu)
+      return true;
+    }
+    console.log("outside if stat" )
+
+    const nestedReply : ReplyInterface | null = await this.findReplyByDateID(id);
+    console.log("outside if stat", nestedReply );
 
     if (nestedReply == null) {
       return false;
     }
+
     nestedReply.numberOfLikes += 1;
-    // await replyDBService.updateReply(nestedReply)?
-    await userDBService.updateUser(tweetAuthor);
+    console.log("outside if stat soososo", nestedReply );
+    await this.updateReply(nestedReply);
     return true;
   }
 
