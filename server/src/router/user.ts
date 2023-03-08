@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { UserInterface } from "../model/interfaces/user.interface";
+import { User } from "../model/user";
 import { makeUserDBService } from "../service/db/UserDBService";
 import { UserServiceInterface } from "../service/interfaces/userservice.interface";
 
@@ -75,6 +76,11 @@ userRouter.get("/", async (req: GetUserssRequest, res: Response<UserInterface[] 
   }
 });
 
+type LogoutRequest = Request &{
+  session: {
+    user?: UserInterface;
+  }
+}
 
 userRouter.post("/login", async (
   req: UserRequest,
@@ -107,6 +113,25 @@ userRouter.post("/login", async (
       }
       req.session.user = user;
       res.status(200).send(user);
+
+  } catch (e: any) {
+    res.status(500).send(e.message);
+  }
+});
+
+userRouter.post("/logout", async (
+  req: LogoutRequest,
+  res: Response<string>
+) => {
+  try {
+
+    if (!req.session.user) {
+      res.status(409).send("User already logged out");
+      return;
+    }
+
+    req.session.user = undefined;
+    res.status(200).send("User logged out");
 
   } catch (e: any) {
     res.status(500).send(e.message);
