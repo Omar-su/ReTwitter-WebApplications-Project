@@ -25,6 +25,10 @@ const tweetSchema = new Schema({
     type : Number,
     required : true,
   },
+  usersThatLikedTheTweet : [{
+    type : String,
+    required : true,
+  }],
   replies : [{
     type : ObjectId,
     ref : "Replies",

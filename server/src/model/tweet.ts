@@ -9,6 +9,7 @@ export class Tweet implements TweetInterface {
   description: string;
   numberOfLikes: number;
   numberOfReplies: number;
+  usersThatLikedTheTweet : String [];
   replies: ReplyInterface[];
   _id: any;
 
@@ -22,6 +23,7 @@ export class Tweet implements TweetInterface {
     this.description = description;
     this.numberOfReplies = 0;
     this.numberOfLikes = 0;
+    this.usersThatLikedTheTweet = [];
     this.replies = [];
   }
 
