@@ -209,7 +209,7 @@ type DeleteRequest = Request &{
     session : { user ?: UserInterface};
 }
 
-tweetRouter.post("/delete/:id", async( req : DeleteRequest , res : Response<string>) =>{
+tweetRouter.delete("/:id", async( req : DeleteRequest , res : Response<string>) =>{
     try {
 
         if (req.params.id == null) {

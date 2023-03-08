@@ -73,7 +73,7 @@ export function TweetItem({ key, id, author, description, numberOfLikes, numberO
           <ReplyForm id={id} replies={replies}></ReplyForm>
         </div>
         <button onClick={async () => {
-          await axios.post(`http://localhost:9090/tweet/delete/${id}`);
+          await axios.delete(`http://localhost:9090/tweet/${id}`);
         }}>Delete Tweet </button>
       </div>
     </div>
