@@ -22,6 +22,7 @@ class TweetDBService implements TweetServiceInterface{
       description: description,
       numberOfReplies: 0,
       numberOfLikes: 0,
+      usersThatLikedTheTweet : [],
       replies: []
     });
     console.log(author);
@@ -46,8 +47,11 @@ class TweetDBService implements TweetServiceInterface{
     console.log("test" , tweet)
 
     if (tweet != null) {
-
+      if (tweet.usersThatLikedTheTweet.includes(foundUser.userNameID)) {
+        return false;
+      }
       console.log("test tesy" )
+      tweet.usersThatLikedTheTweet.push(foundUser.userNameID);
       tweet.numberOfLikes += 1;
       const fu = await this.updateTweet(tweet);
       console.log("test tweet fu " , fu)
@@ -61,7 +65,10 @@ class TweetDBService implements TweetServiceInterface{
     if (nestedReply == null) {
       return false;
     }
-
+    if (nestedReply.usersThatLikedTheTweet.includes(foundUser.userNameID)) {
+      return false;
+    }
+    nestedReply.usersThatLikedTheTweet.push(foundUser.userNameID);
     nestedReply.numberOfLikes += 1;
     console.log("outside if stat soososo", nestedReply );
     await this.updateReply(nestedReply);

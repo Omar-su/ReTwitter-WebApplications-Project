@@ -9,7 +9,7 @@ export class Tweet implements TweetInterface {
   description: string;
   numberOfLikes: number;
   numberOfReplies: number;
-  usersThatLikedTheTweet : String [];
+  usersThatLikedTheTweet : string [];
   replies: ReplyInterface[];
   _id: any;
 

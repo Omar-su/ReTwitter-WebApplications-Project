@@ -7,6 +7,7 @@ export interface TweetInterface {
     description: string;
     numberOfLikes: number;
     numberOfReplies: number;
+    usersThatLikedTheTweet : string[];
     replies: ReplyInterface[];
 
     increaseNrLikes(): void;
