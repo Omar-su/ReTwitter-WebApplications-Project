@@ -2,6 +2,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { User } from "../../Interfaces";
+import './NavBar.css'
 
 axios.defaults.withCredentials = true
 
@@ -42,7 +43,7 @@ export function NavBar() {
   return (
     <div className="col-2">
       Menu
-      <ul className="nav flex-column">
+      <ul className="nav flex-column text-color">
         <li className="nav-item">
           <a className="nav-link active top-buffer menu-links nav-button" aria-current="page" href="" onClick={() => navigatePage("/home")}>
             Home
