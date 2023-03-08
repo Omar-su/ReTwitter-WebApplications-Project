@@ -48,7 +48,10 @@ class TweetDBService implements TweetServiceInterface{
 
     if (tweet != null) {
       if (tweet.usersThatLikedTheTweet.includes(foundUser.userNameID)) {
-        return false;
+        tweet.numberOfLikes -= 1;
+        tweet.usersThatLikedTheTweet = tweet.usersThatLikedTheTweet.filter((str) => str !== foundUser.userNameID);
+        await this.updateTweet(tweet);
+        return true;
       }
       console.log("test tesy" )
       tweet.usersThatLikedTheTweet.push(foundUser.userNameID);
@@ -66,7 +69,10 @@ class TweetDBService implements TweetServiceInterface{
       return false;
     }
     if (nestedReply.usersThatLikedTheTweet.includes(foundUser.userNameID)) {
-      return false;
+      nestedReply.numberOfLikes -= 1;
+      nestedReply.usersThatLikedTheTweet = nestedReply.usersThatLikedTheTweet.filter((str) => str !== foundUser.userNameID);
+      await this.updateReply(nestedReply);
+      return true;
     }
     nestedReply.usersThatLikedTheTweet.push(foundUser.userNameID);
     nestedReply.numberOfLikes += 1;
