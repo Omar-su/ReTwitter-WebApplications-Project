@@ -89,7 +89,7 @@ class TweetDBService implements TweetServiceInterface{
     // const tweet : TweetInterface | undefined = foundUser.tweets.find((tweet : TweetInterface) => {
     //   return tweet.id === id;
     // }); 
-    const tweet : Tweet | TweetInterface = await this.findTweetByDateID(id);
+    const tweet : null | TweetInterface = await this.findTweetByDateID(id);
     console.log("test" , tweet)
 
     if (tweet != null) {
@@ -99,7 +99,8 @@ class TweetDBService implements TweetServiceInterface{
         return false;
       }
       console.log("inside if stat", tweet2 );
-      const reply = await replyDBService.createReply(foundUser.ownerName, desc, foundUser.ownerName);
+      const reply = await replyDBService.createReply(foundUser.ownerName, desc, tweet.author);
+      console.log("test tesy" )
       tweet2.replies.push(reply._id);
       console.log("test after change" , tweet2)
       tweet2.numberOfReplies += 1;
@@ -110,27 +111,43 @@ class TweetDBService implements TweetServiceInterface{
     console.log("outside if stat" )
 
     //const nestedReply : ReplyInterface | undefined = this.recrusiveIdSearch(id, foundUser.tweets.flatMap((tweet) => tweet.replies));
-    const nestedReply : ReplyInterface | undefined = await this.findReplyByDateID(id);
+    const nestedReply : ReplyInterface | null = await this.findReplyByDateID(id);
     console.log("outside if stat", nestedReply );
 
     if (nestedReply == null) {
       return false;
     }
-    const reply = await replyDBService.createReply(foundUser.ownerName, desc, foundUser.ownerName);
-    nestedReply.replies.push(reply);
+    const reply = await replyDBService.createReply(foundUser.ownerName, desc, nestedReply.author);
+    nestedReply.replies.push(reply._id);
     nestedReply.numberOfReplies += 1;
     await this.updateReply(nestedReply);
     return true;
   }
 
-  async updateTweet(tweet: Tweet): Promise<Tweet | null> {
+  async getRepliesOnTweet(id : number) : Promise<ReplyInterface[] | null> {
+    const foundTweet = await this.findTweetByDateID(id);
+    if (foundTweet) {
+        //TODO Somehow use foundUser.getTweets(); 
+        return foundTweet.replies;
+    }
+    const foundReply = await this.findReplyByDateID(id);
+    if (foundReply) {
+      //TODO Somehow use foundUser.getTweets(); 
+      return foundReply.replies;
+    }
+    return null;
+  }
+
+  async updateTweet(tweet: TweetInterface): Promise<TweetInterface | null> {
     const updatedTweet = await tweetModel.findByIdAndUpdate(tweet._id.toString(), tweet, { new: true });
     return updatedTweet;
   }
-  async updateReply(reply: Reply): Promise<Reply | null> {
+
+  async updateReply(reply: ReplyInterface): Promise<ReplyInterface | null> {
     const updatedReply = await replyModel.findByIdAndUpdate(reply._id.toString(), reply, { new: true });
     return updatedReply;
   }
+
   async findUserByID(user_id: string): Promise<User | null> {
     return await userModel.findById(user_id).populate("tweets");
   }
@@ -139,10 +156,10 @@ class TweetDBService implements TweetServiceInterface{
     return await tweetModel.findById(tweet_id);
   }
   async findTweetByDateID(dateID: number): Promise<TweetInterface | null> {
-    return await tweetModel.findOne({ "id": dateID });
+    return await tweetModel.findOne({ "id": dateID }).populate("replies");
   }
-  async findReplyByDateID(dateID: number): Promise<ReplyInterface | undefined> {
-    return await replyModel.findOne({ "id": dateID });
+  async findReplyByDateID(dateID: number): Promise<ReplyInterface | null> {
+    return await replyModel.findOne({ "id": dateID }).populate("replies");
   }
   async deleteTweet(tweetAuthor: UserInterface, id: number): Promise<boolean> {
     // Find the index of the tweet to remove in the user's tweets array
