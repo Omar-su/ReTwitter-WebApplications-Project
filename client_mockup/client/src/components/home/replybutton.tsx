@@ -2,7 +2,7 @@ import {useState} from 'react';
 import axios from 'axios';
 import { Reply } from '../../Interfaces';
 import { ReplyDisplayerButton } from './DisplayReplies';
-
+import './TweetButton.css'; 
 axios.defaults.withCredentials = true
 
 interface ReplyButtonProps{
@@ -22,7 +22,7 @@ function ReplyForm({id, replies}: ReplyButtonProps){
         setDescription(e.target.value);
       }} />
     </form>
-    <button className='reply-button' onClick={async () => {
+    <button className='reply-button button' onClick={async () => {
       await axios.post(`http://localhost:9090/tweet/reply/${id}`, {description : description});
     }}>Reply</button>
     <ReplyDisplayerButton id={id} replies={replies}></ReplyDisplayerButton>

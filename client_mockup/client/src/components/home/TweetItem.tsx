@@ -62,17 +62,17 @@ export function TweetItem({ key, id, author, description, numberOfLikes, numberO
     <div style={{ marginBottom: '20px' }} className='tweet-info'>
       {/* <p className='id' style={{ fontSize: '20px', fontWeight: 'bold' }}>{id}</p> */}
       <a href={"/profile/" + author} className='author' style={{ fontSize: '20px', fontWeight: 'bold' }} >{author}</a>
-      <p className='tweet-description text-color' style={{ fontSize: '16px', marginBottom: '10px' }}>{description}</p>
+      <p className='tweet-description text-color ' style={{ fontSize: '16px', marginBottom: '10px' }}>{description}</p>
       <p style={{ fontSize: '14px', color: 'grey' }}>{"2:34 PM - 16 Feb 2023"}</p>
       <div>
-        <button onClick={numberOfLikes}>
+        <button className={'button'} onClick={numberOfLikes}>
           {children}
         </button>
         <span style={{ fontSize: '14px', color: 'white' }}>{numberOfReplies}</span>
         <div>
           <ReplyForm id={id} replies={replies}></ReplyForm>
         </div>
-        <button onClick={async () => {
+        <button className={'button'} onClick={async () => {
           await axios.delete(`http://localhost:9090/tweet/${id}`);
         }}>Delete Tweet </button>
       </div>
