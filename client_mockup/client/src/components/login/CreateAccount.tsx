@@ -23,6 +23,7 @@ export default function CreateAccount() {
     await axios.post("http://localhost:9090/user", {
       userid: data.userid,
       ownerName: data.name,
+      bio : data.bio,
       email: data.email,
       password: data.password
     })
@@ -41,6 +42,7 @@ export default function CreateAccount() {
   const [isValidEmail, setIsValidEmail] = useState([false, true]);
   const [isValidName, setIsValidName] = useState([false, true]);
   const [isValidUserID, setIsValidUserID] = useState([false, true]);
+  const [isValidBio, setIsValidBio] = useState([false, true]);
   const [isValidPassword, setIsValidPassword] = useState([false, true]);
 
   const validateEmail = (email: string) => {
@@ -69,6 +71,14 @@ export default function CreateAccount() {
       setIsValidUserID([false, false]);
     }
   }
+  const validateBio = (bio: string) => {
+    if (bio !== "") {
+      setIsValidBio([true, true]);
+    }
+    else {
+      setIsValidBio([false, false]);
+    }
+  }
   const validatePassword = (password: string) => {
     if (password !== "") {
       setIsValidPassword([true, true]);
@@ -90,12 +100,14 @@ export default function CreateAccount() {
     console.log({
       userid: data.get('id'),
       name: data.get('name'),
+      bio : data.get(`bio`),
       email: data.get('email'),
       password: data.get('password'),
     });
     const dataValue = {
       userid: data.get('id'),
       name: data.get('name'),
+      bio : data.get(`bio`),
       email: data.get('email'),
       password: data.get('password'),
     }
@@ -148,6 +160,21 @@ export default function CreateAccount() {
                   autoComplete="id"
                   onChange={(event) => {
                     validateUserID(event.target.value);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  error={!isValidBio[1]}
+                  helperText={!isValidBio[1] ? "Field can not be empty." : ""}
+                  required
+                  fullWidth
+                  id="bio"
+                  label="Your Bio"
+                  name="bio"
+                  autoComplete="bio"
+                  onChange={(event) => {
+                    validateBio(event.target.value);
                   }}
                 />
               </Grid>
