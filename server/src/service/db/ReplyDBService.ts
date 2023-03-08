@@ -17,8 +17,8 @@ class ReplyDBService implements ReplyServiceInterface {
       author: author,
       userNameOfOriginalTweet: ownerOfTweet,
       description: description,
-      numberofreplies: 0,
-      numberoflikes: 0,
+      numberOfReplies: 0,
+      numberOfLikes: 0,
       replies: []
     });
     await newReply.save();

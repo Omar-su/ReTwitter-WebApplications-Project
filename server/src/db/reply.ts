@@ -22,11 +22,11 @@ const replySchema = new Schema({
     type : String,
     required : true,
   },
-  numberofreplies : {
+  numberOfReplies : {
     type : Number,
     required : true,
   },
-  numberoflikes : {
+  numberOfLikes : {
     type : Number,
     required : true,
   },
