@@ -21,7 +21,6 @@ export function TweetFeed() {
   }
 
   useEffect(() => {
-    console.log("called ");
     updateTweets();
   }, []);
   tweets.map((tweet) => {

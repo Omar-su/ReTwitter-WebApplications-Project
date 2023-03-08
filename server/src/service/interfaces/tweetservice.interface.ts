@@ -1,3 +1,4 @@
+import { ReplyInterface } from "../../model/interfaces/reply.interface";
 import { TweetInterface } from "../../model/interfaces/tweet.interface";
 import { UserInterface } from "../../model/interfaces/user.interface";
 
@@ -25,5 +26,7 @@ export interface TweetServiceInterface {
     deleteTweet(tweetAuthor: UserInterface, id: number): Promise<boolean>;
 
     replyOnTweet(user: UserInterface, id: number, desc : string): Promise<boolean>;
+
+    getRepliesOnTweet(id : number) : Promise<ReplyInterface[] | null>;
 
 }

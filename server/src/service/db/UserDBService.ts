@@ -1,4 +1,5 @@
 import { userModel } from '../../db/user'
+import { ReplyInterface } from '../../model/interfaces/reply.interface';
 import { TweetInterface } from '../../model/interfaces/tweet.interface';
 import { UserInterface } from '../../model/interfaces/user.interface';
 import { UserServiceInterface } from '../interfaces/userservice.interface';
