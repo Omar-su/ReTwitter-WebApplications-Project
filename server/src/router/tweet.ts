@@ -140,7 +140,7 @@ tweetRouter.post("/:id", async (
             res.status(401).send("Not logged in");
             return;
         }
-        const succeeded = await tweetService.likeTweet(req.session.user, id);
+        const succeeded = await tweetService.likeOrUnlikeTweet(req.session.user, id);
         
         if (! succeeded) {
             res.status(404).send(`No tweet with id number ${id}`);
@@ -190,7 +190,7 @@ tweetRouter.post("/reply/:id",
             res.status(401).send("Not logged in");
             return;
         }
-        const succeeded = await tweetService.replyOnTweet(req.session.user , id, desc);
+        const succeeded = await tweetService.replyOnTweetOrReply(req.session.user , id, desc);
 
         if (! succeeded) {
             res.status(404).send("does not work");

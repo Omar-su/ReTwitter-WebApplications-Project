@@ -17,7 +17,7 @@ export interface TweetServiceInterface {
      * @param tweetAuthor 
      * @param id 
      */
-    likeTweet(tweetAuthor: UserInterface, id: number): Promise<boolean>;
+    likeOrUnlikeTweet(tweetAuthor: UserInterface, id: number): Promise<boolean>;
 
     /**
      * Deletes a tweet with the given author and id from authors list of tweets
@@ -25,7 +25,7 @@ export interface TweetServiceInterface {
      */
     deleteTweet(tweetAuthor: UserInterface, id: number): Promise<boolean>;
 
-    replyOnTweet(user: UserInterface, id: number, desc : string): Promise<boolean>;
+    replyOnTweetOrReply(user: UserInterface, id: number, desc : string): Promise<boolean>;
 
     getRepliesOnTweet(id : number) : Promise<ReplyInterface[] | null>;
 

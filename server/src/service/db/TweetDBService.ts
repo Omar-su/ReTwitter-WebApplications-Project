@@ -36,88 +36,93 @@ class TweetDBService implements TweetServiceInterface{
   }
 
   // No nested reply update. How would that work here? 
-  async likeTweet(user: UserInterface, id: number): Promise<boolean> {
+  async likeOrUnlikeTweet(user: UserInterface, id: number): Promise<boolean> {
     const foundUser = await this.findUserByID(user._id.toString());
     if (!foundUser) {
       return false;
     }
-    console.log("test" , foundUser)
 
     const tweet : null | TweetInterface = await this.findTweetByDateID(id);
-    console.log("test" , tweet)
 
     if (tweet != null) {
       if (tweet.usersThatLikedTheTweet.includes(foundUser.userNameID)) {
-        tweet.numberOfLikes -= 1;
-        tweet.usersThatLikedTheTweet = tweet.usersThatLikedTheTweet.filter((str) => str !== foundUser.userNameID);
-        await this.updateTweet(tweet);
-        return true;
+        return await this.unLikeTweet(tweet, foundUser);
       }
-      console.log("test tesy" )
-      tweet.usersThatLikedTheTweet.push(foundUser.userNameID);
-      tweet.numberOfLikes += 1;
-      const fu = await this.updateTweet(tweet);
-      console.log("test tweet fu " , fu)
-      return true;
+      return await this.likeTweet(tweet, foundUser);
     }
-    console.log("outside if stat" )
+    return await this.likeOrUnlikeReply(foundUser, id);
+  }
 
+  private async likeTweet(tweet: TweetInterface, foundUser: User) {
+    tweet.usersThatLikedTheTweet.push(foundUser.userNameID);
+    tweet.numberOfLikes += 1;
+    await this.updateTweet(tweet);
+    return true;
+  }
+
+  private async unLikeTweet(tweet: TweetInterface, foundUser: User) {
+    tweet.numberOfLikes -= 1;
+    tweet.usersThatLikedTheTweet = tweet.usersThatLikedTheTweet.filter((str) => str !== foundUser.userNameID);
+    await this.updateTweet(tweet);
+    return true;
+  }
+
+  async likeOrUnlikeReply(foundUser : UserInterface, id : number) : Promise<boolean> {
     const nestedReply : ReplyInterface | null = await this.findReplyByDateID(id);
-    console.log("outside if stat", nestedReply );
 
     if (nestedReply == null) {
       return false;
     }
     if (nestedReply.usersThatLikedTheTweet.includes(foundUser.userNameID)) {
-      nestedReply.numberOfLikes -= 1;
-      nestedReply.usersThatLikedTheTweet = nestedReply.usersThatLikedTheTweet.filter((str) => str !== foundUser.userNameID);
-      await this.updateReply(nestedReply);
-      return true;
+      return await this.unLikeReply(nestedReply, foundUser);
     }
+    return await this.likeReply(nestedReply, foundUser);
+  }
+
+
+  private async likeReply(nestedReply: ReplyInterface, foundUser: UserInterface) {
     nestedReply.usersThatLikedTheTweet.push(foundUser.userNameID);
     nestedReply.numberOfLikes += 1;
-    console.log("outside if stat soososo", nestedReply );
     await this.updateReply(nestedReply);
     return true;
   }
 
+  private async unLikeReply(nestedReply: ReplyInterface, foundUser: UserInterface) {
+    nestedReply.numberOfLikes -= 1;
+    nestedReply.usersThatLikedTheTweet = nestedReply.usersThatLikedTheTweet.filter((str) => str !== foundUser.userNameID);
+    await this.updateReply(nestedReply);
+    return true;
+  }
 
-  async replyOnTweet(user: UserInterface, id: number, desc : string): Promise<boolean> {
+  async replyOnTweetOrReply(user: UserInterface, id: number, desc : string): Promise<boolean> {
 
     const foundUser = await this.findUserByID(user._id.toString());
     if (!foundUser) {
       return false;
     }
-    console.log("test" , foundUser)
 
-    // const tweet : TweetInterface | undefined = foundUser.tweets.find((tweet : TweetInterface) => {
-    //   return tweet.id === id;
-    // }); 
     const tweet : null | TweetInterface = await this.findTweetByDateID(id);
-    console.log("test" , tweet)
 
     if (tweet != null) {
-      console.log("inside if stat" )
-      const tweet2 = await this.findTweetByID(tweet._id.toString());
-      if (!tweet2) {
-        return false;
-      }
-      console.log("inside if stat", tweet2 );
-      const reply = await replyDBService.createReply(foundUser.ownerName, desc, tweet.author);
-      console.log("test tesy" )
-      tweet2.replies.push(reply._id);
-      console.log("test after change" , tweet2)
-      tweet2.numberOfReplies += 1;
-      const fu = await this.updateTweet(tweet2);
-      console.log("test tweet fu " , fu)
-      return true;
+      return await this.replyOnTweet(tweet, foundUser, desc);
     }
-    console.log("outside if stat" )
+    return await this.replyOnReply(foundUser, id, desc);
+  }
 
-    //const nestedReply : ReplyInterface | undefined = this.recrusiveIdSearch(id, foundUser.tweets.flatMap((tweet) => tweet.replies));
+  async replyOnTweet(tweet : TweetInterface, foundUser : UserInterface, desc : string) : Promise<boolean> {
+    const tweet2 = await this.findTweetByID(tweet._id.toString());
+    if (!tweet2) {
+      return false;
+    }
+    const reply = await replyDBService.createReply(foundUser.ownerName, desc, tweet.author);
+    tweet2.replies.push(reply._id);
+    tweet2.numberOfReplies += 1;
+    await this.updateTweet(tweet2);
+    return true;
+  }
+
+  async replyOnReply(foundUser : UserInterface, id : number, desc : string) : Promise<boolean>{
     const nestedReply : ReplyInterface | null = await this.findReplyByDateID(id);
-    console.log("outside if stat", nestedReply );
-
     if (nestedReply == null) {
       return false;
     }
