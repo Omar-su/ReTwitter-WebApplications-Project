@@ -12,7 +12,7 @@ type UserRequest = Request & {
   body: {
     userid?: string;
     ownerName?: string;
-    bio : string;
+    bio: string;
     email: string;
     password: string;
   }
@@ -28,7 +28,7 @@ userRouter.post("/", async (
   try {
     const userid: string = req.body.userid;
     const ownerName: string = req.body.ownerName;
-    const bio : string = req.body.bio;
+    const bio: string = req.body.bio;
     const email: string = req.body.email;
     const password: string = req.body.password;
 
@@ -83,7 +83,7 @@ userRouter.get("/", async (req: GetUserssRequest, res: Response<UserInterface[] 
   }
 });
 
-type LogoutRequest = Request &{
+type LogoutRequest = Request & {
   session: {
     user?: UserInterface;
   }
@@ -110,16 +110,16 @@ userRouter.post("/login", async (
 
     const user = await userService.findUserByEmailAndPwd(email, password);
 
-      if(user == null){
-        res.status(409).send("Invalid user name or password")
-        return;
-      }
-      if (req.session.user == user) {
-        res.status(409).send("User already logged in");
-        return;
-      }
-      req.session.user = user;
-      res.status(200).send(user);
+    if (user == null) {
+      res.status(409).send("Invalid username or password")
+      return;
+    }
+    if (req.session.user == user) {
+      res.status(409).send("User already logged in");
+      return;
+    }
+    req.session.user = user;
+    res.status(200).send(user);
 
   } catch (e: any) {
     res.status(500).send(e.message);
@@ -162,13 +162,13 @@ userRouter.get("/current_user", async (
     }
     console.log("Current user: " + req.session.user);
     const currentUserFromDb = await userService.findUserByID(req.session.user._id.toString());
-    if(currentUserFromDb == null) {
+    if (currentUserFromDb == null) {
       res.status(404).send("Could not find user data")
       return;
     }
     res.status(200).send(currentUserFromDb);
-  } catch (e : any) {
-    res.status(500).send(e.message);      
+  } catch (e: any) {
+    res.status(500).send(e.message);
   }
 
 });
