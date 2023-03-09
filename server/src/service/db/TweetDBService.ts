@@ -170,20 +170,17 @@ class TweetDBService implements TweetServiceInterface{
   async findReplyByDateID(dateID: number): Promise<ReplyInterface | null> {
     return await replyModel.findOne({ "id": dateID }).populate("replies");
   }
+
   async deleteTweet(tweetAuthor: UserInterface, id: number): Promise<boolean> {
-    // Find the index of the tweet to remove in the user's tweets array
-    const tweetIndex = tweetAuthor.tweets.findIndex((tweet: TweetInterface) => tweet.id === id);
-
-    if (tweetIndex >= 0) {
-      // Remove the tweet
-      tweetAuthor.tweets.splice(tweetIndex, 1);
-
-      await tweetModel.findOneAndDelete({ id });
-      await userDBService.updateUser(tweetAuthor);
-
+    const foundUser = await this.findUserByID(tweetAuthor._id.toString());
+    if (!foundUser) {
+      return false;
+    }
+    
+    if ( await tweetModel.findOneAndDelete({id : id }) ) {
       return true;
     }
-
+  
     return false;
   }
 }
