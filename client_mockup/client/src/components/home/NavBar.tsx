@@ -29,15 +29,14 @@ export function NavBar() {
     navigate(link);
   }
 
-  async function LogOut(){
+  async function LogOut() {
     await axios.post("http://localhost:9090/user/logout")
       .then(function (response) {
         console.log(response);
-        navigatePage("/login");
       })
       .catch(function (error) {
         console.log(error);
-      }); 
+      });
   }
 
   return (
@@ -80,8 +79,8 @@ export function NavBar() {
           </a>
         </li>
         <li className="nav-item">
-          <a className="nav-link top-buffer menu-links nav-button" href="" onClick={LogOut}>
-            Log out
+          <a className="nav-link top-buffer menu-links nav-button" href="" onClick={() => { LogOut(); navigatePage("/login") }}>
+            {currentUser ? "Logout" : "Login"}
           </a>
         </li>
       </ul>

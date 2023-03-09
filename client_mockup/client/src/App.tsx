@@ -23,6 +23,7 @@ function App() {
       <Route path="/reset" element={<ResetPassword />} />
       <Route path="/register" element={<CreateAccount />} />
       <Route path="/profile/:userNameID" element={<ProfilePage />} />
+      <Route path="/profile" element={<ProfilePage />} />
     </Routes>
   );
 }
