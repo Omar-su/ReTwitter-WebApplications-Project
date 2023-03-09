@@ -182,7 +182,7 @@ tweetRouter.post("/reply/:id",
             const id: number = parseInt(req.params.id, 10);
             // const id : number = req.body.id;
             if (!(id > 0)) {
-                res.status(400).send("Not found id");
+                res.status(400).send("Id not found");
                 return;
             }
 
@@ -193,10 +193,10 @@ tweetRouter.post("/reply/:id",
             const succeeded = await tweetService.replyOnTweetOrReply(req.session.user, id, desc);
 
             if (!succeeded) {
-                res.status(404).send("does not work");
+                res.status(404).send("Tweet not found");
                 return;
             }
-            res.status(200).send("succeeded");
+            res.status(200).send("Succeeded");
         } catch (e: any) {
             res.status(500).send(e.message);
         }
@@ -220,7 +220,7 @@ tweetRouter.delete("/:id", async (req: DeleteRequest, res: Response<string>) => 
         const id: number = parseInt(req.params.id, 10);
         // const id : number = req.body.id;
         if (!(id > 0)) {
-            res.status(400).send("ID not found");
+            res.status(400).send("Id not found");
             return;
         }
 
@@ -232,10 +232,10 @@ tweetRouter.delete("/:id", async (req: DeleteRequest, res: Response<string>) => 
         const succeeded = await tweetService.deleteTweet(req.session.user, id);
 
         if (!succeeded) {
-            res.status(404).send("The tweet was not found");
+            res.status(404).send("Tweet not found");
             return;
         }
-        res.status(200).send("succeeded");
+        res.status(200).send("Succeeded");
 
     } catch (e: any) {
         res.status(500).send(e.message);
