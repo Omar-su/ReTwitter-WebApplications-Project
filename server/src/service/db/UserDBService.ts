@@ -73,7 +73,7 @@ export class UserDBService implements UserServiceInterface {
           }
         }
 
-        tweets.sort(() => Math.random() - 0.5);
+        //tweets.sort(() => Math.random() - 0.5);
 
         return tweets;
     }

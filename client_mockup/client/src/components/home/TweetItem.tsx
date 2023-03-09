@@ -86,7 +86,7 @@ export interface RepliesToTweetProps {
 }
 
 export function RepliesToTweet({ id, replies }: RepliesToTweetProps) {
-  return <div className='reply'>
+  return <div >
     <div>
       {replies && replies.length > 0 && replies.map((reply) => (<ReplyItem key={reply.id} id={reply.id} author={reply.author} origTweetId={id} description={reply.description} replies={reply.replies} numberOfReplies={reply.numberOfReplies} origowner={reply.userNameOfOriginalTweet} numberOfLikes={async () => {
         await axios.post(`http://localhost:9090/tweet/${reply.id}`);

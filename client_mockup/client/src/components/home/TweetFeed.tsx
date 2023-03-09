@@ -23,10 +23,12 @@ export function TweetFeed() {
 
   useEffect(() => {
     updateTweets();
-  }, []);
+  }, [tweets]);
+
   tweets.map((tweet) => {
     console.log(tweet.author);
   })
+  
   return (
     <div>
       <h1 className='text-color'>Tweet Feed</h1>
@@ -43,6 +45,7 @@ export function TweetFeed() {
             description={tweet.description}
             numberOfLikes={async () => {
               await axios.post(`http://localhost:9090/tweet/${tweet.id}`);
+              updateTweets();
             }}
             numberOfReplies={tweet.numberOfReplies}
           >
