@@ -12,16 +12,16 @@ export const tweetRouter = express.Router();
 const tweetService: TweetServiceInterface = makeTweetDBService();
 const userService: UserServiceInterface = makeUserDBService();
 
-type GetTweetsRequest = Request &{
-    params : {
-        id ? : string;
+type GetTweetsRequest = Request & {
+    params: {
+        id?: string;
     };
-    session : {
-        user ?: UserInterface;
+    session: {
+        user?: UserInterface;
     }
 }
 
-tweetRouter.get("/", async(req: GetTweetsRequest, res: Response<TweetInterface[] | string>) => {
+tweetRouter.get("/", async (req: GetTweetsRequest, res: Response<TweetInterface[] | string>) => {
     try {
         if (req.session.user == null) {
             res.status(401).send("Not logged in");
@@ -33,12 +33,12 @@ tweetRouter.get("/", async(req: GetTweetsRequest, res: Response<TweetInterface[]
             return;
         }
         res.status(200).send(tweets);
-    } catch (e:any) {
+    } catch (e: any) {
         res.status(500).send(e.message);
     }
 });
 
-tweetRouter.get("/feed", async(req: GetTweetsRequest, res: Response<TweetInterface[] | string>) => {
+tweetRouter.get("/feed", async (req: GetTweetsRequest, res: Response<TweetInterface[] | string>) => {
     try {
         if (req.session.user == null) {
             res.status(401).send("Not logged in");
@@ -50,12 +50,12 @@ tweetRouter.get("/feed", async(req: GetTweetsRequest, res: Response<TweetInterfa
             return;
         }
         res.status(200).send(tweets);
-    } catch (e:any) {
+    } catch (e: any) {
         res.status(500).send(e.message);
     }
 });
 
-tweetRouter.get("/feed/replies/:id", async(req : GetTweetsRequest, res : Response<ReplyInterface[] | string>) =>{
+tweetRouter.get("/feed/replies/:id", async (req: GetTweetsRequest, res: Response<ReplyInterface[] | string>) => {
     try {
         if (req.session.user == null) {
             res.status(401).send("Not logged in");
@@ -65,8 +65,8 @@ tweetRouter.get("/feed/replies/:id", async(req : GetTweetsRequest, res : Respons
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing id param`);
             return;
         }
-        const id : number = parseInt(req.params.id, 10);
-        if (! (id > 0)) {
+        const id: number = parseInt(req.params.id, 10);
+        if (!(id > 0)) {
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- id number must be a positive integer`);
             return;
         }
@@ -76,169 +76,169 @@ tweetRouter.get("/feed/replies/:id", async(req : GetTweetsRequest, res : Respons
             return;
         }
         res.status(200).send(replies);
-    } catch (e:any) {
+    } catch (e: any) {
         res.status(500).send(e.message);
     }
 });
 
-type TweetRequest = Request &{
-    body : {description : string};
-    session : { user ?: UserInterface}
+type TweetRequest = Request & {
+    body: { description: string };
+    session: { user?: UserInterface }
 }
 
-tweetRouter.post("/", async( 
+tweetRouter.post("/", async (
     req: TweetRequest,
     res: Response<TweetInterface | string>
 ) => {
     try {
         const description = req.body.description;
-    
-        if (typeof(description) !== "string" ) {
+
+        if (typeof (description) !== "string") {
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- description has type
-            ${typeof(description)}`);
+            ${typeof (description)}`);
             return;
         }
-        if(req.session.user == null) {
+        if (req.session.user == null) {
             res.status(401).send("Not logged in");
             return;
         }
         const newTweet = await tweetService.createTweet(req.session.user.userNameID, description);
         res.status(201).send(newTweet);
-    } catch (e:any) {
+    } catch (e: any) {
         res.status(500).send(e.message);
     }
 
 });
 
 type LikeTweetRequest = Request & {
-    params : {
-        id : string;
+    params: {
+        id: string;
     };
-    body : {};
-    session : {
-        user ?: UserInterface;
+    body: {};
+    session: {
+        user?: UserInterface;
     };
 }
 
 type LikeTweetResponse = Response<string>;
 
 tweetRouter.post("/:id", async (
-    req : LikeTweetRequest,
-    res : LikeTweetResponse
+    req: LikeTweetRequest,
+    res: LikeTweetResponse
 ) => {
     try {
         if (req.params.id == null) {
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing id param`);
             return;
         }
-        const id : number = parseInt(req.params.id, 10);
-        if (! (id > 0)) {
+        const id: number = parseInt(req.params.id, 10);
+        if (!(id > 0)) {
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- id number must be a positive integer`);
             return;
         }
-        if(req.session.user == null) {
+        if (req.session.user == null) {
             res.status(401).send("Not logged in");
             return;
         }
         const succeeded = await tweetService.likeOrUnlikeTweet(req.session.user, id);
-        
-        if (! succeeded) {
+
+        if (!succeeded) {
             res.status(404).send(`No tweet with id number ${id}`);
             return;
         }
 
-        res.status(200).send("tweet number of likes increased");
-    } catch (e:any) {
+        res.status(200).send("Like status toggled");
+    } catch (e: any) {
         res.status(500).send(e.message);
     }
 
 });
 
 type ReplyRequest = Request & {
-    params : {id : string};
-    body : { author : string, description : string};
-    session : { user ?: UserInterface};
+    params: { id: string };
+    body: { author: string, description: string };
+    session: { user?: UserInterface };
 
 }
 
 // TODO THIS IS FOR TESTING
 tweetRouter.post("/reply/:id",
-    async(
-    req : ReplyRequest,
-    res : Response<string>
-    )=>{
-    try {
-        const desc = req.body.description;
+    async (
+        req: ReplyRequest,
+        res: Response<string>
+    ) => {
+        try {
+            const desc = req.body.description;
 
-        if(typeof(desc) !== "string" ){
-            res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing body data`);
-            return;
-        }
-        
-        if (req.params.id == null) {
-            res.status(400).send("Id not found");
-            return;
-        }
-        const id : number = parseInt(req.params.id, 10);
-        // const id : number = req.body.id;
-        if (! (id > 0)) {
-            res.status(400).send("Not found id");
-            return;
+            if (typeof (desc) !== "string") {
+                res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing body data`);
+                return;
+            }
+
+            if (req.params.id == null) {
+                res.status(400).send("Id not found");
+                return;
+            }
+            const id: number = parseInt(req.params.id, 10);
+            // const id : number = req.body.id;
+            if (!(id > 0)) {
+                res.status(400).send("Not found id");
+                return;
+            }
+
+            if (req.session.user == null) {
+                res.status(401).send("Not logged in");
+                return;
+            }
+            const succeeded = await tweetService.replyOnTweetOrReply(req.session.user, id, desc);
+
+            if (!succeeded) {
+                res.status(404).send("does not work");
+                return;
+            }
+            res.status(200).send("succeeded");
+        } catch (e: any) {
+            res.status(500).send(e.message);
         }
 
-        if(req.session.user == null) {
-            res.status(401).send("Not logged in");
-            return;
-        }
-        const succeeded = await tweetService.replyOnTweetOrReply(req.session.user , id, desc);
+    });
 
-        if (! succeeded) {
-            res.status(404).send("does not work");
-            return;
-        }
-        res.status(200).send("succeeded");
-    } catch (e:any) {
-        res.status(500).send(e.message);
-    }
-
-});
-
-type DeleteRequest = Request &{
-    params : { id : string};
-    body : {};
-    session : { user ?: UserInterface};
+type DeleteRequest = Request & {
+    params: { id: string };
+    body: {};
+    session: { user?: UserInterface };
 }
 
-tweetRouter.delete("/:id", async( req : DeleteRequest , res : Response<string>) =>{
+tweetRouter.delete("/:id", async (req: DeleteRequest, res: Response<string>) => {
     try {
 
         if (req.params.id == null) {
             res.status(400).send("Id not found");
             return;
         }
-    
-        const id : number = parseInt(req.params.id, 10);
+
+        const id: number = parseInt(req.params.id, 10);
         // const id : number = req.body.id;
-        if (! (id > 0)) {
+        if (!(id > 0)) {
             res.status(400).send("ID not found");
             return;
         }
-    
-        if(req.session.user == null) {
+
+        if (req.session.user == null) {
             res.status(401).send("Not logged in");
             return;
         }
-    
+
         const succeeded = await tweetService.deleteTweet(req.session.user, id);
-    
-        if (! succeeded) {
+
+        if (!succeeded) {
             res.status(404).send("The tweet was not found");
             return;
         }
         res.status(200).send("succeeded");
 
-    } catch (e : any) {
-        res.status(500).send(e.message);        
+    } catch (e: any) {
+        res.status(500).send(e.message);
     }
-    
+
 });
