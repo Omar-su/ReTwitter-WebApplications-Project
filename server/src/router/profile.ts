@@ -6,12 +6,12 @@ import { UserServiceInterface } from "../service/interfaces/userservice.interfac
 export const profileRouter = express.Router();
 const userService: UserServiceInterface = makeUserDBService();
 
-profileRouter.get("/:userid", async (
-  req: Request<{ userid: string }, {}, {}>,
+profileRouter.get("/:id", async (
+  req: Request<{ id: string }, {}, {}>,
   res: Response<UserInterface | string>
 ) => {
   try {
-    const userID: string = req.params.userid;
+    const userID: string = req.params.id;
 
     if (userID == null) {
       res.status(400).send(`Bad GET call to ${req.originalUrl} --- missing user id param`);
@@ -28,7 +28,7 @@ profileRouter.get("/:userid", async (
     //   res.status(404).send(`no tweets from user with id number ${userID}`);
     //   return;
     // }
-    
+
     res.status(200).send(user);
 
   } catch (e: any) {
@@ -46,12 +46,12 @@ type followRequest = Request & {
   };
 }
 
-profileRouter.post("/:toBeFollowedId/follow", async (
+profileRouter.post("/:id/follow", async (
   req: followRequest,
   res: Response<string>
 ) => {
   try {
-    const followee = req.params.toBeFollowedId;
+    const followee = req.params.id;
     if (followee == null) {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing account to follow`);
       return;
@@ -65,8 +65,7 @@ profileRouter.post("/:toBeFollowedId/follow", async (
       res.status(401).send("Not logged in");
       return;
     }
-    console.log(req.session.user)
-    const userFollowingId : string = req.session.user._id.toString();
+    const userFollowingId: string = req.session.user._id.toString();
     const succeeded = await userService.followProfile(followee, userFollowingId);
 
     if (!succeeded) {
@@ -91,12 +90,12 @@ type unFollowRequest = Request & {
   };
 }
 
-profileRouter.post("/:toBeUnfollowedId/unfollow", async (
+profileRouter.post("/:id/unfollow", async (
   req: unFollowRequest,
   res: Response<string>
 ) => {
   try {
-    const toBeUnfollowedId = req.params.toBeUnfollowedId;
+    const toBeUnfollowedId = req.params.id;
     if (toBeUnfollowedId == null) {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing account to unfollow`);
       return;
@@ -111,7 +110,7 @@ profileRouter.post("/:toBeUnfollowedId/unfollow", async (
       return;
     }
 
-    const userUnfollowingId : string = req.session.user._id.toString();
+    const userUnfollowingId: string = req.session.user._id.toString();
     const succeeded = await userService.unfollowProfile(toBeUnfollowedId, userUnfollowingId);
 
     if (!succeeded) {

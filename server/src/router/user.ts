@@ -160,7 +160,6 @@ userRouter.get("/current_user", async (
       res.status(400).send("No user is logged in");
       return;
     }
-    console.log("Current user: " + req.session.user);
     const currentUserFromDb = await userService.findUserByID(req.session.user._id.toString());
     if (currentUserFromDb == null) {
       res.status(404).send("Could not find user data")
