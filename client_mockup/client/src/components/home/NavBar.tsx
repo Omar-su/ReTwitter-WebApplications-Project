@@ -44,7 +44,7 @@ export function NavBar() {
       Menu
       <ul className="nav flex-column text-color">
         <li className="nav-item">
-          <a className="nav-link active top-buffer menu-links nav-button" aria-current="page" href="" onClick={() => navigatePage("/home")}>
+          <a className="nav-link active top-buffer nav-button text-color" aria-current="page" href="" onClick={() => navigatePage("/home")}>
             Home
           </a>
         </li>
@@ -59,12 +59,12 @@ export function NavBar() {
           </a>
         </li>
         <li className="nav-item">
-          <a className="nav-link top-buffer menu-links nav-button" href="" onClick={() => navigatePage(`/bookmarks`)}>
+          <a className="nav-link top-buffer menu-links nav-button" href=""  onClick={() => navigatePage(`/bookmarks`)}>
             Bookmark
           </a>
         </li>
         <li className="nav-item">
-          <a className="nav-link top-buffer menu-links nav-button" href="" onClick={() => navigatePage(`/profile/${currentUser?.userNameID}`)}>
+          <a className="nav-link top-buffer menu-links nav-button" href=""  onClick={() => navigatePage(`/profile/${currentUser?.userNameID}`)}>
             Profile
           </a>
         </li>
@@ -79,8 +79,13 @@ export function NavBar() {
           </a>
         </li>
         <li className="nav-item">
+<<<<<<< Updated upstream
           <a className="nav-link top-buffer menu-links nav-button" href="" onClick={() => { LogOut(); navigatePage("/login") }}>
             {currentUser ? "Logout" : "Login"}
+=======
+          <a className="nav-link top-buffer menu-links nav-log-out-button" href="" onClick={LogOut}>
+            Log out
+>>>>>>> Stashed changes
           </a>
         </li>
       </ul>
