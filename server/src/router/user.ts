@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
 import { UserInterface } from "../model/interfaces/user.interface";
-import { User } from "../model/user";
 import { makeUserDBService } from "../service/db/UserDBService";
 import { UserServiceInterface } from "../service/interfaces/userservice.interface";
 
@@ -32,29 +31,8 @@ userRouter.post("/", async (
     const email: string = req.body.email;
     const password: string = req.body.password;
 
-    if (typeof (userid) !== "string") {
-      res.status(400).send(`Bad POST call to ${req.originalUrl} --- userid has type
-      ${typeof (userid)}`);
-      return;
-    }
-    if (typeof (bio) !== "string") {
-      res.status(400).send(`Bad POST call to ${req.originalUrl} --- bio has type
-      ${typeof (bio)}`);
-      return;
-    }
-    if (typeof (ownerName) !== "string") {
-      res.status(400).send(`Bad POST call to ${req.originalUrl} --- ownername has type
-      ${typeof (ownerName)}`);
-      return;
-    }
-    if (typeof (email) !== "string") {
-      res.status(400).send(`Bad POST call to ${req.originalUrl} --- email has type
-      ${typeof (email)}`);
-      return;
-    }
-    if (typeof (password) !== "string") {
-      res.status(400).send(`Bad POST call to ${req.originalUrl} --- passWord has type
-      ${typeof (password)}`);
+    if (typeof (email) !== "string" || typeof (password) !== "string" || typeof (ownerName) !== "string" || typeof (bio) !== "string" || typeof (userid) !== "string") {
+      res.status(400).send(`Mandatory body parameters missing or have incorrect type.`);
       return;
     }
 
@@ -72,10 +50,10 @@ userRouter.post("/", async (
 
 });
 
-type GetUserssRequest = Request & {
+type GetUsersRequest = Request & {
 }
 
-userRouter.get("/", async (req: GetUserssRequest, res: Response<UserInterface[] | string>) => {
+userRouter.get("/", async (req: GetUsersRequest, res: Response<UserInterface[] | string>) => {
   try {
     res.status(200).send(await userService.getUsers());
   } catch (e: any) {
@@ -97,14 +75,8 @@ userRouter.post("/login", async (
     const email: string = req.body.email;
     const password: string = req.body.password;
 
-    if (typeof (email) !== "string") {
-      res.status(400).send(`Bad POST call to ${req.originalUrl} --- email has type
-        ${typeof (email)}`);
-      return;
-    }
-    if (typeof (password) !== "string") {
-      res.status(400).send(`Bad POST call to ${req.originalUrl} --- passWord has type
-        ${typeof (password)}`);
+    if (typeof (password) !== "string" || typeof (email) !== "string") {
+      res.status(400).send(`Mandatory body parameters missing or have incorrect type.`);
       return;
     }
 
