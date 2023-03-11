@@ -6,8 +6,6 @@ import { makeReplyDBService } from "./ReplyDBService";
 import { TweetServiceInterface } from "../interfaces/tweetservice.interface";
 import { UserInterface } from "../../model/interfaces/user.interface";
 import { ReplyInterface } from "../../model/interfaces/reply.interface";
-import { Tweet } from "../../model/tweet";
-import { User } from "../../model/user";
 import { replyModel } from "../../db/reply";
 
 export const userDBService = makeUserDBService();
@@ -53,14 +51,14 @@ class TweetDBService implements TweetServiceInterface{
     return await this.likeOrUnlikeReply(foundUser, id);
   }
 
-  private async likeTweet(tweet: TweetInterface, foundUser: User) {
+  private async likeTweet(tweet: TweetInterface, foundUser: UserInterface) {
     tweet.usersThatLikedTheTweet.push(foundUser.userNameID);
     tweet.numberOfLikes += 1;
     await this.updateTweet(tweet);
     return true;
   }
 
-  private async unLikeTweet(tweet: TweetInterface, foundUser: User) {
+  private async unLikeTweet(tweet: TweetInterface, foundUser: UserInterface) {
     tweet.numberOfLikes -= 1;
     tweet.usersThatLikedTheTweet = tweet.usersThatLikedTheTweet.filter((str) => str !== foundUser.userNameID);
     await this.updateTweet(tweet);
@@ -157,11 +155,11 @@ class TweetDBService implements TweetServiceInterface{
     return updatedReply;
   }
 
-  async findUserByID(user_id: string): Promise<User | null> {
+  async findUserByID(user_id: string): Promise<UserInterface | null> {
     return await userModel.findById(user_id).populate("tweets");
   }
 
-  async findTweetByID(tweet_id: string): Promise<Tweet | null> {
+  async findTweetByID(tweet_id: string): Promise<TweetInterface | null> {
     return await tweetModel.findById(tweet_id);
   }
   async findTweetByDateID(dateID: number): Promise<TweetInterface | null> {
@@ -184,6 +182,6 @@ class TweetDBService implements TweetServiceInterface{
     return false;
   }
 }
-export function makeTweetDBService() {
+export function makeTweetDBService() : TweetServiceInterface {
   return new TweetDBService;
 }

@@ -43,3 +43,7 @@ export class Tweet implements TweetInterface {
     this.increaseNrComments();
   }
 }
+
+export function newTweet(author: string, description: string) : TweetInterface {
+  return new Tweet(author, description);
+} 

@@ -28,6 +28,6 @@ class ReplyDBService implements ReplyServiceInterface {
     return newReply;
   }
 }
-export function makeReplyDBService() {
+export function makeReplyDBService() : ReplyServiceInterface{
   return new ReplyDBService;
 }

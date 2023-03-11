@@ -136,6 +136,6 @@ export class UserDBService implements UserServiceInterface {
 
 }
 
-export function makeUserDBService() {
+export function makeUserDBService() : UserServiceInterface {
     return new UserDBService;
 }
