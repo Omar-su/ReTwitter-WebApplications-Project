@@ -175,7 +175,7 @@ class TweetDBService implements TweetServiceInterface{
       return false;
     }
     
-    if ( await tweetModel.findOneAndDelete({id : id }) ) {
+    if ( await tweetModel.findOneAndDelete({id : id, author: tweetAuthor.userNameID }) ) {
       return true;
     }
   

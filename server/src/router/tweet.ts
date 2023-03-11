@@ -232,10 +232,10 @@ tweetRouter.delete("/:id", async (req: DeleteRequest, res: Response<string>) => 
         const succeeded = await tweetService.deleteTweet(req.session.user, id);
 
         if (!succeeded) {
-            res.status(404).send("Tweet not found");
+            res.status(400).send("Tweet not found or not owner of tweet");
             return;
         }
-        res.status(200).send("Succeeded");
+        res.status(200).send("Tweet was deleted");
 
     } catch (e: any) {
         res.status(500).send(e.message);
