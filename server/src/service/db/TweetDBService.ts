@@ -15,7 +15,7 @@ const replyDBService = makeReplyDBService();
 
 class TweetDBService implements TweetServiceInterface{
 
-  async getTweets() : Promise<Tweet[]> {
+  async getTweets() : Promise<TweetInterface[]> {
     return await tweetModel.find();
   }
   
