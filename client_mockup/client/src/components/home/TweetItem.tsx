@@ -8,6 +8,8 @@ import ReplyForm from './replybutton';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Tweet, Reply } from '../../Interfaces';
 import { TweetsContext } from './TweetsContext';
+import Button from 'react-bootstrap/Button';
+
 axios.defaults.withCredentials = true
 
 export function TweetPage() {
@@ -73,9 +75,12 @@ export function TweetItem({ key, id, author, description, numberOfLikes, numberO
         <div>
           <ReplyForm id={id} replies={replies}></ReplyForm>
         </div>
-        <button className={'button'} onClick={async () => {
+        <Button variant="outline-danger button-danger" onClick={async () => {
           await axios.delete(`http://localhost:9090/tweet/${id}`);
-        }}>Delete Tweet </button>
+        }}>Delete Tweet</Button>
+        {/* <button className={'button'} onClick={async () => {
+          await axios.delete(`http://localhost:9090/tweet/${id}`);
+        }}>Delete Tweet </button> */}
       </div>
     </div>
   </div>
