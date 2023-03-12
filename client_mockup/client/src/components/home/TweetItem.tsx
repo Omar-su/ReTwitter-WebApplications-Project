@@ -9,6 +9,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Tweet, Reply } from '../../Interfaces';
 import { TweetsContext } from './TweetsContext';
 import Button from 'react-bootstrap/Button';
+import { MDBBtn } from 'mdb-react-ui-kit';
+
 
 axios.defaults.withCredentials = true
 
@@ -68,19 +70,23 @@ export function TweetItem({ key, id, author, description, numberOfLikes, numberO
       <p className='tweet-description text-color tweet-desc' style={{ fontSize: '16px', marginBottom: '10px' }}>{description}</p>
       <p style={{ fontSize: '14px', color: 'grey' }}>{"2:34 PM - 16 Feb 2023"}</p>
       <div>
-        <button className={'button'} onClick={numberOfLikes}>
+        <Button variant="secondary" onClick={numberOfLikes}>{children}</Button>
+        {/* <button className={'button'} onClick={numberOfLikes}>
           {children}
-        </button>
-        <span style={{ fontSize: '14px', color: 'white' }}>{numberOfReplies}</span>
+        </button> */}
+        <Button variant="info" disabled>{numberOfReplies}</Button>
+        {/* <span style={{ fontSize: '14px', color: 'white' }}>{numberOfReplies}</span> */}
         <div>
           <ReplyForm id={id} replies={replies}></ReplyForm>
         </div>
+        {/* <MDBBtn rounded className='mx-2' color='danger' onClick={async () => {
+          await axios.delete(`http://localhost:9090/tweet/${id}`);
+        }} >
+          Delete Tweet
+        </MDBBtn> */}
         <Button variant="outline-danger button-danger" onClick={async () => {
           await axios.delete(`http://localhost:9090/tweet/${id}`);
         }}>Delete Tweet</Button>
-        {/* <button className={'button'} onClick={async () => {
-          await axios.delete(`http://localhost:9090/tweet/${id}`);
-        }}>Delete Tweet </button> */}
       </div>
     </div>
   </div>
