@@ -9,11 +9,13 @@ import { Messages } from "./components/message_system/Messages";
 import { NotificationPage } from "./components/notifications/NotificationPage";
 import ProfilePage from "./components/profile/ProfilePage";
 import { SettingsPage } from "./components/settings/Settings";
+import RedirectHome from "./components/util/RedirectHome";
 
 
 function App() {
   return (
     <Routes>
+      <Route path="/" element={<RedirectHome />} />
       <Route path="/home" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/messages" element={<Messages />} />
