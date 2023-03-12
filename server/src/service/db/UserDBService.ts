@@ -1,5 +1,6 @@
 import { Model } from 'mongoose';
-import { dataBaseModels } from '../../db/connect_database';
+import { DatabaseModels } from '../../db/connect_database';
+import { connUrlOrigin } from '../../db/conn_url_origin';
 import { TweetInterface } from '../../model/interfaces/tweet.interface';
 import { UserInterface } from '../../model/interfaces/user.interface';
 import { UserServiceInterface } from '../interfaces/userservice.interface';
@@ -144,7 +145,7 @@ export class UserDBService implements UserServiceInterface {
 }
 
 
-export function makeUserDBService() : UserServiceInterface {
+export function makeUserDBService(dataBaseModels : DatabaseModels) : UserServiceInterface {
     const userModel = dataBaseModels.getUserModel();
     return new UserDBService(userModel);
 }

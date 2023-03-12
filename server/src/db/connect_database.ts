@@ -34,6 +34,9 @@ export class DatabaseModels {
   }
 }
 
-export const dataBaseModels = new DatabaseModels(connUrlOrigin);
+// export const dataBaseModels = 
+export function getDatabaseModels(url : string){
+  return new DatabaseModels(url);
+}
 
 

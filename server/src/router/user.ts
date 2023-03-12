@@ -1,12 +1,18 @@
 import express, { Request, Response } from "express";
+import { getDatabaseModels } from "../db/connect_database";
 import { connUrlOrigin } from "../db/conn_url_origin";
 import { UserInterface } from "../model/interfaces/user.interface";
 import { makeUserDBService } from "../service/db/UserDBService";
 import { UserServiceInterface } from "../service/interfaces/userservice.interface";
 
 export const userRouter = express.Router();
+export let databasemodels = getDatabaseModels(connUrlOrigin);
 
-export const userService: UserServiceInterface = makeUserDBService();
+export function changeDatabaseConnection (url : string) {
+  databasemodels = getDatabaseModels(url);
+}
+
+export const userService: UserServiceInterface = makeUserDBService(databasemodels);
 
 type UserRequest = Request & {
   body: {

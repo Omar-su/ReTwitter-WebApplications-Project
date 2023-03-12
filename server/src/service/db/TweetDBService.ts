@@ -7,7 +7,7 @@ import { ReplyInterface } from "../../model/interfaces/reply.interface";
 import { Model } from "mongoose";
 import { UserServiceInterface } from "../interfaces/userservice.interface";
 import { ReplyServiceInterface } from "../interfaces/replyservice.interface";
-import { dataBaseModels } from "../../db/connect_database";
+import { DatabaseModels } from "../../db/connect_database";
 
 
 
@@ -198,13 +198,13 @@ class TweetDBService implements TweetServiceInterface{
     return false;
   }
 }
-export function makeTweetDBService() : TweetServiceInterface {  
+export function makeTweetDBService( dataBaseModels : DatabaseModels ) : TweetServiceInterface {  
   const tweetModel = dataBaseModels.getTweetModel();
   const replyModel = dataBaseModels.getReplyModel();
   const userModel = dataBaseModels.getUserModel();
 
-  const userDBService = makeUserDBService();
-  const replyDBService = makeReplyDBService();
+  const userDBService = makeUserDBService(dataBaseModels);
+  const replyDBService = makeReplyDBService(dataBaseModels);
 
   return new TweetDBService(tweetModel, replyModel, userModel, userDBService, replyDBService);
 }

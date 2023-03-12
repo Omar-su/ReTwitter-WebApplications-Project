@@ -4,7 +4,7 @@ import { ReplyServiceInterface } from "../interfaces/replyservice.interface";
 import { makeUserDBService } from "./UserDBService";
 import mongoose, { Model } from "mongoose";
 import { UserServiceInterface } from "../interfaces/userservice.interface";
-import { dataBaseModels } from "../../db/connect_database";
+import { DatabaseModels } from "../../db/connect_database";
 
 
 
@@ -39,9 +39,9 @@ class ReplyDBService implements ReplyServiceInterface {
 }
 
 
-export function makeReplyDBService() : ReplyServiceInterface{
+export function makeReplyDBService(dataBaseModels : DatabaseModels) : ReplyServiceInterface{
   const replyModel = dataBaseModels.getReplyModel();
 
-  const userDBService = makeUserDBService();
+  const userDBService = makeUserDBService(dataBaseModels);
   return new ReplyDBService(replyModel, userDBService);
 }

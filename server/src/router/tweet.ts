@@ -7,11 +7,12 @@ import { makeTweetDBService } from "../service/db/TweetDBService";
 import { makeUserDBService } from "../service/db/UserDBService";
 import { TweetServiceInterface } from "../service/interfaces/tweetservice.interface";
 import { UserServiceInterface } from "../service/interfaces/userservice.interface";
+import { databasemodels } from "./user";
 
 export const tweetRouter = express.Router();
 
-const tweetService: TweetServiceInterface = makeTweetDBService();
-const userService: UserServiceInterface = makeUserDBService();
+const tweetService: TweetServiceInterface = makeTweetDBService(databasemodels);
+const userService: UserServiceInterface = makeUserDBService(databasemodels);
 
 type GetTweetsRequest = Request & {
     params: {
