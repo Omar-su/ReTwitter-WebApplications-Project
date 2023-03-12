@@ -14,6 +14,10 @@ export const userDBService = makeUserDBService();
 const replyDBService = makeReplyDBService();
 
 class TweetDBService implements TweetServiceInterface{
+
+  async getTweets() : Promise<Tweet[]> {
+    return await tweetModel.find();
+  }
   
   async createTweet(author: string, description: string): Promise<TweetInterface> {
     const newTweet = new tweetModel({
