@@ -1,9 +1,10 @@
 import { ObjectId } from "mongodb";
-import { Schema } from "mongoose";
+import { Connection, Schema } from "mongoose";
 import { ReplyInterface } from "../model/interfaces/reply.interface";
-import { conn } from "./conn";
+import { connectToDataBase } from "./conn";
+import { connUrlOrigin } from "./conn_url_origin";
 
-const replySchema = new Schema({
+export const replySchema = new Schema({
   id : {
     type : Number,
     required : true,
@@ -41,4 +42,7 @@ const replySchema = new Schema({
   }] 
 })
 
-export const replyModel = conn.model<ReplyInterface>("Replies", replySchema);
+
+
+
+// export const replyModel = conn.model<ReplyInterface>("Replies", replySchema);

@@ -1,4 +1,5 @@
 import express, { Request, response, Response } from "express";
+import { connUrlOrigin } from "../db/conn_url_origin";
 import { ReplyInterface } from "../model/interfaces/reply.interface";
 import { TweetInterface } from "../model/interfaces/tweet.interface";
 import { UserInterface } from "../model/interfaces/user.interface";
