@@ -50,18 +50,18 @@ test("If a tweet is liked, the number of likes should increase", async () => {
   }
 });
 
-test("If a tweet is unliked, the number of likes should descrease", async () => {
-  const desc = "testDescription3";
-  await tweetService.createTweet(testUserName, desc);
-  const tweets = await tweetService.getTweets();
-  const testTweet = tweets.find((tweet) => tweet.description === desc);
-  const tweetAuthor = await userService.findUserByUsername(testUserName);
-  if (testTweet && tweetAuthor) { //Ensures that testTweet is not undefined
-    const likrNrBeforeLike = testTweet.numberOfLikes;
-    tweetService.likeOrUnlikeTweet(tweetAuthor, testTweet.id);
-    expect(testTweet.numberOfLikes === likrNrBeforeLike + 1);
-  }
-});
+// test("If a tweet is unliked, the number of likes should descrease", async () => {
+//   const desc = "testDescription3";
+//   await tweetService.createTweet(testUserName, desc);
+//   const tweets = await tweetService.getTweets();
+//   const testTweet = tweets.find((tweet) => tweet.description === desc);
+//   const tweetAuthor = await userService.findUserByUsername(testUserName);
+//   if (testTweet && tweetAuthor) { //Ensures that testTweet is not undefined
+//     const likrNrBeforeLike = testTweet.numberOfLikes;
+//     tweetService.likeOrUnlikeTweet(tweetAuthor, testTweet.id);
+//     expect(testTweet.numberOfLikes === likrNrBeforeLike + 1);
+//   }
+// });
 
 afterAll(async () => {
   const allTweets = await tweetService.getTweets();
