@@ -14,7 +14,7 @@ function ReplyForm({id, replies}: ReplyButtonProps){
 
   const [description, setDescription] = useState<string>("");
 
-  return <div>
+  return <span>
     <form onSubmit={async e => {
       e.preventDefault();
     }}>
@@ -26,7 +26,7 @@ function ReplyForm({id, replies}: ReplyButtonProps){
       await axios.post(`http://localhost:9090/tweet/reply/${id}`, {description : description});
     }}>Reply</button>
     <ReplyDisplayerButton id={id} replies={replies}></ReplyDisplayerButton>
-  </div>
+  </span>
 }
 
 
