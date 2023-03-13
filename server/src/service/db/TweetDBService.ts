@@ -91,7 +91,7 @@ class TweetDBService implements TweetServiceInterface{
     if (!tweet2) {
       return false;
     }
-    const reply = await this.replyDBService.createReply(foundUser.ownerName, desc, tweet.author);
+    const reply = await this.replyDBService.createReply(foundUser.userNameID, desc, tweet.author);
     tweet2.replies.push(reply._id);
     tweet2.numberOfReplies += 1;
     await this.updateTweet(tweet2);

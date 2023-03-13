@@ -1,5 +1,6 @@
 import ReplyForm from "./replybutton";
 import { Reply } from "../../Interfaces";
+import Button from 'react-bootstrap/Button';
 
 interface ReplyProps{
   key : number;
@@ -18,14 +19,11 @@ function ReplyItem({key, id, origTweetId, author, description, numberOfLikes, nu
   return <div className='reply-item'>
     <img src="" alt="" />
     <div className='reply-info'>
-      {/* <h3 className="origowner">{origowner}</h3> */}
-      <h3 className='author'>{author}</h3>
+      <h4 className='author'>{"@" + origowner}</h4>
       <p className='reply-desc'>{description}</p>
       <div>
-        <button onClick={numberOfLikes}>
-          {children}
-        </button>
-        <span>{numberOfReplies}</span>
+        <Button variant="secondary" onClick={numberOfLikes}>{children}</Button>
+        <Button variant="info" disabled>{numberOfReplies}</Button>
       </div>
       <div>
           <ReplyForm id={id} replies={replies}></ReplyForm>

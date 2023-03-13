@@ -18,11 +18,6 @@ export function ReplyDisplayerButton({id, replies} : RepliesToTweetProps){
       setReplies(response.data);
       setRepliesDisplay(!repliesDisplayed);
     }}>{repliesDisplayed ? 'Hide replies' : 'Display replies'} </Button>
-    {/* <button className="reply-displayer button" onClick={ async () => { 
-      const response = await axios.get<Reply[]>(`http://localhost:9090/tweet/feed/replies/${id}`);
-      setReplies(response.data);
-      setRepliesDisplay(!repliesDisplayed);
-    }}> {repliesDisplayed ? 'Hide replies' : 'Display replies'} </button> */}
     {repliesDisplayed && <RepliesToTweet id={id} replies={repliesData}></RepliesToTweet>}
 
   </span>

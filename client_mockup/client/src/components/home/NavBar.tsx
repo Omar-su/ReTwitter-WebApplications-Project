@@ -41,8 +41,13 @@ export function NavBar() {
 
   return (
     <div className="col-2">
-      Menu
-      <ul className="nav flex-column text-color">
+      
+      <ul className="nav flex-column menu-nav-ch">
+      <li className="nav-item">
+          <a className="nav-link active top-buffer menu-nav" aria-current="page" aria-disabled onClick={() => navigatePage("/home")}>
+            Menu
+          </a>
+        </li>
         <li className="nav-item">
           <a className="nav-link active top-buffer nav-button text-color" aria-current="page" href="" onClick={() => navigatePage("/home")}>
             Home
