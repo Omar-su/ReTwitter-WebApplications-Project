@@ -7,6 +7,9 @@ import { replySchema } from "./reply";
 import { tweetSchema } from "./tweet";
 import { userSchema } from "./user";
 
+/**
+ * A class which create schemas in the database and returns models to be used elsewhere
+ */
 export class DatabaseModels {
 
   replyModel;
@@ -34,7 +37,7 @@ export class DatabaseModels {
   }
 }
 
-// export const dataBaseModels = 
+// A method to get an instance with the desired database connection 
 export function getDatabaseModels(url : string){
   return new DatabaseModels(url);
 }

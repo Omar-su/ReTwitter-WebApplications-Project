@@ -3,6 +3,9 @@ import { Schema } from "mongoose";
 import { UserInterface } from "../model/interfaces/user.interface";
 import { connectToDataBase } from "./conn";
 
+/**
+ * A user schema which is used to represent the user class in the database
+ */
 export const userSchema : Schema = new Schema({
   
   userNameID : {
@@ -41,7 +44,4 @@ export const userSchema : Schema = new Schema({
   }]
 });
 
-
-
-// export const userModel = conn.model<UserInterface>("Users", userSchema);
 

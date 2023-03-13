@@ -2,6 +2,9 @@ import mongoose, { ObjectId } from "mongoose";
 import { UserInterface } from "./interfaces/user.interface";
 import { TweetInterface } from "./interfaces/tweet.interface";
 
+/**
+ * User class that represents users in the app
+ */
 class User implements UserInterface {
 
   _id!: ObjectId;
@@ -10,7 +13,9 @@ class User implements UserInterface {
   password: string;
   bio: string;
   email: string;
+  // The user's followers 
   followers: string[];
+  // the users, the user follow
   following: string[];
   tweets: TweetInterface[];
 

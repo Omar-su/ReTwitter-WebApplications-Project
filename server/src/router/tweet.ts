@@ -23,23 +23,26 @@ type GetTweetsRequest = Request & {
     }
 }
 
-tweetRouter.get("/", async (req: GetTweetsRequest, res: Response<TweetInterface[] | string>) => {
-    try {
-        if (req.session.user == null) {
-            res.status(401).send("Not logged in");
-            return;
-        }
-        const tweets = await userService.getUserTweets(req.session.user);
-        if (tweets == null) {
-            res.status(500).send("Failed to get user tweets");
-            return;
-        }
-        res.status(200).send(tweets);
-    } catch (e: any) {
-        res.status(500).send(e.message);
-    }
-});
+// tweetRouter.get("/", async (req: GetTweetsRequest, res: Response<TweetInterface[] | string>) => {
+//     try {
+//         if (req.session.user == null) {
+//             res.status(401).send("Not logged in");
+//             return;
+//         }
+//         const tweets = await userService.getUserTweets(req.session.user);
+//         if (tweets == null) {
+//             res.status(500).send("Failed to get user tweets");
+//             return;
+//         }
+//         res.status(200).send(tweets);
+//     } catch (e: any) {
+//         res.status(500).send(e.message);
+//     }
+// });
 
+/**
+ * A get call which returns all tweets of the accounts the user follows and the user's tweets as well
+ */
 tweetRouter.get("/feed", async (req: GetTweetsRequest, res: Response<TweetInterface[] | string>) => {
     try {
         if (req.session.user == null) {
@@ -57,6 +60,9 @@ tweetRouter.get("/feed", async (req: GetTweetsRequest, res: Response<TweetInterf
     }
 });
 
+/**
+ * A get call which returns all replies to a specific tweet
+ */
 tweetRouter.get("/feed/replies/:id", async (req: GetTweetsRequest, res: Response<ReplyInterface[] | string>) => {
     try {
         if (req.session.user == null) {
@@ -88,6 +94,9 @@ type TweetRequest = Request & {
     session: { user?: UserInterface }
 }
 
+/**
+ * A post call to create a new tweet and returns it 
+ */
 tweetRouter.post("/", async (
     req: TweetRequest,
     res: Response<TweetInterface | string>
@@ -124,6 +133,9 @@ type LikeTweetRequest = Request & {
 
 type LikeTweetResponse = Response<string>;
 
+/**
+ * A post call to like a specific tweet if not liked yet and vice versa
+ */
 tweetRouter.post("/:id", async (
     req: LikeTweetRequest,
     res: LikeTweetResponse
@@ -164,6 +176,9 @@ type ReplyRequest = Request & {
 }
 
 // TODO THIS IS FOR TESTING
+/**
+ * A post call to comment on a specific tweet
+ */
 tweetRouter.post("/reply/:id",
     async (
         req: ReplyRequest,
@@ -211,6 +226,9 @@ type DeleteRequest = Request & {
     session: { user?: UserInterface };
 }
 
+/**
+ * A delete call to delete a tweet with a specific id
+ */
 tweetRouter.delete("/:id", async (req: DeleteRequest, res: Response<string>) => {
     try {
 
