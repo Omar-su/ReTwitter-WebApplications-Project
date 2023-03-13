@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Reply } from '../../Interfaces';
 import { ReplyDisplayerButton } from './DisplayReplies';
 import './TweetButton.css'; 
+import Button from 'react-bootstrap/Button';
+
 axios.defaults.withCredentials = true
 
 interface ReplyButtonProps{
@@ -14,7 +16,7 @@ function ReplyForm({id, replies}: ReplyButtonProps){
 
   const [description, setDescription] = useState<string>("");
 
-  return <div>
+  return <span>
     <form onSubmit={async e => {
       e.preventDefault();
     }}>
@@ -22,11 +24,14 @@ function ReplyForm({id, replies}: ReplyButtonProps){
         setDescription(e.target.value);
       }} />
     </form>
-    <button className='reply-button button' onClick={async () => {
+    <Button variant="primary" onClick={async () => {
       await axios.post(`http://localhost:9090/tweet/reply/${id}`, {description : description});
-    }}>Reply</button>
+    }}>Reply</Button>
+    {/* <button className='reply-button button' onClick={async () => {
+      await axios.post(`http://localhost:9090/tweet/reply/${id}`, {description : description});
+    }}>Reply</button> */}
     <ReplyDisplayerButton id={id} replies={replies}></ReplyDisplayerButton>
-  </div>
+  </span>
 }
 
 

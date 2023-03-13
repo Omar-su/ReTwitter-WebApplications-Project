@@ -2,7 +2,7 @@ import mongoose, { ObjectId } from "mongoose";
 import { UserInterface } from "./interfaces/user.interface";
 import { TweetInterface } from "./interfaces/tweet.interface";
 
-export class User implements UserInterface {
+class User implements UserInterface {
 
   _id!: ObjectId;
   userNameID: string;

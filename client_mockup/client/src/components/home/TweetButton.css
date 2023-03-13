@@ -7,3 +7,13 @@
   background-color: rgb(220, 220, 220);
   color: #333333;
 }
+
+.button-danger{
+  background-color: rgb(255, 0, 0);
+  color: white;
+}
+
+.button-danger :hover{
+  background-color: white;
+  color: red;
+}

@@ -79,13 +79,8 @@ export function NavBar() {
           </a>
         </li>
         <li className="nav-item">
-<<<<<<< Updated upstream
-          <a className="nav-link top-buffer menu-links nav-button" href="" onClick={() => { LogOut(); navigatePage("/login") }}>
+          <a className="nav-link top-buffer menu-links nav-button nav-log-out-button" href="" onClick={() => { LogOut(); navigatePage("/login") }}>
             {currentUser ? "Logout" : "Login"}
-=======
-          <a className="nav-link top-buffer menu-links nav-log-out-button" href="" onClick={LogOut}>
-            Log out
->>>>>>> Stashed changes
           </a>
         </li>
       </ul>

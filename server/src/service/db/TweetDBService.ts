@@ -1,26 +1,40 @@
-import { tweetModel } from "../../db/tweet";
 import { makeUserDBService } from "./UserDBService";
-import { userModel } from "../../db/user";
 import { TweetInterface } from "../../model/interfaces/tweet.interface";
 import { makeReplyDBService } from "./ReplyDBService";
 import { TweetServiceInterface } from "../interfaces/tweetservice.interface";
 import { UserInterface } from "../../model/interfaces/user.interface";
 import { ReplyInterface } from "../../model/interfaces/reply.interface";
-import { Tweet } from "../../model/tweet";
-import { User } from "../../model/user";
-import { replyModel } from "../../db/reply";
+import { Model } from "mongoose";
+import { UserServiceInterface } from "../interfaces/userservice.interface";
+import { ReplyServiceInterface } from "../interfaces/replyservice.interface";
+import { DatabaseModels } from "../../db/connect_database";
 
-export const userDBService = makeUserDBService();
-const replyDBService = makeReplyDBService();
+
 
 class TweetDBService implements TweetServiceInterface{
 
+  
+  userDBService : UserServiceInterface;
+  replyDBService : ReplyServiceInterface;
+  tweetModel : Model<TweetInterface, {}, {}, {}, any>;
+  replyModel : Model<ReplyInterface, {}, {}, {}, any>;
+  userModel : Model<UserInterface, {}, {}, {}, any>;
+  
+  
+  constructor(tweetModel: Model<TweetInterface, {}, {}, {}, any>, replyModel: Model<ReplyInterface, {}, {}, {}, any>, userModel: Model<UserInterface, {}, {}, {}, any>, userDBService : UserServiceInterface, replyDBService : ReplyServiceInterface){
+    this.replyModel = replyModel;
+    this.tweetModel = tweetModel;
+    this.userModel = userModel;
+    this.userDBService = userDBService;
+    this.replyDBService = replyDBService;
+  }
+  
   async getTweets() : Promise<TweetInterface[]> {
     return await tweetModel.find();
   }
-  
+
   async createTweet(author: string, description: string): Promise<TweetInterface> {
-    const newTweet = new tweetModel({
+    const newTweet = new this.tweetModel({
       id: Date.now().valueOf(),
       author: author,
       description: description,
@@ -31,10 +45,10 @@ class TweetDBService implements TweetServiceInterface{
     });
     console.log(author);
     await newTweet.save();
-    const authorToUpdate = await userDBService.findUserByUsername(author);
+    const authorToUpdate = await this.userDBService.findUserByUsername(author);
     if(authorToUpdate) {
       authorToUpdate.tweets.push(newTweet);
-      await userDBService.updateUser(authorToUpdate);
+      await this.userDBService.updateUser(authorToUpdate);
     }
     return newTweet;
   }
@@ -57,14 +71,14 @@ class TweetDBService implements TweetServiceInterface{
     return await this.likeOrUnlikeReply(foundUser, id);
   }
 
-  private async likeTweet(tweet: TweetInterface, foundUser: User) {
+  private async likeTweet(tweet: TweetInterface, foundUser: UserInterface) {
     tweet.usersThatLikedTheTweet.push(foundUser.userNameID);
     tweet.numberOfLikes += 1;
     await this.updateTweet(tweet);
     return true;
   }
 
-  private async unLikeTweet(tweet: TweetInterface, foundUser: User) {
+  private async unLikeTweet(tweet: TweetInterface, foundUser: UserInterface) {
     tweet.numberOfLikes -= 1;
     tweet.usersThatLikedTheTweet = tweet.usersThatLikedTheTweet.filter((str) => str !== foundUser.userNameID);
     await this.updateTweet(tweet);
@@ -118,7 +132,7 @@ class TweetDBService implements TweetServiceInterface{
     if (!tweet2) {
       return false;
     }
-    const reply = await replyDBService.createReply(foundUser.ownerName, desc, tweet.author);
+    const reply = await this.replyDBService.createReply(foundUser.ownerName, desc, tweet.author);
     tweet2.replies.push(reply._id);
     tweet2.numberOfReplies += 1;
     await this.updateTweet(tweet2);
@@ -130,7 +144,7 @@ class TweetDBService implements TweetServiceInterface{
     if (nestedReply == null) {
       return false;
     }
-    const reply = await replyDBService.createReply(foundUser.ownerName, desc, nestedReply.author);
+    const reply = await this.replyDBService.createReply(foundUser.ownerName, desc, nestedReply.author);
     nestedReply.replies.push(reply._id);
     nestedReply.numberOfReplies += 1;
     await this.updateReply(nestedReply);
@@ -152,27 +166,27 @@ class TweetDBService implements TweetServiceInterface{
   }
 
   async updateTweet(tweet: TweetInterface): Promise<TweetInterface | null> {
-    const updatedTweet = await tweetModel.findByIdAndUpdate(tweet._id.toString(), tweet, { new: true });
+    const updatedTweet = await this.tweetModel.findByIdAndUpdate(tweet._id.toString(), tweet, { new: true });
     return updatedTweet;
   }
 
   async updateReply(reply: ReplyInterface): Promise<ReplyInterface | null> {
-    const updatedReply = await replyModel.findByIdAndUpdate(reply._id.toString(), reply, { new: true });
+    const updatedReply = await this.replyModel.findByIdAndUpdate(reply._id.toString(), reply, { new: true });
     return updatedReply;
   }
 
-  async findUserByID(user_id: string): Promise<User | null> {
-    return await userModel.findById(user_id).populate("tweets");
+  async findUserByID(user_id: string): Promise<UserInterface | null> {
+    return await this.userModel.findById(user_id).populate("tweets");
   }
 
-  async findTweetByID(tweet_id: string): Promise<Tweet | null> {
-    return await tweetModel.findById(tweet_id);
+  async findTweetByID(tweet_id: string): Promise<TweetInterface | null> {
+    return await this.tweetModel.findById(tweet_id);
   }
   async findTweetByDateID(dateID: number): Promise<TweetInterface | null> {
-    return await tweetModel.findOne({ "id": dateID }).populate("replies");
+    return await this.tweetModel.findOne({ "id": dateID }).populate("replies");
   }
   async findReplyByDateID(dateID: number): Promise<ReplyInterface | null> {
-    return await replyModel.findOne({ "id": dateID }).populate("replies");
+    return await this.replyModel.findOne({ "id": dateID }).populate("replies");
   }
 
   async deleteTweet(tweetAuthor: UserInterface, id: number): Promise<boolean> {
@@ -181,13 +195,20 @@ class TweetDBService implements TweetServiceInterface{
       return false;
     }
     
-    if ( await tweetModel.findOneAndDelete({id : id, author: tweetAuthor.userNameID }) ) {
+    if ( await this.tweetModel.findOneAndDelete({id : id, author: tweetAuthor.userNameID }) ) {
       return true;
     }
   
     return false;
   }
 }
-export function makeTweetDBService() {
-  return new TweetDBService;
+export function makeTweetDBService( dataBaseModels : DatabaseModels ) : TweetServiceInterface {  
+  const tweetModel = dataBaseModels.getTweetModel();
+  const replyModel = dataBaseModels.getReplyModel();
+  const userModel = dataBaseModels.getUserModel();
+
+  const userDBService = makeUserDBService(dataBaseModels);
+  const replyDBService = makeReplyDBService(dataBaseModels);
+
+  return new TweetDBService(tweetModel, replyModel, userModel, userDBService, replyDBService);
 }

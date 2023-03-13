@@ -6,6 +6,7 @@ import { TweetFeed } from './TweetFeed';
 import { NavBar } from './NavBar';
 import { NewsItems } from './NewsItem';
 import './Home.css'
+import { TweetsProvider } from './TweetsContext';
 
 function Home() {
   return (
@@ -14,7 +15,9 @@ function Home() {
         <div className="row align-items-start">
           <NavBar></NavBar>
           <div className="col">
-            <TweetFeed></TweetFeed>
+          <TweetsProvider>
+            <TweetFeed />
+          </TweetsProvider>
           </div>
           <div className="col">
             <NewsItems></NewsItems>

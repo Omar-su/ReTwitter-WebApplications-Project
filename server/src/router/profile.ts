@@ -1,10 +1,12 @@
 import express, { Request, Response } from "express";
+import { connUrlOrigin } from "../db/conn_url_origin";
 import { UserInterface } from "../model/interfaces/user.interface";
 import { makeUserDBService } from "../service/db/UserDBService";
 import { UserServiceInterface } from "../service/interfaces/userservice.interface";
+import { databasemodels } from "./user";
 
 export const profileRouter = express.Router();
-const userService: UserServiceInterface = makeUserDBService();
+const userService: UserServiceInterface = makeUserDBService(databasemodels);
 
 profileRouter.get("/:id", async (
   req: Request<{ id: string }, {}, {}>,

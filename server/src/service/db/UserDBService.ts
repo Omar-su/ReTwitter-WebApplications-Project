@@ -1,24 +1,32 @@
-import { userModel } from '../../db/user'
-import { ReplyInterface } from '../../model/interfaces/reply.interface';
+import { Model } from 'mongoose';
+import { DatabaseModels } from '../../db/connect_database';
+import { connUrlOrigin } from '../../db/conn_url_origin';
 import { TweetInterface } from '../../model/interfaces/tweet.interface';
 import { UserInterface } from '../../model/interfaces/user.interface';
 import { UserServiceInterface } from '../interfaces/userservice.interface';
 
 export class UserDBService implements UserServiceInterface {
 
+    userModel : Model<UserInterface, {}, {}, {}, any>;
+    
+  
+    constructor(userModel: Model<UserInterface, {}, {}, {}, any>){
+      this.userModel = userModel;
+    }
+
     async getUsers(): Promise<UserInterface[]> {
-        return await userModel.find();
+        return await this.userModel.find();
     }
 
     async createUser(userNameID: string, ownerName: string, bio : string, email: string, password: string): Promise<boolean> {
-        const existingUsername = await userModel.findOne({ userNameID: userNameID });
-        const existingEmail = await userModel.findOne({ email: email });
+        const existingUsername = await this.userModel.findOne({ userNameID: userNameID });
+        const existingEmail = await this.userModel.findOne({ email: email });
         if (existingUsername || existingEmail) {
             // A user with the given userNameID or email already exists, return false
             return false;
         }
 
-        const newUser = await userModel.create(
+        const newUser = await this.userModel.create(
             {
                 userNameID: userNameID,
                 ownerName: ownerName,
@@ -33,7 +41,7 @@ export class UserDBService implements UserServiceInterface {
     }
 
     async findUserByEmailAndPwd(email: string, password: string): Promise<UserInterface | null> {
-        const userLoggingIn = await userModel.findOne({ "email": email }).populate("tweets").exec();
+        const userLoggingIn = await this.userModel.findOne({ "email": email }).populate("tweets").exec();
         if(userLoggingIn?.password == password){
             return userLoggingIn;
         }
@@ -41,11 +49,11 @@ export class UserDBService implements UserServiceInterface {
     }
 
     async findUserByID(user_id: string): Promise<UserInterface | null> {
-        return await userModel.findById(user_id).populate("tweets");
+        return await this.userModel.findById(user_id).populate("tweets");
     }
 
     async findUserByUsername(userName: string): Promise<UserInterface | null> {
-        return await userModel.findOne({ "userNameID": userName }).populate("tweets");
+        return await this.userModel.findOne({ "userNameID": userName }).populate("tweets");
     }
 
     async getUserTweets(user: UserInterface): Promise<Array<TweetInterface> | null> {
@@ -130,12 +138,14 @@ export class UserDBService implements UserServiceInterface {
 
 
     async updateUser(user: UserInterface): Promise<UserInterface | null> {
-        const updatedUser = await userModel.findByIdAndUpdate(user._id.toString(), user, { new: true });
+        const updatedUser = await this.userModel.findByIdAndUpdate(user._id.toString(), user, { new: true });
         return updatedUser;
     }
 
 }
 
-export function makeUserDBService() {
-    return new UserDBService;
+
+export function makeUserDBService(dataBaseModels : DatabaseModels) : UserServiceInterface {
+    const userModel = dataBaseModels.getUserModel();
+    return new UserDBService(userModel);
 }

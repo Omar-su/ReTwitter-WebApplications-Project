@@ -1,9 +1,9 @@
 import { ObjectId } from "mongodb";
 import { Schema } from "mongoose";
 import { UserInterface } from "../model/interfaces/user.interface";
-import { conn } from "./conn";
+import { connectToDataBase } from "./conn";
 
-const userSchema : Schema = new Schema({
+export const userSchema : Schema = new Schema({
   
   userNameID : {
     type : String,
@@ -41,5 +41,7 @@ const userSchema : Schema = new Schema({
   }]
 });
 
-export const userModel = conn.model<UserInterface>("Users", userSchema);
+
+
+// export const userModel = conn.model<UserInterface>("Users", userSchema);
 
