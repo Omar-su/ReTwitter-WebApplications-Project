@@ -37,8 +37,6 @@ test("If a tweet is deleted then it should not be in the list of tweets", async 
   };
 });
 
-
-
 test("If a tweet is liked, the number of likes should increase", async () => {
   const desc = "testDescription3";
   const testTweet = await tweetService.createTweet(testUserName, desc);
@@ -50,6 +48,7 @@ test("If a tweet is liked, the number of likes should increase", async () => {
   }
 });
 
+
 test("If a tweet is unliked, the number of likes should descrease", async () => {
   const desc = "testDescription4";
   const testTweet = await tweetService.createTweet(testUserName, desc);
@@ -59,6 +58,17 @@ test("If a tweet is unliked, the number of likes should descrease", async () => 
     const likrNrBeforeUnLike = testTweet.numberOfLikes;
     tweetService.likeOrUnlikeTweet(tweetAuthor, testTweet.id);
     expect(testTweet.numberOfLikes === likrNrBeforeUnLike - 1);
+  }
+});
+
+test("If a tweet is replied to, its number of replies should increase", async () => {
+  const desc = "testDescription5";
+  const testTweet = await tweetService.createTweet(testUserName, desc);
+  const tweetAuthor = await userService.findUserByUsername(testUserName);
+  if(testTweet && tweetAuthor) {
+    const replyNrBeforeReply = testTweet.numberOfReplies;
+    tweetService.replyOnTweetOrReply(tweetAuthor, testTweet.id, desc)
+    expect(testTweet.numberOfReplies === replyNrBeforeReply + 1);
   }
 });
 

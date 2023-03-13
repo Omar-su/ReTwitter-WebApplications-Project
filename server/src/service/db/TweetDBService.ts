@@ -154,12 +154,10 @@ class TweetDBService implements TweetServiceInterface{
   async getRepliesOnTweet(id : number) : Promise<ReplyInterface[] | null> {
     const foundTweet = await this.findTweetByDateID(id);
     if (foundTweet) {
-        //TODO Somehow use foundUser.getTweets(); 
         return foundTweet.replies;
     }
     const foundReply = await this.findReplyByDateID(id);
     if (foundReply) {
-      //TODO Somehow use foundUser.getTweets(); 
       return foundReply.replies;
     }
     return null;
