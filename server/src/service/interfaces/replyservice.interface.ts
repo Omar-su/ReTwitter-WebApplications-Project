@@ -8,4 +8,11 @@ export interface ReplyServiceInterface {
      * replied to and add it to authors list of tweets. Return the created reply
      */
     createReply(author : string, description : string, ownerOfTweet : string): Promise<ReplyInterface>;
+
+    
+    getRepliesOnTweet(id : number) : Promise<ReplyInterface[] | null>;
+
+    likeOrUnlikeReply(foundUser : UserInterface, id : number) : Promise<boolean>;
+
+    replyOnReply(foundUser : UserInterface, id : number, desc : string) : Promise<boolean>;
 }

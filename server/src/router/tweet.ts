@@ -23,22 +23,6 @@ type GetTweetsRequest = Request & {
     }
 }
 
-// tweetRouter.get("/", async (req: GetTweetsRequest, res: Response<TweetInterface[] | string>) => {
-//     try {
-//         if (req.session.user == null) {
-//             res.status(401).send("Not logged in");
-//             return;
-//         }
-//         const tweets = await userService.getUserTweets(req.session.user);
-//         if (tweets == null) {
-//             res.status(500).send("Failed to get user tweets");
-//             return;
-//         }
-//         res.status(200).send(tweets);
-//     } catch (e: any) {
-//         res.status(500).send(e.message);
-//     }
-// });
 
 /**
  * A get call which returns all tweets of the accounts the user follows and the user's tweets as well

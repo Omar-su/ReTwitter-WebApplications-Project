@@ -3,7 +3,6 @@ import { makeReplyDBService } from "../service/db/ReplyDBService";
 import { UserInterface } from "../model/interfaces/user.interface";
 import { ReplyInterface } from "../model/interfaces/reply.interface";
 import { ReplyServiceInterface } from "../service/interfaces/replyservice.interface";
-import { connUrlOrigin } from "../db/conn_url_origin";
 import { databasemodels } from "./user";
 import { makeTweetDBService } from "../service/db/TweetDBService";
 import { TweetServiceInterface } from "../service/interfaces/tweetservice.interface";
@@ -59,7 +58,7 @@ replyRouter.get("/feed/replies/:id", async (req: GetRepliesRequest, res: Respons
           res.status(400).send(`Bad POST call to ${req.originalUrl} --- id number must be a positive integer`);
           return;
       }
-      const replies = await tweetService.getRepliesOnTweet(id);
+      const replies = await replyService.getRepliesOnTweet(id);
       if (replies == null) {
           res.status(500).send("Failed to get feed tweets");
           return;
