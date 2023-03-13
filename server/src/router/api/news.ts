@@ -21,6 +21,9 @@ newsRouter.get("/", async (
       return;
     }
     const data = await newsService.getNews();
+    if (!data) {
+      res.status(404).send("Failed external api call");
+    }
     res.status(200).send(data);
   } catch (e:any) {
     res.status(500).send(e.message);

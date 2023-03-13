@@ -60,7 +60,7 @@ replyRouter.get("/feed/replies/:id", async (req: GetRepliesRequest, res: Respons
       }
       const replies = await replyService.getRepliesOnTweet(id);
       if (replies == null) {
-          res.status(500).send("Failed to get feed tweets");
+          res.status(404).send("Replies for the tweet not found");
           return;
       }
       res.status(200).send(replies);
