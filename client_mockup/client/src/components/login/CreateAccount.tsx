@@ -15,15 +15,41 @@ import axios from 'axios';
 import { Copyright } from '../util/CopyrightFooter';
 axios.defaults.withCredentials = true
 
-const theme = createTheme();
+/**
+ * This page uses the standard darktheme from MUI
+ */
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
+const theme = createTheme(darkTheme);
 
+/**
+ * Format for the data that the form will gather which is sent to createUser function
+ */
+type dataFormat = {
+  userid: FormDataEntryValue | null,
+  name: FormDataEntryValue | null,
+  bio: FormDataEntryValue | null,
+  email: FormDataEntryValue | null,
+  password: FormDataEntryValue | null,
+};
+/**
+ * RegisterPage component
+ * @returns HTML
+ */
 export default function CreateAccount() {
 
-  const createUser = async (data: any) => {
+  /**
+   * Sends a post request to register a new user. Will set registrationError if error occurs
+   * @param data from the form
+   */
+  const createUser = async (data: dataFormat) => {
     await axios.post("http://localhost:9090/user", {
       userid: data.userid,
       ownerName: data.name,
-      bio : data.bio,
+      bio: data.bio,
       email: data.email,
       password: data.password
     })
@@ -37,14 +63,25 @@ export default function CreateAccount() {
       });
   };
 
+  /**
+   * UseState for error message. This message will appear below the register button if the registrationprocess returned an error
+   */
   const [registrationError, setRegistrationError] = useState("");
 
+  /**
+   * UseStates for validation of the textfields. The second array element is only used the first time to hide textfield error messages
+   * if the user have typed anything yet. This makes sure that the whole page is not red when it is initially loaded.
+   */
   const [isValidEmail, setIsValidEmail] = useState([false, true]);
   const [isValidName, setIsValidName] = useState([false, true]);
   const [isValidUserID, setIsValidUserID] = useState([false, true]);
   const [isValidBio, setIsValidBio] = useState([false, true]);
   const [isValidPassword, setIsValidPassword] = useState([false, true]);
 
+  /**
+   * Checks if the email is a valid format
+   * @param email string of email
+   */
   const validateEmail = (email: string) => {
     const emailRegexValidator = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
@@ -55,6 +92,10 @@ export default function CreateAccount() {
       setIsValidEmail([false, false]);
     }
   }
+  /**
+   * Checks that the name field is not empty
+   * @param name string of name
+   */
   const validateName = (name: string) => {
     if (name !== "") {
       setIsValidName([true, true]);
@@ -63,6 +104,10 @@ export default function CreateAccount() {
       setIsValidName([false, false]);
     }
   }
+  /**
+   * Checks that the userid field is not empty
+   * @param userID string of userID
+   */
   const validateUserID = (userID: string) => {
     if (userID !== "") {
       setIsValidUserID([true, true]);
@@ -71,6 +116,10 @@ export default function CreateAccount() {
       setIsValidUserID([false, false]);
     }
   }
+  /**
+   * Checks that the bio field is not empty
+   * @param bio string of bio
+   */
   const validateBio = (bio: string) => {
     if (bio !== "") {
       setIsValidBio([true, true]);
@@ -79,6 +128,11 @@ export default function CreateAccount() {
       setIsValidBio([false, false]);
     }
   }
+  /**
+   * Checks that the password textfield is not empty
+   * For the future, this could be changed to make sure that the password is more complex
+   * @param password string of password
+   */
   const validatePassword = (password: string) => {
     if (password !== "") {
       setIsValidPassword([true, true]);
@@ -88,26 +142,33 @@ export default function CreateAccount() {
     }
   }
 
+  /**
+   * React router dom to navigate the website
+   */
   const navigate = useNavigate();
   const navigatePage = (link: string) => {
     navigate(link);
   }
 
 
+  /**
+   * Handle submit function
+   * @param event form
+   */
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       userid: data.get('id'),
       name: data.get('name'),
-      bio : data.get(`bio`),
+      bio: data.get(`bio`),
       email: data.get('email'),
       password: data.get('password'),
     });
     const dataValue = {
       userid: data.get('id'),
       name: data.get('name'),
-      bio : data.get(`bio`),
+      bio: data.get(`bio`),
       email: data.get('email'),
       password: data.get('password'),
     }
