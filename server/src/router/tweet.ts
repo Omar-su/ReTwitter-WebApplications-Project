@@ -90,7 +90,7 @@ type LikeTweetRequest = Request & {
 type LikeTweetResponse = Response<string>;
 
 /**
- * A post call to like a specific tweet if not liked yet and vice versa
+ * A post call to like a specific tweet or a reply if not liked yet and vice versa
  */
 tweetRouter.post("/:id", async (
     req: LikeTweetRequest,

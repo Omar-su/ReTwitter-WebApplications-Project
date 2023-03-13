@@ -9,6 +9,7 @@ export const app = express();
 
 import session from "express-session";
 import { newsRouter } from "./router/api/news";
+import { replyRouter } from "./router/reply";
 
 app.use(session({
   secret : "Your secret key", // TODO Move to separate file. DO NOT UPLOAD TO GITHUB!!!!
@@ -23,6 +24,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use("/news" , newsRouter)
+app.use("/reply" , replyRouter)
 app.use("/tweet", tweetRouter);
 app.use("/profile", profileRouter);
 app.use("/user", userRouter);

@@ -25,7 +25,7 @@ function ReplyForm({id, replies}: ReplyButtonProps){
       }} />
     </form>
     <Button variant="primary" onClick={async () => {
-      await axios.post(`http://localhost:9090/tweet/reply/${id}`, {description : description});
+      await axios.post(`http://localhost:9090/reply/${id}`, {description : description});
     }}>Reply</Button>
     {/* <button className='reply-button button' onClick={async () => {
       await axios.post(`http://localhost:9090/tweet/reply/${id}`, {description : description});

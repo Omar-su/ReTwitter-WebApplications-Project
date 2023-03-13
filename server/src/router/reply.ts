@@ -11,7 +11,7 @@ export const replyRouter = express.Router();
 const tweetService: TweetServiceInterface = makeTweetDBService(databasemodels);
 const replyService: ReplyServiceInterface = makeReplyDBService(databasemodels);
 
-replyRouter.post("/tweet/reply",
+replyRouter.post("/",
 
 // TODO author should be logged in user
 async(
@@ -81,7 +81,7 @@ type ReplyRequest = Request & {
 /**
  * A post call to comment on a specific tweet
  */
-replyRouter.post("/reply/:id",
+replyRouter.post("/:id",
     async (
         req: ReplyRequest,
         res: Response<string>
@@ -120,7 +120,7 @@ replyRouter.post("/reply/:id",
             res.status(500).send(e.message);
         }
 
-    });
+});
 
 
 

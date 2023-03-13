@@ -18,7 +18,7 @@ export function TweetPage() {
   const [tweets, setTweets] = useState<Tweet[]>([]);
 
   async function updateTweets() {
-    const response = await axios.get<Tweet[]>("http://localhost:9090/tweet");
+    const response = await axios.get<Tweet[]>("http://localhost:9090/tweet/feed");
     setTweets(response.data);
   }
 
@@ -102,7 +102,7 @@ export function RepliesToTweet({ id, replies }: RepliesToTweetProps) {
   const [tweets, setTweets] = React.useContext(TweetsContext);
 
   async function updateTweets() {
-    const response = await axios.get<Tweet[]>("http://localhost:9090/tweet");
+    const response = await axios.get<Tweet[]>("http://localhost:9090/tweet/feed");
     setTweets(response.data);
   }
 
