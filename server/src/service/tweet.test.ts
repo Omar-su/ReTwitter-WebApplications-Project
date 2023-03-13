@@ -1,17 +1,19 @@
 import { before } from "node:test";
+import { getDatabaseModels } from "../db/connect_database";
+import { connUrlTest } from "../db/conn_url_origin";
 import { makeTweetDBService } from "./db/TweetDBService";
 import { makeUserDBService } from "./db/UserDBService";
 import { TweetServiceInterface } from "./interfaces/tweetservice.interface";
 import { UserServiceInterface } from "./interfaces/userservice.interface";
-import { makeTweetService } from "./oldservices/tweet";
 
 const testUserName = "testuser";
 let userService: UserServiceInterface;
 let tweetService: TweetServiceInterface;
+let databaseModels = getDatabaseModels(connUrlTest);
 
-beforeAll(async () => {
-  userService = makeUserDBService();
-  tweetService = makeTweetDBService();
+beforeEach(async () => {
+  userService = makeUserDBService(databaseModels);
+  tweetService = makeTweetDBService(databaseModels);
   await userService.createUser(testUserName, "testownername", "testbio", "test@test.com", "testpassword");
 });
 
@@ -26,7 +28,7 @@ test("If a tweet is deleted then it should not be in the list of tweets", async 
   const desc = "testDescription2";
   await tweetService.createTweet(testUserName, desc);
   const tweetsBeforeDelete = await tweetService.getTweets();
-  const createdTweet = tweetsBeforeDelete.find((tweet) => tweet.description === desc);
+  const createdTweet = tweetsBeforeDelete.find((tweet) => tweet.description === desc); // get tweet from list of tweets
   const tweetAuthor = await userService.findUserByUsername(testUserName);
   if (createdTweet && tweetAuthor) { // if successfully created
     await tweetService.deleteTweet(tweetAuthor, createdTweet.id);
@@ -39,9 +41,7 @@ test("If a tweet is deleted then it should not be in the list of tweets", async 
 
 test("If a tweet is liked, the number of likes should increase", async () => {
   const desc = "testDescription3";
-  await tweetService.createTweet(testUserName, desc);
-  const tweets = await tweetService.getTweets();
-  const testTweet = tweets.find((tweet) => tweet.description === desc);
+  const testTweet = await tweetService.createTweet(testUserName, desc);
   const tweetAuthor = await userService.findUserByUsername(testUserName);
   if (testTweet && tweetAuthor) { //Ensures that testTweet is not undefined
     const likrNrBeforeLike = testTweet.numberOfLikes;
@@ -50,32 +50,26 @@ test("If a tweet is liked, the number of likes should increase", async () => {
   }
 });
 
-// test("If a tweet is unliked, the number of likes should descrease", async () => {
-//   const desc = "testDescription3";
-//   await tweetService.createTweet(testUserName, desc);
-//   const tweets = await tweetService.getTweets();
-//   const testTweet = tweets.find((tweet) => tweet.description === desc);
-//   const tweetAuthor = await userService.findUserByUsername(testUserName);
-//   if (testTweet && tweetAuthor) { //Ensures that testTweet is not undefined
-//     const likrNrBeforeLike = testTweet.numberOfLikes;
-//     tweetService.likeOrUnlikeTweet(tweetAuthor, testTweet.id);
-//     expect(testTweet.numberOfLikes === likrNrBeforeLike + 1);
-//   }
-// });
-
-afterAll(async () => {
-  const allTweets = await tweetService.getTweets();
-  const testTweet1 = allTweets.find((tweet) => tweet.description === "testDescription1");
-  const testTweet2 = allTweets.find((tweet) => tweet.description === "testDescription2");
-  const testTweet3 = allTweets.find((tweet) => tweet.description === "testDescription3");
+test("If a tweet is unliked, the number of likes should descrease", async () => {
+  const desc = "testDescription4";
+  const testTweet = await tweetService.createTweet(testUserName, desc);
   const tweetAuthor = await userService.findUserByUsername(testUserName);
-  if(testTweet1 && tweetAuthor){
-    tweetService.deleteTweet(tweetAuthor, testTweet1.id);
+  if (testTweet && tweetAuthor) { //Ensures that testTweet is not undefined
+    tweetService.likeOrUnlikeTweet(tweetAuthor, testTweet.id); // Like the tweet first
+    const likrNrBeforeUnLike = testTweet.numberOfLikes;
+    tweetService.likeOrUnlikeTweet(tweetAuthor, testTweet.id);
+    expect(testTweet.numberOfLikes === likrNrBeforeUnLike - 1);
   }
-  if(testTweet2 && tweetAuthor){
-    tweetService.deleteTweet(tweetAuthor, testTweet2.id);
+});
+
+afterEach(async () => {
+  if (databaseModels.getReplyModel().db.name == "db_for_unit_tests") {
+    await databaseModels.getReplyModel().deleteMany({});
   }
-  if(testTweet3 && tweetAuthor){
-    tweetService.deleteTweet(tweetAuthor, testTweet3.id);
+  if (databaseModels.getTweetModel().db.name == "db_for_unit_tests") {
+    await databaseModels.getTweetModel().deleteMany();
   }
-})
+  if (databaseModels.getUserModel().db.name == "db_for_unit_tests") {
+    await databaseModels.getUserModel().deleteMany({});
+  }
+});

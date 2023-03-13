@@ -30,7 +30,7 @@ class TweetDBService implements TweetServiceInterface{
   }
   
   async getTweets() : Promise<TweetInterface[]> {
-    return await tweetModel.find();
+    return await this.tweetModel.find();
   }
 
   async createTweet(author: string, description: string): Promise<TweetInterface> {
