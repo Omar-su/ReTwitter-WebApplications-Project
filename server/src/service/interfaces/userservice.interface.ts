@@ -61,19 +61,19 @@ export interface UserServiceInterface {
 
     /**
      * Adds the user with username userNameBeingFollowed to the following list of user with
-     * id user_idFollowing. Also adds the user with id user_idFollowing to list of
+     * username userNameFollowing. Also adds the user with usename userNameFollowing to list of
      * followers for user with username userNameBeingFollowed. After this, return true
      * If either of the users do not exist, return false
      */
-    followProfile(userNameBeingFollowed: string, user_idFollowing: string): Promise<boolean>;
+    followProfile(userNameBeingFollowed: string, userNameFollowing: string): Promise<boolean>;
 
     /**
      * Removes the user with username toBeUnfollowedUserName from the following list of user with
-     * id userUnfollowingId. Also removes the user with id userUnfollowingId from list of
+     * username userUnfollowingUsername. Also removes the user with username userUnfollowingUsername from list of
      * followers for user with username toBeUnfollowedUsername. After this, return true
      * If either of the users do not exist, return false
      */
-    unfollowProfile(toBeUnfollowedUserName: string, userUnfollowingId: string): Promise<boolean>;
+    unfollowProfile(toBeUnfollowedUserName: string, userUnfollowingUsername: string): Promise<boolean>;
 
     /**
      * Updates the information for the given user object if it exists in the database
