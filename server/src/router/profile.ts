@@ -53,26 +53,26 @@ profileRouter.post("/:id/follow", async (
   res: Response<string>
 ) => {
   try {
-    const followee = req.params.id;
-    if (followee == null) {
+    const followeeUserName = req.params.id;
+    if (followeeUserName == null) {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing account to follow`);
       return;
     }
-    if (typeof (followee) !== "string") {
+    if (typeof (followeeUserName) !== "string") {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- account to follow has type 
-        ${typeof (followee)}`);
+        ${typeof (followeeUserName)}`);
       return;
     }
     if (req.session.user == null) {
       res.status(401).send("Not logged in");
       return;
     }
-    const userFollowingId: string = req.session.user._id.toString();
-    const succeeded = await userService.followProfile(followee, userFollowingId);
+    const userFollowingUserName: string = req.session.user.userNameID;
+    const succeeded = await userService.followProfile(followeeUserName, userFollowingUserName);
 
     if (!succeeded) {
-      res.status(404).send(`No user with id ${followee} 
-          or no user with id ${userFollowingId}`);
+      res.status(404).send(`No user with username ${followeeUserName} 
+          or no user with username ${userFollowingUserName}`);
       return;
     }
 
