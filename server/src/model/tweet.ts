@@ -2,6 +2,9 @@
 import { TweetInterface } from "./interfaces/tweet.interface";
 import { ReplyInterface } from "./interfaces/reply.interface";
 
+/**
+ * A tweet class which represents the posts that the users are able to create
+ */
 export class Tweet implements TweetInterface {
 
   id: number;
@@ -13,8 +16,6 @@ export class Tweet implements TweetInterface {
   replies: ReplyInterface[];
   _id: any;
 
-  // Optional
-  // number of views, number of shares, 
 
   //Default values for some parameters as they should not be set 
   constructor(author: string, description: string) {
@@ -27,8 +28,6 @@ export class Tweet implements TweetInterface {
     this.replies = [];
   }
 
-  // currently tweet can not be edited
-  // what changes is only the numbers of likes and comments
 
   increaseNrLikes() {
     this.numberOfLikes += 1;
@@ -44,6 +43,12 @@ export class Tweet implements TweetInterface {
   }
 }
 
+/**
+ * Creates a tweet with dependency inversion by returning an interface type 
+ * @param author author of the tweet
+ * @param description description of the tweet
+ * @returns a new tweet
+ */
 export function newTweet(author: string, description: string) : TweetInterface {
   return new Tweet(author, description);
 } 

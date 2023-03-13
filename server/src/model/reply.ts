@@ -4,7 +4,9 @@
 import { ReplyInterface } from "./interfaces/reply.interface";
 import { Tweet } from "./tweet";
 
-// Comment has a reference to the original tweet
+/**
+ * A class which represents a comment on a tweet, very similar to the tweet class
+ */
 class Reply extends Tweet implements ReplyInterface{
 
     userNameOfOriginalTweet : string;

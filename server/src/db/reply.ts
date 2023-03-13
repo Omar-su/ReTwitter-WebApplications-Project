@@ -4,6 +4,9 @@ import { ReplyInterface } from "../model/interfaces/reply.interface";
 import { connectToDataBase } from "./conn";
 import { connUrlOrigin } from "./conn_url_origin";
 
+/**
+ * A reply schema which is used to represent the reply class in the database
+ */
 export const replySchema = new Schema({
   id : {
     type : Number,
@@ -45,4 +48,3 @@ export const replySchema = new Schema({
 
 
 
-// export const replyModel = conn.model<ReplyInterface>("Replies", replySchema);

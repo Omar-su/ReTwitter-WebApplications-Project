@@ -3,6 +3,9 @@ import { Schema } from "mongoose";
 import { TweetInterface } from "../model/interfaces/tweet.interface";
 import { connectToDataBase } from "./conn";
 
+/**
+ * A tweet schema which is used to represent the tweet class in the database
+ */
 export const tweetSchema = new Schema({
   id : {
     type : Number,
@@ -36,5 +39,3 @@ export const tweetSchema = new Schema({
   }] 
 })
 
-
-// export const tweetModel = conn.model<TweetInterface>("Tweets", tweetSchema);

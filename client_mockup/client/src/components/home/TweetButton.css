@@ -17,3 +17,22 @@
   background-color: white;
   color: red;
 }
+
+.dark-form {
+  width: 200px;
+  background-color: rgb(26, 175, 255);
+  color: black;
+  border-radius: 20px;
+}
+
+.feed-form {
+  width: 400px;
+  height: 35px;
+  border: 2px solid #0dcaf0;
+  color: black;
+  border-radius: 20px 0px 0px 20px;
+}
+
+.feed-form :active {
+  border: 3px solid #0dcaf0;
+}

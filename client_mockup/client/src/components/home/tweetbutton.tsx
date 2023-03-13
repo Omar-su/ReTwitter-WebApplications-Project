@@ -19,7 +19,7 @@ function TweetButton(){
     <form onSubmit={async e => {
       e.preventDefault();
     }}>
-      <input type="text" className='description' name='descripition' onChange={async e => {
+      <input type="text" className='feed-form' name='descripition' onChange={async e => {
         setDescription(e.target.value);
       }} />
     </form>

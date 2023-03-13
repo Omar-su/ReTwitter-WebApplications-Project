@@ -57,16 +57,7 @@ userRouter.post("/", async (
 
 });
 
-type GetUsersRequest = Request & {
-}
 
-userRouter.get("/", async (req: GetUsersRequest, res: Response<UserInterface[] | string>) => {
-  try {
-    res.status(200).send(await userService.getUsers());
-  } catch (e: any) {
-    res.status(500).send(e.message);
-  }
-});
 
 type LogoutRequest = Request & {
   session: {
@@ -136,7 +127,7 @@ userRouter.get("/current_user", async (
 ) => {
   try {
     if (req.session.user == null) {
-      res.status(400).send("No user is logged in");
+      res.status(401).send("No user is logged in");
       return;
     }
     const currentUserFromDb = await userService.findUserByID(req.session.user._id.toString());

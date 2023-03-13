@@ -30,8 +30,7 @@ export interface TweetServiceInterface {
      */
     deleteTweet(tweetAuthor: UserInterface, id: number): Promise<boolean>;
 
-    replyOnTweetOrReply(user: UserInterface, id: number, desc : string): Promise<boolean>;
 
-    getRepliesOnTweet(id : number) : Promise<ReplyInterface[] | null>;
+    replyOnTweetOrReply(user: UserInterface, id: number, desc : string): Promise<boolean>;
 
 }

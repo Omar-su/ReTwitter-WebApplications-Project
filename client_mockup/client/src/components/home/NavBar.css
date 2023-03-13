@@ -50,3 +50,14 @@
     background-color: #47116e;
   }
 
+.nav-item .nav-link.menu-nav{
+  margin: 0px;
+  padding: 10px;
+  border: 2px solid white;
+  border-radius: 20px 20px 0px 0px;
+  color: white;
+}
+
+.menu-nav-ch {
+  padding-top: 20px;
+}

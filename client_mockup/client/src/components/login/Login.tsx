@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,18 +14,68 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 import { Copyright } from '../util/CopyrightFooter';
+import { User } from '../../Interfaces';
 
 axios.defaults.withCredentials = true
 
-const theme = createTheme();
+/**
+ * This page uses the standard darktheme from MUI
+ */
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
+const theme = createTheme(darkTheme);
 
+/**
+ * Format for the data that the form will gather which is sent to login function
+ */
+type dataFormat = {
+  email: FormDataEntryValue | null,
+  password: FormDataEntryValue | null,
+};
+
+/**
+ * LoginPage component
+ * @returns HTML
+ */
 export default function Login() {
 
+  /**
+    * useEffect that runs first time only
+    */
+  useEffect(() => {
+    /**
+     * async function that checks if a current user exists
+     */
+    async function checkCurrentUser() {
+      try {
+        await axios.get<User>('http://localhost:9090/user/current_user');
+        navigatePage("/home");
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    checkCurrentUser();
+
+  }, []);
+
+  /**
+  * UseState for error message. This message will appear below the register button if the registrationprocess returned an error
+  */
   const [loginError, setLoginError] = useState("");
 
+  /**
+   * UseState for text field validation. Will change the state of the textfield to showcase error if the useState is false
+   */
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
 
+  /**
+   * Checks if the email is a valid format
+   * @param email string of email
+   */
   const validateEmail = (email: string) => {
     const emailRegexValidator = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
@@ -35,6 +86,11 @@ export default function Login() {
       setIsValidEmail(false);
     }
   }
+
+  /**
+   * Checks if the password is not empty
+   * @param password string of password
+   */
   const validatePassword = (password: string) => {
     if (password !== "") {
       setIsValidPassword(true);
@@ -44,13 +100,19 @@ export default function Login() {
     }
   }
 
+  /**
+   * React router dom to navigate the website
+   */
   const navigate = useNavigate();
-
   const navigatePage = (link: string) => {
     navigate(link);
   }
 
-  const login = async (data: any) => {
+  /**
+   * Sends a post request to login. Will set registrationError if error occurs
+   * @param data from the form
+   */
+  const login = async (data: dataFormat) => {
     await axios.post("http://localhost:9090/user/login", {
       email: data.email,
       password: data.password
@@ -65,6 +127,10 @@ export default function Login() {
       });
   };
 
+  /**
+  * Handle submit function
+  * @param event form
+  */
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);

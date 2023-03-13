@@ -4,9 +4,7 @@ import axios from 'axios';
 import twitterImage from "../util/images/twitter_test_image.png";
 import './Home.css';
 import './NavBar.css';
-import ReplyItem from './reply';
 import TweetButton from './TweetButton';
-import ReplyForm from './replybutton';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { TweetItem } from './TweetItem';
 import { Tweet, User } from '../../Interfaces';
@@ -31,7 +29,7 @@ export function TweetFeed() {
   
   return (
     <div>
-      <h1 className='text-color'>Tweet Feed</h1>
+      <h1 className='tweet-feed'>Tweet Feed</h1>
       <div>
         <TweetButton></TweetButton>
       </div>

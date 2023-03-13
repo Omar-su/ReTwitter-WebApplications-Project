@@ -1,4 +1,7 @@
-// News class in which you can create news objects from the api call
+
+/**
+ * News class in which you can create news objects from the api call 
+ */
 export class News{
 
   title : string;
