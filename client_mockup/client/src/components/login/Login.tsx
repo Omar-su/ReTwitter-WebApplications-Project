@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 import { Copyright } from '../util/CopyrightFooter';
+import { User } from '../../Interfaces';
 
 axios.defaults.withCredentials = true
 
@@ -39,6 +41,25 @@ type dataFormat = {
  * @returns HTML
  */
 export default function Login() {
+
+  /**
+    * useEffect that runs first time only
+    */
+  useEffect(() => {
+    /**
+     * async function that checks if a current user exists
+     */
+    async function checkCurrentUser() {
+      try {
+        await axios.get<User>('http://localhost:9090/user/current_user');
+        navigatePage("/home");
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    checkCurrentUser();
+
+  }, []);
 
   /**
   * UseState for error message. This message will appear below the register button if the registrationprocess returned an error
