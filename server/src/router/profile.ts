@@ -8,21 +8,21 @@ import { databasemodels } from "./user";
 export const profileRouter = express.Router();
 const userService: UserServiceInterface = makeUserDBService(databasemodels);
 
-profileRouter.get("/:id", async (
-  req: Request<{ id: string }, {}, {}>,
+profileRouter.get("/:username", async (
+  req: Request<{ username: string }, {}, {}>,
   res: Response<UserInterface | string>
 ) => {
   try {
-    const userID: string = req.params.id;
+    const userName: string = req.params.username;
 
-    if (userID == null) {
-      res.status(400).send(`Bad GET call to ${req.originalUrl} --- missing user id param`);
+    if (userName == null) {
+      res.status(400).send(`Bad GET call to ${req.originalUrl} --- missing username param`);
       return;
     }
 
-    const user = await userService.findUserByUsername(userID);
+    const user = await userService.findUserByUsername(userName);
     if (user == null) {
-      res.status(404).send(`No user exists with id number ${userID}`);
+      res.status(404).send(`No user exists with username ${userName}`);
       return;
     }
 
@@ -41,38 +41,38 @@ profileRouter.get("/:id", async (
 
 type followRequest = Request & {
   params: {
-    toBeFollowedId: string;
+    username: string;
   };
   session: {
     user?: UserInterface;
   };
 }
 
-profileRouter.post("/:id/follow", async (
+profileRouter.post("/:username/follow", async (
   req: followRequest,
   res: Response<string>
 ) => {
   try {
-    const followee = req.params.id;
-    if (followee == null) {
+    const followeeUserName = req.params.username;
+    if (followeeUserName == null) {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing account to follow`);
       return;
     }
-    if (typeof (followee) !== "string") {
+    if (typeof (followeeUserName) !== "string") {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- account to follow has type 
-        ${typeof (followee)}`);
+        ${typeof (followeeUserName)}`);
       return;
     }
     if (req.session.user == null) {
       res.status(401).send("Not logged in");
       return;
     }
-    const userFollowingId: string = req.session.user._id.toString();
-    const succeeded = await userService.followProfile(followee, userFollowingId);
+    const userFollowingUserName: string = req.session.user.userNameID;
+    const succeeded = await userService.followProfile(followeeUserName, userFollowingUserName);
 
     if (!succeeded) {
-      res.status(404).send(`No user with id ${followee} 
-          or no user with id ${userFollowingId}`);
+      res.status(404).send(`No user with username ${followeeUserName} 
+          or no user with username ${userFollowingUserName}`);
       return;
     }
 
@@ -85,26 +85,26 @@ profileRouter.post("/:id/follow", async (
 
 type unFollowRequest = Request & {
   params: {
-    toBeUnFollowedId: string;
+    username: string;
   };
   session: {
     user?: UserInterface;
   };
 }
 
-profileRouter.post("/:id/unfollow", async (
+profileRouter.post("/:username/unfollow", async (
   req: unFollowRequest,
   res: Response<string>
 ) => {
   try {
-    const toBeUnfollowedId = req.params.id;
-    if (toBeUnfollowedId == null) {
+    const toBeUnfollowedUserName = req.params.username;
+    if (toBeUnfollowedUserName == null) {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- missing account to unfollow`);
       return;
     }
-    if (typeof (toBeUnfollowedId) !== "string") {
+    if (typeof (toBeUnfollowedUserName) !== "string") {
       res.status(400).send(`Bad POST call to ${req.originalUrl} --- account to unfollow has type 
-        ${typeof (toBeUnfollowedId)}`);
+        ${typeof (toBeUnfollowedUserName)}`);
       return;
     }
     if (req.session.user == null) {
@@ -112,12 +112,12 @@ profileRouter.post("/:id/unfollow", async (
       return;
     }
 
-    const userUnfollowingId: string = req.session.user._id.toString();
-    const succeeded = await userService.unfollowProfile(toBeUnfollowedId, userUnfollowingId);
+    const userUnfollowingUsername: string = req.session.user.userNameID;
+    const succeeded = await userService.unfollowProfile(toBeUnfollowedUserName, userUnfollowingUsername);
 
     if (!succeeded) {
-      res.status(404).send(`No user with id ${toBeUnfollowedId} 
-          or no user with id ${userUnfollowingId}`);
+      res.status(404).send(`No user with username ${toBeUnfollowedUserName} 
+          or no user with username ${userUnfollowingUsername}`);
       return;
     }
 

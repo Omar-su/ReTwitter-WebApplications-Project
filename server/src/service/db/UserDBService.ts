@@ -102,9 +102,9 @@ export class UserDBService implements UserServiceInterface {
         return null;
     }
 
-    async followProfile(userNameBeingFollowed: string, user_idFollowing: string): Promise<boolean> {
+    async followProfile(userNameBeingFollowed: string, userNameFollowing: string): Promise<boolean> {
         const toBeFollowed: UserInterface | null = await this.findUserByUsername(userNameBeingFollowed);
-        const toFollow: UserInterface | null = await this.findUserByID(user_idFollowing);
+        const toFollow: UserInterface | null = await this.findUserByUsername(userNameFollowing);
         if (toBeFollowed == null || toFollow == null) {
             return false;
         }
@@ -117,9 +117,9 @@ export class UserDBService implements UserServiceInterface {
         return true;
     }
 
-    async unfollowProfile(toBeUnfollowedUserName: string, userUnfollowingId: string): Promise<boolean> {
+    async unfollowProfile(toBeUnfollowedUserName: string, userNameFollowing: string): Promise<boolean> {
         const toBeUnfollowed: UserInterface | null = await this.findUserByUsername(toBeUnfollowedUserName);
-        const userUnfollowing: UserInterface | null = await this.findUserByID(userUnfollowingId);
+        const userUnfollowing: UserInterface | null = await this.findUserByUsername(userNameFollowing);
 
         if (toBeUnfollowed == null || userUnfollowing == null) {
             return false;

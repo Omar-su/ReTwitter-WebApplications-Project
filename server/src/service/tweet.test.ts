@@ -7,8 +7,8 @@ import { TweetServiceInterface } from "./interfaces/tweetservice.interface";
 import { UserServiceInterface } from "./interfaces/userservice.interface";
 
 const testUserName = "testuser";
-let userService: UserServiceInterface;
-let tweetService: TweetServiceInterface;
+let userService!: UserServiceInterface;
+let tweetService!: TweetServiceInterface;
 let databaseModels = getDatabaseModels(connUrlTest);
 
 beforeEach(async () => {
