@@ -13,13 +13,13 @@ type NewsGetRequest = Request &{
 
 newsRouter.get("/", async ( 
   req : NewsGetRequest,
-  res : Response<News[]>, 
+  res : Response<News[] | string>, 
 ) => {
   try {
-    // if (req.session.user == null) {
-    //   res.status(401).send("Not logged in");
-    //   return;
-    // }
+    if (req.session.user == null) {
+      res.status(401).send("Not logged in");
+      return;
+    }
     const data = await newsService.getNews();
     res.status(200).send(data);
   } catch (e:any) {

@@ -11,25 +11,25 @@ export const replyRouter = express.Router();
 const tweetService: TweetServiceInterface = makeTweetDBService(databasemodels);
 const replyService: ReplyServiceInterface = makeReplyDBService(databasemodels);
 
-replyRouter.post("/",
+// replyRouter.post("/",
 
-// TODO author should be logged in user
-async(
-  req : Request<{},{},{author : string, desc : string, origowner : string}>,
-  res : Response<ReplyInterface>
-)=>{
-  try {
-    const author = req.body.author;
-    const desc = req.body.desc;
-    const origowner = req.body.origowner;
+// // TODO author should be logged in user
+// async(
+//   req : Request<{},{},{author : string, desc : string, origowner : string}>,
+//   res : Response<ReplyInterface>
+// )=>{
+//   try {
+//     const author = req.body.author;
+//     const desc = req.body.desc;
+//     const origowner = req.body.origowner;
     
-    const newReply = await replyService.createReply(author, desc, origowner);
-    res.status(201).send(newReply);
-  } catch (e:any) {
-    res.status(500).send(e.message);
-  }
+//     const newReply = await replyService.createReply(author, desc, origowner);
+//     res.status(201).send(newReply);
+//   } catch (e:any) {
+//     res.status(500).send(e.message);
+//   }
 
-});
+// });
 
 type GetRepliesRequest = Request & {
   params: {
