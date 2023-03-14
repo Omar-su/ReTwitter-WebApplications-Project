@@ -11,25 +11,6 @@ export const replyRouter = express.Router();
 const tweetService: TweetServiceInterface = makeTweetDBService(databasemodels);
 const replyService: ReplyServiceInterface = makeReplyDBService(databasemodels);
 
-// replyRouter.post("/",
-
-// // TODO author should be logged in user
-// async(
-//   req : Request<{},{},{author : string, desc : string, origowner : string}>,
-//   res : Response<ReplyInterface>
-// )=>{
-//   try {
-//     const author = req.body.author;
-//     const desc = req.body.desc;
-//     const origowner = req.body.origowner;
-    
-//     const newReply = await replyService.createReply(author, desc, origowner);
-//     res.status(201).send(newReply);
-//   } catch (e:any) {
-//     res.status(500).send(e.message);
-//   }
-
-// });
 
 type GetRepliesRequest = Request & {
   params: {
@@ -73,7 +54,7 @@ replyRouter.get("/feed/replies/:id", async (req: GetRepliesRequest, res: Respons
 
 type ReplyRequest = Request & {
   params: { id: string };
-  body: { author: string, description: string };
+  body: { author?: string, description: string };
   session: { user?: UserInterface };
 
 }
@@ -115,7 +96,7 @@ replyRouter.post("/:id",
                 res.status(404).send("Tweet not found");
                 return;
             }
-            res.status(200).send("Succeeded");
+            res.status(201).send("Succeeded");
         } catch (e: any) {
             res.status(500).send(e.message);
         }

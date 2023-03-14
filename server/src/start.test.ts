@@ -1,52 +1,341 @@
-import * as SuperTest from "supertest";
-import { TweetInterface } from "./model/interfaces/tweet.interface";
-import { app } from "./start";
 
-const request = SuperTest.default(app);
 
-test("End-to-end test", async () => {
-    const description = "Test description";
-    const author = "author test";
-    const res1 = await request.post("/tweet").send({author: author, description : description});
-    expect(res1.statusCode).toEqual(201);
-    expect(res1.body.description).toEqual(description);
-    const res2 = await request.get("/tweet");
-    expect(res2.statusCode).toEqual(200);
-    expect(res2.body.map((tweet : TweetInterface) => tweet.description)).toContain(description);
+import supertest from 'supertest';
+import { getDatabaseModels } from './db/connect_database';
+import { connUrlTest } from './db/conn_url_origin';
+import { TweetInterface } from './model/interfaces/tweet.interface';
+const session = require('supertest-session');
+import { app } from './start';
+
+const request = supertest(app);
+const sess = session(app);
+let databaseModels = getDatabaseModels(connUrlTest);
+jest.setTimeout(20000); // set timeout to 10 seconds
+
+
+beforeEach(async () => {
+    await sess
+    .post('/user')
+    .send({ userid: 'userid', ownerName : 'ownername',bio: 'bio', email : 'email', password: 'password' })
+
+  // Perform a login request with the session
+  await sess
+    .post('/user/login')
+    .send( {email: 'email',password: 'password'})
+    .expect(200);
+
 });
 
-test("Follow test", async () => {
-    const userID1 = "account1";
-    const ownerName1 = "owner1";
-    const bio1 = "bio1"
-
-    const userID2 = "account2";
-    const ownerName2 = "owner2";
-    const bio2 = "bio2"
-
-    const createRes1 = await request.post("/newuser").send({userID: userID1, ownerName : ownerName1,
-    bio : bio1});
-    expect(createRes1.statusCode).toEqual(201);
-
-    const createRes2 = await request.post("/newuser").send({userID: userID2, ownerName : ownerName2,
-        bio : bio2});
-        expect(createRes2.statusCode).toEqual(201);
 
 
-    const followRes = await request.post("/profile/account1/follow").send({followee: userID1,
-        follower: userID2});
-        expect(followRes.statusCode).toEqual(200);
+test('should create a user', async () => { 
 
-    const profilesRes = await request.get("/profiles");
-    expect(profilesRes.statusCode).toEqual(200);
+    const useridWrongType = 1;
+    const ownerNameWrongType = 1;
+    const bioWrongType = 122;
+    const emailWrongType = 123; 
+    const passwordWrongType = 3124;
+
+    await sess
+    .post('/user')
+    .send({ userid: useridWrongType, ownerName : ownerNameWrongType ,bio: bioWrongType, email : emailWrongType, password: passwordWrongType }).expect(400);
+
+
+    await sess
+    .post('/user')
+    .send({ userid: 'user', ownerName : 'owner',bio: 'my bio', email : 'email.gmail.com', password: 'password123' }).expect(201);
+
+    await sess
+    .post('/user')
+    .send({ userid: 'user', ownerName : 'owner',bio: 'my bio', email : 'email.gmail.com', password: 'password123' }).expect(409);
+
+});
+
+test('User logout', async () => {
+    await sess
+    .post('/user/logout')
+    .send().expect(200);
+
+});
+
+test("User tweeting end-to-end tests", async () => {
     
-    const followedAccount = profilesRes.body.find((profile: { userNameID: string; }) => 
-    {return profile.userNameID === userID1});
-    expect(followedAccount.getFollowers === 1);
+    const description = "Test description";
+    const res1 = await sess
+    .post('/tweet')
+    .send({description : description}).expect(201);
+    expect(res1.body.description).toEqual(description);
 
-    const followingAccount = profilesRes.body.find((profile: { userNameID: string; }) => 
-    {return profile.userNameID === userID2});
-    expect(followingAccount.following === 1);
+    // Should recieve a 400 status error if description has other type than string
+    const descriptionBadType = 123;
+    await sess
+    .post('/tweet')
+    .send({description : descriptionBadType}).expect(400);
 
+    // Log out
+    await sess
+    .post('/user/logout')
+    .send().expect(200);
+
+    await sess
+    .post('/tweet')
+    .send({description : description}).expect(401);
+
+});
+
+test("User liking a tweet end-to-end", async () => {
+    
+    const description = "Test description";
+    const res = await sess
+    .post('/tweet')
+    .send({description : description});
+
+    await sess.post(`/tweet/${res.body.id}`)
+    .send().expect(200);
+
+    const negativeIdNr = "-1234";
+
+    await sess.post(`/tweet/${negativeIdNr}`)
+    .send().expect(400);
+
+    // Id of tweet not created 
+    const fakeIdNr = "12345";
+    // Should not find the tweet
+    await sess.post(`/tweet/${fakeIdNr}`)
+    .send().expect(404);
+
+    // Log out
+    await sess
+    .post('/user/logout')
+    .send().expect(200);
+
+    await sess.post(`/tweet/${res.body.id}`)
+    .send().expect(401);
+    
+
+});
+
+
+
+test("User getting feed tweets end-to-end", async () => {
+    
+    const tweetDesc1 = "Test description 1";
+    const tweetDesc2 = "Test description 2";
+    const tweetDesc3 = "Test description 3";
+
+    const res = await sess
+    .post('/tweet')
+    .send({description : tweetDesc1}).expect(201);
+
+    const res2 = await sess
+    .post('/tweet')
+    .send({description : tweetDesc2}).expect(201);
+
+    const res3 = await sess
+    .post('/tweet')
+    .send({description : tweetDesc3}).expect(201);
+
+    const feedTweets = await sess.get('/tweet/feed')
+    .send().expect(200);
+    
+    const tweetIds = [res.body.id, res2.body.id, res3.body.id];
+
+    const allIdsInFeed = tweetIds.every((id) => feedTweets.body.some((tweet: { id: any; }) => tweet.id === id));
+    
+    expect(allIdsInFeed).toBe(true);
+
+    // Log out
+    await sess
+    .post('/user/logout')
+    .send().expect(200);
+
+    await sess.get(`/tweet/feed`)
+    .send().expect(401);
+    
+
+});
+
+
+
+test("User deleting a tweet end-to-end", async () => {
+    
+    const description = "Test description";
+    const res1 = await sess
+    .post('/tweet')
+    .send({description : description});
+
+    await sess.delete(`/tweet/${res1.body.id}`)
+    .send().expect(200);
+
+    const negativeIdNr = "-1234";
+
+    await sess.post(`/tweet/${negativeIdNr}`)
+    .send().expect(400);
+
+    // Id of tweet not created 
+    const fakeIdNr = "12345";
+    // Should not find the tweet
+    await sess.post(`/tweet/${fakeIdNr}`)
+    .send().expect(404);
+
+    
+    const res2 = await sess
+    .post('/tweet')
+    .send({description : description});
+
+    // Log out
+    await sess
+    .post('/user/logout')
+    .send().expect(200);
+
+    await sess.delete(`/tweet/${res2.body.id}`)
+    .send().expect(401);
+    
+
+});
+
+
+test("User commenting  on a tweet end-to-end", async () => {
+    
+    const description = "Test description";
+    const res1 = await sess
+    .post('/tweet')
+    .send({description : description}).expect(201);
+
+    const descriptionReply = "Test description reply";
+    await sess
+    .post(`/reply/${res1.body.id}`)
+    .send({description : descriptionReply}).expect(201);
+
+    // Should recieve a 400 status error if description has other type than string
+    const descriptionBadType = 123;
+    await sess
+    .post(`/reply/${res1.body.id}`)
+    .send({description : descriptionBadType}).expect(400);
+
+    const negativeIdNr = "-1234";
+
+    await sess.post(`/reply/${negativeIdNr}`)
+    .send({description : descriptionReply}).expect(400);
+
+    // Id of tweet not created 
+    const fakeIdNr = "12345";
+    // Should not find the tweet
+    await sess.post(`/reply/${fakeIdNr}`)
+    .send({description : descriptionReply}).expect(404);
+
+    // Log out
+    await sess
+    .post('/user/logout')
+    .send().expect(200);
+
+    await sess.post(`/reply/${res1.body.id}`)
+    .send({description : descriptionReply}).expect(401);
+
+});
+
+
+test("User getting replies on a tweet end-to-end", async () => {
+
+    const description = "Test description";
+    const res1 = await sess
+    .post('/tweet')
+    .send({description : description}).expect(201);
+
+    const descriptionReply1 = "Test description reply";
+    await sess
+    .post(`/reply/${res1.body.id}`)
+    .send({description : descriptionReply1}).expect(201);
+
+    const descriptionReply2 = "Test description reply";
+    await sess
+    .post(`/reply/${res1.body.id}`)
+    .send({description : descriptionReply2}).expect(201);
+
+    const descriptionReply3 = "Test description reply";
+    await sess
+    .post(`/reply/${res1.body.id}`)
+    .send({description : descriptionReply3}).expect(201);
+
+    const repliesOnTestTweet = await sess
+    .get(`/reply/feed/replies/${res1.body.id}`)
+    .send().expect(200);
+
+    const repliesDescs = [descriptionReply1 , descriptionReply2 , descriptionReply3];
+
+    const allDescsInTweetThread = repliesDescs.every((desc) => repliesOnTestTweet.body.some((reply: any) => reply.description == desc));
+
+    expect(allDescsInTweetThread).toBe(true);
+
+});
+
+test("Should be able to follow/unfollow and visit his and other people profiles", async () => {
+    const userid1 = "userid1";
+    const ownerName1 = "ownerName1";
+    const bio1 = "bio1";
+    const email1 = "email1"; 
+    const password1 = "password1";
+
+    // const user1Res = await sess
+    // .post('/user')
+    // .send({ userid: userid1, ownerName : ownerName1 ,bio: bio1, email : email1, password: password1 }).expect(201);
+ 
+    // const userid2 = "userid2";
+    // const ownerName2 = "ownerName2";
+    // const bio2 = "bio2";
+    // const email2 = "email2"; 
+    // const password2 = "password2";
+
+    // const user2Res = await sess
+    // .post('/user')
+    // .send({ userid: userid2, ownerName : ownerName2 ,bio: bio2, email : email2, password: password2 }).expect(201);
+
+    const currentUser = await sess
+    .get('/user/current_user')
+    .send().expect(200);
+
+    // Find a user profile page by username
+    const foundUser = await sess
+    .get(`/profile/${currentUser.body.userNameID}`)
+    .send().expect(200);
+
+    // Compare bodies of objects
+    expect(currentUser.body).toEqual(foundUser.body);
+
+    // Find a user profile page by username
+    const foundUser2 = await sess
+    .get(`/profile/${userid1}`)
+    .send().expect(200);
+
+    console.log("current 2 : " + JSON.stringify(foundUser2.body.following));
+    
+
+    // Let current user follow foundUser2 already in the database
+    await sess
+    .get(`/profile/${foundUser2.body.userNameID}/follow`)
+    .send().expect(200);
+
+    // Compare bodies of objects
+    expect(currentUser.body.following).toContain(foundUser2.body.userNameID);
+
+    // Let current user follow foundUser2 already in the database
+    await sess
+    .get(`/profile/${foundUser2.body.userNameID}/unfollow`)
+    .send().expect(200);
+
+    // Compare bodies of objects
+    expect(currentUser.body.following).not.toContain(foundUser2.body.userNameID);
+
+
+});
+
+
+beforeAll(async () => {
+
+    await databaseModels.getReplyModel().deleteMany();
+
+    await databaseModels.getTweetModel().deleteMany();
+    
+    await databaseModels.getUserModel().deleteMany();
 
 });

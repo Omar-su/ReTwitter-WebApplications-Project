@@ -4,7 +4,7 @@ import axios from 'axios';
 import twitterImage from "../util/images/twitter_test_image.png";
 import './Home.css';
 import './NavBar.css';
-import TweetButton from './tweetbutton';
+import TweetButton from './TweetButton';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { TweetItem } from './TweetItem';
 import { Tweet, User } from '../../Interfaces';

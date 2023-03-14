@@ -16,7 +16,8 @@
     "express-session": "^1.17.3",
     "mongodb": "^5.1.0",
     "mongoose": "^6.10.0",
-    "node-fetch": "^3.3.0"
+    "node-fetch": "^3.3.0",
+    "supertest-session": "^4.1.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",

@@ -35,7 +35,7 @@ tweetRouter.get("/feed", async (req: GetTweetsRequest, res: Response<TweetInterf
         }
         const tweets = await userService.getFollowingTweets(req.session.user);
         if (tweets == null) {
-            res.status(500).send("Failed to get feed tweets");
+            res.status(404).send("Failed to get feed tweets");
             return;
         }
         res.status(200).send(tweets);
