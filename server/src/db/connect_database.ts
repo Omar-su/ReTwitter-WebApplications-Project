@@ -16,6 +16,10 @@ export class DatabaseModels {
   userModel;
   tweetModel;
 
+  /**
+   * Constructor for the DatabaseModels
+   * @param url - the url to the database
+   */
   constructor(url : string){
     const conn = connectToDataBase(url);
     this.replyModel = conn.model<ReplyInterface>("Replies", replySchema);
@@ -23,21 +27,31 @@ export class DatabaseModels {
     this.userModel = conn.model<UserInterface>("Users", userSchema);
   }
 
+  /**
+   * @returns the replyModel
+   */
   getReplyModel(){
     return this.replyModel;
   }
 
-  
+  /**
+   * @returns the tweetModel
+   */
   getTweetModel(){
     return this.tweetModel;
   }
 
+  /**
+   * @returns the userModel
+   */
   getUserModel(){
     return this.userModel;
   }
 }
 
-// A method to get an instance with the desired database connection 
+/**
+ *  A method to get an instance with the desired database connection 
+ */
 export function getDatabaseModels(url : string){
   return new DatabaseModels(url);
 }
