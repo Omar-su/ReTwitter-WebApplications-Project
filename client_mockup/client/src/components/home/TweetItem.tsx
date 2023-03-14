@@ -6,7 +6,7 @@ import ReplyItem from './reply';
 import TweetButton from './TweetButton';
 import ReplyForm from './replybutton';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Tweet, Reply } from '../../Interfaces';
+import { Tweet, Reply, User } from '../../Interfaces';
 import { TweetsContext } from './TweetsContext';
 import Button from 'react-bootstrap/Button';
 
@@ -60,6 +60,19 @@ interface TweetItemProps {
 
 export function TweetItem({ key, id, author, description, numberOfLikes, numberOfReplies, children, replies }: TweetItemProps) {
   console.log(author);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const response = await axios.get<User>('http://localhost:9090/user/current_user');
+        setCurrentUser(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchUser();
+  }, []);
   return <div className='tweet'>
     <img src={twitterImage} alt="Account" className='tweet__image' />
 
@@ -74,9 +87,10 @@ export function TweetItem({ key, id, author, description, numberOfLikes, numberO
         <div>
           <ReplyForm id={id} replies={replies}></ReplyForm>
         </div>
-        <Button variant="outline-danger button-danger" onClick={async () => {
+        {currentUser?.userNameID === author ? <Button variant="outline-danger button-danger" onClick={async () => {
           await axios.delete(`http://localhost:9090/tweet/${id}`);
-        }}>Delete Tweet</Button>
+        }}>Delete Tweet</Button> : null}
+
       </div>
     </div>
   </div>
