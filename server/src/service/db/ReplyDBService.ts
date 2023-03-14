@@ -125,7 +125,7 @@ class ReplyDBService implements ReplyServiceInterface {
   /**
    * Update a reply
    * @param reply - the reply to update
-   * @returns updated reply
+   * @returns updated reply or null
    */
   async updateReply(reply: ReplyInterface): Promise<ReplyInterface | null> {
     const updatedReply = await this.replyModel.findByIdAndUpdate(reply._id.toString(), reply, { new: true });
@@ -135,7 +135,7 @@ class ReplyDBService implements ReplyServiceInterface {
   /**
    * Method to find a reply by dateID
    * @param dateID  - date id
-   * @returns reply
+   * @returns reply or null
    */
   async findReplyByDateID(dateID: number): Promise<ReplyInterface | null> {
     return await this.replyModel.findOne({ "id": dateID }).populate("replies");
@@ -144,7 +144,7 @@ class ReplyDBService implements ReplyServiceInterface {
   /**
    * Find a tweet by id
    * @param tweet_id - tweet id
-   * @returns the specific tweet
+   * @returns the specific tweet or null
    */
   async findTweetByID(tweet_id: string): Promise<TweetInterface | null> {
     return await this.tweetModel.findById(tweet_id);
@@ -153,7 +153,7 @@ class ReplyDBService implements ReplyServiceInterface {
   /**
    * Find a tweet by date id
    * @param dateID - date id
-   * @returns the specific tweet
+   * @returns the specific tweet or null
    */
   async findTweetByDateID(dateID: number): Promise<TweetInterface | null> {
     return await this.tweetModel.findOne({ "id": dateID }).populate("replies");
