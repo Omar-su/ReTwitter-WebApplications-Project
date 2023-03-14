@@ -19,6 +19,12 @@ The goal of this project is to create an clone of twitter for the DAT076 / DIT12
 
 The app will also offer users a feed of news that will show news a day before the call. 
 
+The backend or server side of the application is located in the server/src/ directory. Here you can find directories for the services, the model, the routers and the database. There are also end-to-end tests in the start.test.ts file in server/src/ as well as some unit tests in the test files located in server/src/service/.
+
+The frontend is located in client_mockup/client/src with the components being located in client_mockup/client/src/components.
+
+The project report is located at the root directory of this repository and is named "Project Report - ReTwitter. Group 3"
+
 The group of students working on the project: 
 
 Omar Suliman : @omar-su <br>
