@@ -106,3 +106,28 @@ test("User tweeting error handling", async () => {
     .send({description : description}).expect(401);
 
 });
+
+test("User liking a tweet end-to-end", async () => {
+    
+    const description = "Test description";
+    const res1 = await sess
+    .post('/tweet')
+    .send({description : description}).expect(201);
+    expect(res1.body.description).toEqual(description);
+
+    // Should recieve a 400 status error if description has other type than string
+    const descriptionBadType = 123;
+    await sess
+    .post('/tweet')
+    .send({descriptionBadType : descriptionBadType}).expect(400);
+
+    // Log out
+    await sess
+    .post('/user/logout')
+    .send().expect(200);
+
+    await sess
+    .post('/tweet')
+    .send({description : description}).expect(401);
+
+});

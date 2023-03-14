@@ -22,9 +22,10 @@ beforeEach(async () => {
 
 test("If a tweet is created then it should be in the list of tweets", async () => {
   const desc = "testDescription1";
-  await tweetService.createTweet(testUserName, desc);
+  const tweetTest = await tweetService.createTweet(testUserName, desc);
   const tweets = await tweetService.getTweets();
-  expect(tweets.some((tweet) => tweet.description === desc)).toBeTruthy();
+  console.log(tweets.find((tweet) => tweet.id === tweetTest.id));
+  expect(tweets.some((tweet) => tweet.id === tweetTest.id)).toBeTruthy();
 });
 
 test("If a tweet is deleted then it should not be in the list of tweets", async () => {
