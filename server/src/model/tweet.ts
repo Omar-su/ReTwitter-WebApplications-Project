@@ -16,8 +16,11 @@ export class Tweet implements TweetInterface {
   replies: ReplyInterface[];
   _id: any;
 
-
-  //Default values for some parameters as they should not be set 
+  /**
+   * Constructor for a tweet with some default values that should not be set on creation
+   * @param author - string of userNameID
+   * @param description - string of the description
+   */
   constructor(author: string, description: string) {
     this.id = Date.now();
     this.author = author;
@@ -28,15 +31,24 @@ export class Tweet implements TweetInterface {
     this.replies = [];
   }
 
-
+  /**
+   * Increase the number of likes
+   */
   increaseNrLikes() {
     this.numberOfLikes += 1;
   }
 
+  /**
+   * Increase the number of replies
+   */
   increaseNrComments() {
     this.numberOfReplies += 1;
   }
 
+  /**
+   * Add a reply to a tweet
+   * @param newReply - reply that implements ReplyInterface
+   */
   addReply(newReply: ReplyInterface) {
     this.replies.push(newReply);
     this.increaseNrComments();
