@@ -6,8 +6,13 @@ import { UserServiceInterface } from "../service/interfaces/userservice.interfac
 import { databasemodels } from "./user";
 
 export const profileRouter = express.Router();
+
 const userService: UserServiceInterface = makeUserDBService(databasemodels);
 
+/**
+ * A get request for a specific user
+ * Searches by username
+ */
 profileRouter.get("/:username", async (
   req: Request<{ username: string }, {}, {}>,
   res: Response<UserInterface | string>
@@ -48,6 +53,10 @@ type followRequest = Request & {
   };
 }
 
+/**
+ * A post call to follow a user
+ * Will require a user to be logged in in order to start follow another user
+ */
 profileRouter.post("/:username/follow", async (
   req: followRequest,
   res: Response<string>
@@ -92,6 +101,10 @@ type unFollowRequest = Request & {
   };
 }
 
+/**
+ * A Post call to unfollow a user
+ * Requires the user to be logged in order to unfollow another user
+ */
 profileRouter.post("/:username/unfollow", async (
   req: unFollowRequest,
   res: Response<string>

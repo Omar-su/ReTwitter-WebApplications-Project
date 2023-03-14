@@ -8,7 +8,7 @@ import { UserServiceInterface } from "../service/interfaces/userservice.interfac
 export const userRouter = express.Router();
 export let databasemodels = getDatabaseModels(connUrlOrigin);
 
-export function changeDatabaseConnection (url : string) {
+export function changeDatabaseConnection(url: string) {
   databasemodels = getDatabaseModels(url);
 }
 
@@ -27,6 +27,11 @@ type UserRequest = Request & {
   }
 }
 
+/**
+ * A post call to register a new user
+ * Requires userID and email to be unique for a successfull
+ * Requires all information to be string
+ */
 userRouter.post("/", async (
   req: UserRequest,
   res: Response<string>
@@ -65,6 +70,9 @@ type LogoutRequest = Request & {
   }
 }
 
+/**
+ * A post call to login
+ */
 userRouter.post("/login", async (
   req: UserRequest,
   res: Response<string | UserInterface>
@@ -96,6 +104,9 @@ userRouter.post("/login", async (
   }
 });
 
+/**
+ * A post call to logout
+ */
 userRouter.post("/logout", async (
   req: LogoutRequest,
   res: Response<string>
@@ -121,6 +132,9 @@ type currentUserReq = Request & {
   };
 }
 
+/**
+ * A get call to get the currently logged in user
+ */
 userRouter.get("/current_user", async (
   req: currentUserReq,
   res: Response<UserInterface | string>
