@@ -94,7 +94,7 @@ function ProfileFeed(){
           }
         </div>
         <div id="profile-feed">
-          {!profileInfo?.tweets.length ? <p id="notweettext">No tweets</p> : ""}
+          {!profileInfo?.tweets.length ? <p id="notweettext" className='notweets'>No tweets</p> : ""}
           {/* Reverse list of tweets so they are in chronological order */}
           {!profileInfo ? "" : profileInfo.tweets.slice(0).reverse().map((tweet) =>
             <TweetItem

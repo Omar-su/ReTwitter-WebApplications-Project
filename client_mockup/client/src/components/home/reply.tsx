@@ -19,7 +19,7 @@ function ReplyItem({key, id, origTweetId, author, description, numberOfLikes, nu
   return <div className='reply-item'>
     <img src="" alt="" />
     <div className='reply-info'>
-      <h4 className='author'>{"@" + origowner}</h4>
+      <h4 className='author'>{"@" + author}</h4>
       <p className='reply-desc'>{description}</p>
       <div>
         <Button variant="secondary" onClick={numberOfLikes}>{children}</Button>

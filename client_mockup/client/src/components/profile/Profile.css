@@ -15,6 +15,10 @@
 
 }
 
+.notweets {
+    color: white;
+}
+
 #followings {
     text-align: center;
 }
