@@ -9,10 +9,18 @@ export interface ReplyServiceInterface {
      */
     createReply(author : string, description : string, ownerOfTweet : string): Promise<ReplyInterface>;
 
-    
+    /**
+     * Returns the replies on a tweet with the given id
+     */
     getRepliesOnTweet(id : number) : Promise<ReplyInterface[] | null>;
 
+    /**
+     * Toggles the like status of a given reply
+     */
     likeOrUnlikeReply(foundUser : UserInterface, id : number) : Promise<boolean>;
 
+    /**
+     * Creates a reply on a given reply with the given description
+     */
     replyOnReply(foundUser : UserInterface, id : number, desc : string) : Promise<boolean>;
 }
