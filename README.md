@@ -23,6 +23,8 @@ The backend or server side of the application is located in the server/src/ dire
 
 The frontend is located in client_mockup/client/src with the components being located in client_mockup/client/src/components.
 
+The project report is located at the root directory of this repository and is named "Project Report - ReTwitter. Group 3"
+
 The group of students working on the project: 
 
 Omar Suliman : @omar-su <br>
