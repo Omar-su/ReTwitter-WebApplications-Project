@@ -11,6 +11,12 @@ class Reply extends Tweet implements ReplyInterface{
 
     userNameOfOriginalTweet : string;
     
+    /**
+     * Constructor for a reply
+     * @param author - string of userNameID
+     * @param description - text of the reply
+     * @param userNameOfOriginalTweet - userName of the original tweet
+     */
     constructor( author : string, description : string, userNameOfOriginalTweet : string){
         super(author, description);
         this.userNameOfOriginalTweet = userNameOfOriginalTweet;

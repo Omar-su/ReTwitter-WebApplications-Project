@@ -4,7 +4,7 @@ import axios from 'axios';
 import twitterImage from "../util/images/twitter_test_image.png";
 import './Home.css';
 import './NavBar.css';
-import TweetButton from './TweetButton';
+import TweetButton from './tweetbutton';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { TweetItem } from './TweetItem';
 import { Tweet, User } from '../../Interfaces';
@@ -28,7 +28,7 @@ export function TweetFeed() {
   })
   
   return (
-    <div>
+    <div style={{ marginTop: '20px' }}>
       <h1 className='tweet-feed'>Tweet Feed</h1>
       <div>
         <TweetButton></TweetButton>

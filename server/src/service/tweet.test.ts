@@ -1,19 +1,22 @@
-import { before } from "node:test";
 import { getDatabaseModels } from "../db/connect_database";
 import { connUrlTest } from "../db/conn_url_origin";
+import { makeReplyDBService } from "./db/ReplyDBService";
 import { makeTweetDBService } from "./db/TweetDBService";
 import { makeUserDBService } from "./db/UserDBService";
 import { TweetServiceInterface } from "./interfaces/tweetservice.interface";
 import { UserServiceInterface } from "./interfaces/userservice.interface";
+import { ReplyServiceInterface } from "./interfaces/replyservice.interface";
 
 const testUserName = "testuser";
 let userService!: UserServiceInterface;
 let tweetService!: TweetServiceInterface;
+let replyService!: ReplyServiceInterface;
 let databaseModels = getDatabaseModels(connUrlTest);
 
 beforeEach(async () => {
   userService = makeUserDBService(databaseModels);
   tweetService = makeTweetDBService(databaseModels);
+  replyService = makeReplyDBService(databaseModels)
   await userService.createUser(testUserName, "testownername", "testbio", "test@test.com", "testpassword");
 });
 
@@ -43,20 +46,19 @@ test("If a tweet is liked, the number of likes should increase", async () => {
   const tweetAuthor = await userService.findUserByUsername(testUserName);
   if (testTweet && tweetAuthor) { //Ensures that testTweet is not undefined
     const likrNrBeforeLike = testTweet.numberOfLikes;
-    tweetService.likeOrUnlikeTweet(tweetAuthor, testTweet.id);
+    await tweetService.likeOrUnlikeTweet(tweetAuthor, testTweet.id);
     expect(testTweet.numberOfLikes === likrNrBeforeLike + 1);
   }
 });
-
 
 test("If a tweet is unliked, the number of likes should descrease", async () => {
   const desc = "testDescription4";
   const testTweet = await tweetService.createTweet(testUserName, desc);
   const tweetAuthor = await userService.findUserByUsername(testUserName);
   if (testTweet && tweetAuthor) { //Ensures that testTweet is not undefined
-    tweetService.likeOrUnlikeTweet(tweetAuthor, testTweet.id); // Like the tweet first
+    await tweetService.likeOrUnlikeTweet(tweetAuthor, testTweet.id); // Like the tweet first
     const likrNrBeforeUnLike = testTweet.numberOfLikes;
-    tweetService.likeOrUnlikeTweet(tweetAuthor, testTweet.id);
+    await tweetService.likeOrUnlikeTweet(tweetAuthor, testTweet.id);
     expect(testTweet.numberOfLikes === likrNrBeforeUnLike - 1);
   }
 });
@@ -65,14 +67,70 @@ test("If a tweet is replied to, its number of replies should increase", async ()
   const desc = "testDescription5";
   const testTweet = await tweetService.createTweet(testUserName, desc);
   const tweetAuthor = await userService.findUserByUsername(testUserName);
-  if(testTweet && tweetAuthor) {
+  if (testTweet && tweetAuthor) {
     const replyNrBeforeReply = testTweet.numberOfReplies;
-    tweetService.replyOnTweetOrReply(tweetAuthor, testTweet.id, desc)
+    await tweetService.replyOnTweetOrReply(tweetAuthor, testTweet.id, desc)
     expect(testTweet.numberOfReplies === replyNrBeforeReply + 1);
   }
 });
 
+test("If a reply is replied to, its number of replies should increase", async () => {
+  const desc = "testDescription6";
+  const testTweet = await tweetService.createTweet(testUserName, desc);
+  const tweetAuthor = await userService.findUserByUsername(testUserName);
+  if (testTweet && tweetAuthor) {
+    await tweetService.replyOnTweetOrReply(tweetAuthor, testTweet.id, desc); // Reply on the tweet
+    const replies = await replyService.getRepliesOnTweet(testTweet.id);
+    if (replies) {
+      const replyToBeRepliedTo = replies.find((tweet) => tweet.description === desc);
+      if (replyToBeRepliedTo) {
+        const replyNrBeforeReply = replyToBeRepliedTo.numberOfReplies;
+        await tweetService.replyOnTweetOrReply(tweetAuthor, replyToBeRepliedTo.id, desc); // Reply on the reply
+        expect(replyToBeRepliedTo.numberOfReplies === replyNrBeforeReply + 1)
+      }
+    }
+  }
+});
+
+test("If a reply is liked, its number of likes should increase", async () => {
+  const desc = "testDescription7";
+  const testTweet = await tweetService.createTweet(testUserName, desc);
+  const tweetAuthor = await userService.findUserByUsername(testUserName);
+  if (testTweet && tweetAuthor) {
+    await tweetService.replyOnTweetOrReply(tweetAuthor, testTweet.id, desc); // Reply on the tweet
+    const replies = await replyService.getRepliesOnTweet(testTweet.id);
+    if (replies) {
+      const replyToBeLiked = replies.find((tweet) => tweet.description === desc);
+      if (replyToBeLiked) {
+        const replyLikesBeforeLike = replyToBeLiked.numberOfLikes;
+        await replyService.likeOrUnlikeReply(tweetAuthor, replyToBeLiked.id)
+        expect(replyToBeLiked.numberOfLikes === replyLikesBeforeLike + 1)
+      }
+    }
+  }
+});
+
+test("If a reply is deleted, the number of replies should decrease", async () => {
+  const desc = "testDescription8";
+  const testTweet = await tweetService.createTweet(testUserName, desc);
+  const tweetAuthor = await userService.findUserByUsername(testUserName);
+  if (testTweet && tweetAuthor) {
+    await tweetService.replyOnTweetOrReply(tweetAuthor, testTweet.id, desc);
+    const nrOfRepliesBeforeDeletion = testTweet.numberOfReplies;
+    const replies = await replyService.getRepliesOnTweet(testTweet.id);
+    if (replies) {
+      const replyToBeDeleted = replies.find((tweet) => tweet.description === desc);
+      if (replyToBeDeleted) {
+        tweetService.deleteTweet(tweetAuthor, replyToBeDeleted.id)
+      }
+      expect(testTweet.numberOfReplies === nrOfRepliesBeforeDeletion - 1);
+    }
+  }
+});
+
+// Clear the test database between each test
 afterEach(async () => {
+  //Ensure that only the test database is cleared
   if (databaseModels.getReplyModel().db.name == "db_for_unit_tests") {
     await databaseModels.getReplyModel().deleteMany({});
   }
