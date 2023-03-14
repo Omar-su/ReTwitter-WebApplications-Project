@@ -73,7 +73,7 @@ class ReplyDBService implements ReplyServiceInterface {
     if (nestedReply == null) {
       return false;
     }
-    const reply = await this.createReply(foundUser.ownerName, desc, nestedReply.author);
+    const reply = await this.createReply(foundUser.userNameID, desc, nestedReply.author);
     nestedReply.replies.push(reply._id);
     nestedReply.numberOfReplies += 1;
     await this.updateReply(nestedReply);
