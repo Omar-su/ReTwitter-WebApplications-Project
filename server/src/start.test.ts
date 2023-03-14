@@ -24,7 +24,32 @@ beforeEach(async () => {
     .send( {email: 'email',password: 'password'})
     .expect(200);
 
-})
+});
+
+
+
+test('should create a user', async () => { 
+
+    const useridWrongType = 1;
+    const ownerNameWrongType = 1;
+    const bioWrongType = 122;
+    const emailWrongType = 123; 
+    const passwordWrongType = 3124;
+
+    await sess
+    .post('/user')
+    .send({ userid: useridWrongType, ownerName : ownerNameWrongType ,bio: bioWrongType, email : emailWrongType, password: passwordWrongType }).expect(400);
+
+
+    await sess
+    .post('/user')
+    .send({ userid: 'user', ownerName : 'owner',bio: 'my bio', email : 'email.gmail.com', password: 'password123' }).expect(201);
+
+    await sess
+    .post('/user')
+    .send({ userid: 'user', ownerName : 'owner',bio: 'my bio', email : 'email.gmail.com', password: 'password123' }).expect(409);
+
+});
 
 test('User logout', async () => {
     await sess
@@ -244,17 +269,73 @@ test("User getting replies on a tweet end-to-end", async () => {
 
 });
 
+test("Should be able to follow/unfollow and visit his and other people profiles", async () => {
+    const userid1 = "userid1";
+    const ownerName1 = "ownerName1";
+    const bio1 = "bio1";
+    const email1 = "email1"; 
+    const password1 = "password1";
+
+    // const user1Res = await sess
+    // .post('/user')
+    // .send({ userid: userid1, ownerName : ownerName1 ,bio: bio1, email : email1, password: password1 }).expect(201);
+ 
+    // const userid2 = "userid2";
+    // const ownerName2 = "ownerName2";
+    // const bio2 = "bio2";
+    // const email2 = "email2"; 
+    // const password2 = "password2";
+
+    // const user2Res = await sess
+    // .post('/user')
+    // .send({ userid: userid2, ownerName : ownerName2 ,bio: bio2, email : email2, password: password2 }).expect(201);
+
+    const currentUser = await sess
+    .get('/user/current_user')
+    .send().expect(200);
+
+    // Find a user profile page by username
+    const foundUser = await sess
+    .get(`/profile/${currentUser.body.userNameID}`)
+    .send().expect(200);
+
+    // Compare bodies of objects
+    expect(currentUser.body).toEqual(foundUser.body);
+
+    // Find a user profile page by username
+    const foundUser2 = await sess
+    .get(`/profile/${userid1}`)
+    .send().expect(200);
+
+    console.log("current 2 : " + JSON.stringify(foundUser2.body.following));
+    
+
+    // Let current user follow foundUser2 already in the database
+    await sess
+    .get(`/profile/${foundUser2.body.userNameID}/follow`)
+    .send().expect(200);
+
+    // Compare bodies of objects
+    expect(currentUser.body.following).toContain(foundUser2.body.userNameID);
+
+    // Let current user follow foundUser2 already in the database
+    await sess
+    .get(`/profile/${foundUser2.body.userNameID}/unfollow`)
+    .send().expect(200);
+
+    // Compare bodies of objects
+    expect(currentUser.body.following).not.toContain(foundUser2.body.userNameID);
 
 
+});
 
-afterEach(async () => {
-    if (databaseModels.getReplyModel().db.name == "db_for_unit_tests") {
-        await databaseModels.getReplyModel().deleteMany({});
-    }
-    if (databaseModels.getTweetModel().db.name == "db_for_unit_tests") {
-        await databaseModels.getTweetModel().deleteMany();
-    }
-    if (databaseModels.getUserModel().db.name == "db_for_unit_tests") {
-        await databaseModels.getUserModel().deleteMany({});
-    }
+
+beforeAll(async () => {
+
+    await databaseModels.getReplyModel().deleteMany();
+
+    await databaseModels.getTweetModel().deleteMany();
+    
+    await databaseModels.getUserModel().deleteMany();
+
 });
