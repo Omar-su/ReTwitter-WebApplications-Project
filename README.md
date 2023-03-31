@@ -15,7 +15,7 @@
 
 <!-- OVERVIEW -->
 <h2 id="overview"> OverView</h2>
-The goal of this project is to create an clone of twitter for the DAT076 / DIT127 Web applications course at chalmers. The web application will allows users to interact with each other posts by either liking or replying. 
+The goal of this project is to create an clone of twitter for the DAT076 / DIT127 Web applications course at chalmers. The web application will allow users to interact with each others posts by either liking or replying. 
 
 The app will also offer users a feed of news that will show news a day before the call. 
 
